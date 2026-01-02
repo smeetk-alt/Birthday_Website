@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy 18th Kashvi! 🤍</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --primary-pink: #ffb3c1;
+            --soft-pink: #fff0f3;
+            --dark-pink: #fb6f92;
+            --text-color: #5e548e;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            background: var(--soft-pink);
+            font-family: 'Georgia', serif;
+            color: var(--text-color);
+            display: flex; flex-direction: column;
+            align-items: center; overflow-x: hidden;
+        }
+
+        /* Intro Page */
+        #overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, #ffe5ec 0%, #ffb3c1 100%);
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            z-index: 1000; transition: all 1s ease-in-out;
+            text-align: center;
+        }
+
+        #countdown {
+            font-family: sans-serif;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .timer-unit { display: inline-block; margin: 0 10px; }
+        .timer-num { font-size: 2.5rem; font-weight: bold; display: block; }
+        .timer-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        .heart-icon {
+            font-size: 50px; color: white;
+            animation: beat 1.2s infinite; margin-bottom: 20px;
+        }
+
+        @keyframes beat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        button {
+            padding: 18px 40px; font-size: 1.2rem;
+            background: white; color: var(--dark-pink);
+            border: none; border-radius: 50px;
+            cursor: pointer; box-shadow: 0 10px 20px rgba(251, 111, 146, 0.3);
+            font-weight: bold; letter-spacing: 2px; transition: 0.3s;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 600px; text-align: center;
+            padding: 60px 20px; display: none;
+        }
+
+        h1 { font-size: 2.2rem; color: var(--dark-pink); letter-spacing: 3px; line-height: 1.2; }
+        
+        .collage {
+            display: grid; grid-template-columns: repeat(2, 1fr);
+            gap: 15px; margin: 40px 0;
+        }
+
+        .collage img {
+            width: 100%; height: 200px; object-fit: cover;
+            border-radius: 15px; border: 5px solid white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .message-box {
+            background: white; padding: 40px 30px;
+            border-radius: 25px; line-height: 1.9;
+            text-align: left; border-left: 8px solid var(--primary-pink);
+            white-space: pre-line; box-shadow: 0 10px 30px rgba(255, 179, 193, 0.2);
+        }
+
+        .fade-in { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
+        .visible { opacity: 1; transform: translateY(0); }
+
+        footer {
+            margin: 60px 0; font-size: 0.9rem;
+            color: var(--dark-pink); opacity: 0.8;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="overlay">
+        <div class="heart-icon">🤍</div>
+        <div id="countdown">
+            <div class="timer-unit"><span class="timer-num" id="days">00</span><span class="timer-label">Days</span></div>
+            <div class="timer-unit"><span class="timer-num" id="hours">00</span><span class="timer-label">Hrs</span></div>
+            <div class="timer-unit"><span class="timer-num" id="mins">00</span><span class="timer-label">Mins</span></div>
+        </div>
+        <button onclick="startPage()">FOR KASHVI 🤍</button>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="birthday-song.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="container" id="mainContent">
+        <div class="fade-in">
+            <h1>HAPPY 18th BIRTHDAY KASHVI</h1>
+            <p style="letter-spacing: 5px; color: var(--dark-pink); font-weight: bold;">JANUARY 20, 2026</p>
+        </div>
+
+        <div class="collage">
+            <img src="1.jpeg" class="fade-in">
+            <img src="2.jpeg" class="fade-in">
+            <img src="3.jpeg" class="fade-in">
+            <img src="4.jpeg" class="fade-in">
+            <img src="5.jpeg" class="fade-in">
+            <img src="6.jpeg" class="fade-in">
+        </div>
+
+        <div class="message-box fade-in">
+            Happy Birthday to someone who makes even the most ordinary days feel lighter. From the laughs we somehow always find in labs, to sharing earphones and working together with an understanding that never needed explaining—it’s always just easy with you. 
+
+            From finishing each other’s assignments, correcting mistakes, helping each other through quizzes, to mocking and competing in the healthiest, funniest way, every moment with you feels like teamwork at its best. Add in the random tickles and cheek-pulling that end in uncontrollable laughter, and it’s impossible not to smile around you. 
+
+            You’ve had my back quietly—keeping things discreet when needed, guiding me toward better choices, and pushing me to improve without ever making it feel heavy. Even on the days you said “I’m okay” when you weren’t, you still showed up with strength and care. 
+
+            I’m genuinely grateful to have you as a friend, and I hope this year gives you all the laughter, wins, and peace you deserve 🤍
+        </div>
+
+        <footer>Made from SMEET for a very special friend</footer>
+    </div>
+
+    <script>
+        // Countdown to Jan 20
+        const targetDate = new Date("January 20, 2026 00:00:00").getTime();
+        const timer = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+            document.getElementById("days").innerText = Math.max(0, Math.floor(distance / (1000 * 60 * 60 * 24)));
+            document.getElementById("hours").innerText = Math.max(0, Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+            document.getElementById("mins").innerText = Math.max(0, Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)));
+            if (distance < 0) {
+                clearInterval(timer);
+                document.getElementById("countdown").innerHTML = "<h2 style='color:white'>IT'S YOUR 18th!</h2>";
+            }
+        }, 1000);
+
+        function startPage() {
+            document.getElementById('overlay').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('overlay').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+                const elements = document.querySelectorAll('.fade-in');
+                elements.forEach((el, index) => {
+                    setTimeout(() => el.classList.add('visible'), index * 250);
+                });
+            }, 1000);
+
+            document.getElementById('bgMusic').play();
+
+            // Birthday Confetti
+            var end = Date.now() + (5 * 1000);
+            var colors = ['#ffb3c1', '#fb6f92', '#ffffff'];
+            (function frame() {
+                confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: colors });
+                confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: colors });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+        }
+    </script>
+</body>
+</html>

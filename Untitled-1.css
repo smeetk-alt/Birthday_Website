@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Kashvi!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
+            overflow-x: hidden;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text y="20" font-size="20">🎀</text></svg>'), auto;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Confetti Canvas */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Floating hearts */
+        .floating-heart {
+            position: fixed;
+            font-size: 2em;
+            animation: floatUp 4s ease-in infinite;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Balloons */
+        .balloon {
+            position: fixed;
+            font-size: 3em;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            z-index: 100;
+            animation: sway 3s ease-in-out infinite;
+        }
+
+        .balloon:hover {
+            transform: scale(1.3) translateY(-20px);
+        }
+
+        @keyframes sway {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            50% {
+                transform: translateX(20px);
+            }
+        }
+
+        .header {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(to bottom, rgba(252, 228, 236, 0.9), rgba(248, 187, 208, 0.9));
+            animation: fadeIn 2s ease-in;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 4em;
+            color: #fff;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+            animation: bounceIn 1.5s ease-out;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .header h1:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .header p {
+            font-size: 1.5em;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .music-control {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .music-button {
+            background: linear-gradient(135deg, #f48fb1, #f8bbd0);
+            border: none;
+            color: white;
+            padding: 15px 25px;
+            font-size: 1.2em;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(244, 143, 177, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .music-button:hover {
+            transform: scale(1.1) rotate(-5deg);
+            box-shadow: 0 8px 25px rgba(244, 143, 177, 0.4);
+        }
+
+        .music-button:active {
+            transform: scale(0.95);
+        }
+
+        /* Confetti button */
+        .confetti-button {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 1000;
+            background: linear-gradient(135deg, #f8bbd0, #f48fb1);
+            border: none;
+            color: white;
+            padding: 15px 25px;
+            font-size: 1.2em;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(244, 143, 177, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .confetti-button:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 8px 25px rgba(244, 143, 177, 0.4);
+        }
+
+        .gallery {
+            padding: 40px 20px;
+        }
+
+        .photo-container {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            opacity: 0;
+            transform: scale(0.3);
+            animation: growIn 1.2s ease-out forwards;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .photo-container:nth-child(1) { animation-delay: 0.2s; }
+        .photo-container:nth-child(2) { animation-delay: 0.5s; }
+        .photo-container:nth-child(3) { animation-delay: 0.8s; }
+        .photo-container:nth-child(4) { animation-delay: 1.1s; }
+        .photo-container:nth-child(5) { animation-delay: 1.4s; }
+        .photo-container:nth-child(6) { animation-delay: 1.7s; }
+
+        .photo-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(244, 143, 177, 0.25);
+            border: 5px solid #fff;
+            transition: all 0.3s ease;
+        }
+
+        .photo-container:hover img {
+            transform: scale(1.15) rotate(2deg);
+            box-shadow: 0 15px 40px rgba(244, 143, 177, 0.35);
+        }
+
+        .photo-container:active img {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        /* Click effect */
+        .click-effect {
+            position: absolute;
+            pointer-events: none;
+            font-size: 2em;
+            animation: clickPop 0.6s ease-out forwards;
+        }
+
+        @keyframes clickPop {
+            0% {
+                transform: scale(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(2) rotate(180deg);
+                opacity: 0;
+            }
+        }
+
+        .message-section {
+            max-width: 800px;
+            margin: 60px auto;
+            padding: 50px 40px;
+            background: linear-gradient(135deg, rgba(252, 228, 236, 0.95), rgba(248, 187, 208, 0.95));
+            border-radius: 30px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            border: 3px solid #f48fb1;
+            animation: fadeIn 2s ease-in;
+            transition: transform 0.3s ease;
+        }
+
+        .message-section:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .message-section h2 {
+            font-size: 2.5em;
+            color: #ec407a;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .message-section h2:hover {
+            transform: scale(1.05);
+        }
+
+        .message-section p {
+            font-size: 1.3em;
+            line-height: 1.8;
+            color: #333;
+            text-align: justify;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        .hearts {
+            text-align: center;
+            font-size: 3em;
+            margin: 30px 0;
+            animation: pulse 2s infinite;
+        }
+
+        .hearts span {
+            display: inline-block;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .hearts span:hover {
+            transform: scale(1.5) rotate(20deg);
+        }
+
+        .music-note {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            font-size: 3em;
+            color: #ec407a;
+            animation: float 3s ease-in-out infinite;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .music-note:hover {
+            transform: scale(1.3) rotate(360deg);
+        }
+
+        /* Sparkle effect */
+        .sparkle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: sparkleAnim 1s ease-out forwards;
+            z-index: 9998;
+        }
+
+        @keyframes sparkleAnim {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(0) translateY(-50px);
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes growIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3) rotate(-5deg);
+            }
+            50% {
+                transform: scale(1.08) rotate(2deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5em;
+            }
+            .header p {
+                font-size: 1.2em;
+            }
+            .message-section {
+                padding: 30px 20px;
+                margin: 40px 20px;
+            }
+            .message-section h2 {
+                font-size: 2em;
+            }
+            .message-section p {
+                font-size: 1.1em;
+            }
+            .music-button, .confetti-button {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="confetti-canvas"></canvas>
+
+    <div class="music-control">
+        <button class="music-button" id="musicToggle">🎵 Play Music</button>
+    </div>
+
+    <button class="confetti-button" id="confettiBtn">🎊 Confetti!</button>
+
+    <audio id="birthdayMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        <source src="https://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Sevish_-__nbsp_.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Balloons -->
+    <div class="balloon" id="balloon1" style="left: 10%; top: 20%;">🎈</div>
+    <div class="balloon" id="balloon2" style="right: 10%; top: 30%;">🎈</div>
+    <div class="balloon" id="balloon3" style="left: 20%; top: 60%;">🎈</div>
+    <div class="balloon" id="balloon4" style="right: 15%; top: 70%;">🎈</div>
+
+    <div class="container">
+        <div class="header">
+            <h1 id="mainTitle">🎉 Happy Birthday KASHVI! 🎉</h1>
+            <p>Wishing you the most amazing day! 🎂</p>
+        </div>
+
+        <div class="gallery" id="gallery">
+            <!-- Images will be loaded here dynamically -->
+        </div>
+
+        <div class="hearts">
+            <span>💕</span> <span>💖</span> <span>💗</span> <span>💓</span> <span>💝</span>
+        </div>
+
+        <div class="message-section">
+            <h2>A Special Message For You 💌</h2>
+            <p>Happy Birthday to someone who makes even the most ordinary days feel lighter. From the laughs we somehow always find in labs, to sharing earphones and working together with an understanding that never needed explaining—it's always just easy with you. From finishing each other's assignments, correcting mistakes, helping each other through quizzes, to mocking and competing in the healthiest, funniest way, every moment with you feels like teamwork at its best. Add in the random tickles and cheek-pulling that end in uncontrollable laughter, and it's impossible not to smile around you. You've had my back quietly—keeping things discreet when needed, guiding me toward better choices, and pushing me to improve without ever making it feel heavy. Even on the days you said "I'm okay" when you weren't, you still showed up with strength and care. I'm genuinely grateful to have you as a friend, and I hope this year gives you all the laughter, wins, and peace you deserve 🤍</p>
+        </div>
+
+        <div class="hearts">
+            <span>🎈</span> <span>🎊</span> <span>🎁</span> <span>🎀</span> <span>✨</span>
+        </div>
+    </div>
+
+    <div class="music-note">🎵</div>
+
+    <script>
+        // Load images from uploaded files
+        async function loadImages() {
+            const gallery = document.getElementById('gallery');
+            const imageFiles = [
+                'IMG-20241213-WA0009.jpg',
+                'IMG-20241020-WA0014.jpg', 
+                'IMG-20241020-WA0015.jpg',
+                'IMG-20230212-WA0016.jpg',
+                'IMG-20241020-WA0021.jpg',
+                'IMG-20241020-WA0027.jpg'
+            ];
+
+            for (let i = 0; i < imageFiles.length; i++) {
+                const container = document.createElement('div');
+                container.className = 'photo-container';
+                container.setAttribute('data-photo', i + 1);
+                
+                const img = document.createElement('img');
+                img.alt = `Kashvi Photo ${i + 1}`;
+                
+                try {
+                    // Try to read the file
+                    const fileData = await window.fs.readFile(imageFiles[i]);
+                    
+                    // Convert to base64
+                    const base64String = btoa(
+                        new Uint8Array(fileData).reduce((data, byte) => data + String.fromCharCode(byte), '')
+                    );
+                    
+                    img.src = `data:image/jpeg;base64,${base64String}`;
+                    
+                    img.onerror = function() {
+                        console.error(`Failed to display ${imageFiles[i]}`);
+                        this.style.display = 'none';
+                    };
+                    
+                    img.onload = function() {
+                        console.log(`Successfully loaded ${imageFiles[i]}`);
+                    };
+                    
+                } catch (error) {
+                    console.error(`Error loading ${imageFiles[i]}:`, error);
+                    // Skip this image and continue
+                    continue;
+                }
+                
+                // Add click effect
+                container.addEventListener('click', function(e) {
+                    const emojis = ['✨', '💖', '🎉', '🌟', '💫', '🎀'];
+                    const effect = document.createElement('div');
+                    effect.className = 'click-effect';
+                    effect.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    
+                    const rect = this.getBoundingClientRect();
+                    effect.style.left = (e.clientX - rect.left) + 'px';
+                    effect.style.top = (e.clientY - rect.top) + 'px';
+                    this.appendChild(effect);
+
+                    setTimeout(() => effect.remove(), 600);
+                });
+                
+                container.appendChild(img);
+                gallery.appendChild(container);
+            }
+            
+            // If no images loaded, show a message
+            if (gallery.children.length === 0) {
+                const message = document.createElement('div');
+                message.style.textAlign = 'center';
+                message.style.padding = '40px';
+                message.style.color = 'white';
+                message.style.fontSize = '1.5em';
+                message.innerHTML = '📸 Please save this HTML file and place your 6 images named as:<br>image1.jpg, image2.jpg, image3.jpg, image4.jpg, image5.jpg, image6.jpg<br>in the same folder!';
+                gallery.appendChild(message);
+            }
+        }
+
+        // Initialize images on page load
+        window.addEventListener('load', loadImages);
+
+        // Music control
+        const music = document.getElementById('birthdayMusic');
+        const musicToggle = document.getElementById('musicToggle');
+        let isPlaying = false;
+
+        musicToggle.addEventListener('click', function() {
+            if (isPlaying) {
+                music.pause();
+                musicToggle.textContent = '🎵 Play Music';
+                isPlaying = false;
+            } else {
+                music.play().then(() => {
+                    musicToggle.textContent = '⏸️ Pause Music';
+                    isPlaying = true;
+                }).catch(error => {
+                    console.error('Error playing music:', error);
+                    alert('Click again to play music!');
+                });
+            }
+        });
+
+        // Auto-play music after user interaction
+        document.addEventListener('click', function autoPlay() {
+            if (!isPlaying) {
+                music.play().then(() => {
+                    musicToggle.textContent = '⏸️ Pause Music';
+                    isPlaying = true;
+                }).catch(error => {
+                    console.log('Waiting for user interaction to play music');
+                });
+            }
+            document.removeEventListener('click', autoPlay);
+        }, { once: true });
+
+        // Confetti effect
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let confetti = [];
+        const colors = ['#f8bbd0', '#f48fb1', '#fce4ec', '#f06292', '#ec407a'];
+
+        class Confetto {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = -10;
+                this.size = Math.random() * 10 + 5;
+                this.speedY = Math.random() * 3 + 2;
+                this.speedX = Math.random() * 2 - 1;
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.rotation = Math.random() * 360;
+                this.rotationSpeed = Math.random() * 10 - 5;
+            }
+
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                this.rotation += this.rotationSpeed;
+
+                if (this.y > canvas.height) {
+                    return false;
+                }
+                return true;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation * Math.PI / 180);
+                ctx.fillStyle = this.color;
+                ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size);
+                ctx.restore();
+            }
+        }
+
+        function createConfetti(count) {
+            for (let i = 0; i < count; i++) {
+                confetti.push(new Confetto());
+            }
+        }
+
+        function animateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            confetti = confetti.filter(c => {
+                c.update();
+                c.draw();
+                return c.y < canvas.height;
+            });
+
+            if (confetti.length > 0) {
+                requestAnimationFrame(animateConfetti);
+            }
+        }
+
+        document.getElementById('confettiBtn').addEventListener('click', function() {
+            createConfetti(200);
+            animateConfetti();
+        });
+
+        // Auto-trigger confetti every 20 seconds
+        setInterval(function() {
+            createConfetti(200);
+            animateConfetti();
+        }, 20000);
+
+        // Trigger confetti on page load after 2 seconds
+        setTimeout(function() {
+            createConfetti(200);
+            animateConfetti();
+        }, 2000);
+
+        // Floating hearts on mouse move
+        document.addEventListener('mousemove', function(e) {
+            if (Math.random() > 0.95) {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.textContent = ['💕', '💖', '💗', '💓', '💝'][Math.floor(Math.random() * 5)];
+                heart.style.left = e.pageX + 'px';
+                heart.style.top = e.pageY + 'px';
+                document.body.appendChild(heart);
+
+                setTimeout(() => heart.remove(), 4000);
+            }
+        });
+
+        // Click effects on photos - already handled in loadImages function above
+
+        // Sparkle effect on mouse click
+        document.addEventListener('click', function(e) {
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    const sparkle = document.createElement('div');
+                    sparkle.className = 'sparkle';
+                    sparkle.style.left = e.pageX + (Math.random() * 40 - 20) + 'px';
+                    sparkle.style.top = e.pageY + (Math.random() * 40 - 20) + 'px';
+                    document.body.appendChild(sparkle);
+
+                    setTimeout(() => sparkle.remove(), 1000);
+                }, i * 50);
+            }
+        });
+
+        // Title click effect
+        document.getElementById('mainTitle').addEventListener('click', function() {
+            createConfetti(100);
+            animateConfetti();
+        });
+
+        // Balloon pop effect
+        document.querySelectorAll('.balloon').forEach(balloon => {
+            balloon.addEventListener('click', function() {
+                this.style.transition = 'all 0.3s ease';
+                this.style.transform = 'scale(2)';
+                this.style.opacity = '0';
+                
+                createConfetti(50);
+                animateConfetti();
+
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                    this.style.opacity = '1';
+                }, 1000);
+            });
+        });
+
+        // Window resize
+        window.addEventListener('resize', function() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
