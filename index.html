@@ -15,60 +15,53 @@
 
         body {
             margin: 0; padding: 0;
-            background: var(--soft-pink);
+            background: #0a0a0a; /* Dark background for the glow effect */
             font-family: 'Georgia', serif;
-            color: var(--text-color);
-            display: flex; flex-direction: column;
-            align-items: center; overflow-x: hidden;
+            color: white;
+            overflow-x: hidden;
         }
 
-        /* Intro Page */
+        /* Initial Page */
         #overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle, #ffe5ec 0%, #ffb3c1 100%);
             display: flex; flex-direction: column;
             justify-content: center; align-items: center;
-            z-index: 1000; transition: all 1s ease-in-out;
-            text-align: center;
+            z-index: 2000; transition: all 1s ease-in-out;
+            text-align: center; color: var(--text-color);
         }
 
-        #countdown {
-            font-family: sans-serif;
-            color: white;
-            margin-bottom: 30px;
-        }
-
+        #countdown { font-family: sans-serif; margin-bottom: 30px; }
         .timer-unit { display: inline-block; margin: 0 10px; }
         .timer-num { font-size: 2.5rem; font-weight: bold; display: block; }
-        .timer-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
-
-        .heart-icon {
-            font-size: 50px; color: white;
-            animation: beat 1.2s infinite; margin-bottom: 20px;
-        }
-
-        @keyframes beat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-        }
 
         button {
             padding: 18px 40px; font-size: 1.2rem;
             background: white; color: var(--dark-pink);
             border: none; border-radius: 50px;
             cursor: pointer; box-shadow: 0 10px 20px rgba(251, 111, 146, 0.3);
-            font-weight: bold; letter-spacing: 2px; transition: 0.3s;
+            font-weight: bold; letter-spacing: 2px;
         }
 
-        /* Main Content */
+        /* 3D Canvas Background */
+        #canvas-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;
+        }
+
+        /* Content Overlay */
+        .content-scroll {
+            position: relative; z-index: 10;
+            width: 100%; display: flex; flex-direction: column; align-items: center;
+        }
+
         .container {
             max-width: 600px; text-align: center;
-            padding: 60px 20px; display: none;
+            padding: 100vh 20px 50px 20px; 
         }
 
-        h1 { font-size: 2.2rem; color: var(--dark-pink); letter-spacing: 3px; line-height: 1.2; }
-        
+        h1 { font-size: 2.5rem; color: var(--primary-pink); text-shadow: 0 0 20px rgba(251,111,146,0.6); margin-top: 50px; }
+
         .collage {
             display: grid; grid-template-columns: repeat(2, 1fr);
             gap: 15px; margin: 40px 0;
@@ -76,48 +69,45 @@
 
         .collage img {
             width: 100%; height: 200px; object-fit: cover;
-            border-radius: 15px; border: 5px solid white;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 15px; border: 4px solid white;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
         }
 
         .message-box {
-            background: white; padding: 40px 30px;
-            border-radius: 25px; line-height: 1.9;
+            background: rgba(255, 255, 255, 0.9); padding: 40px 30px;
+            border-radius: 25px; line-height: 1.9; color: var(--text-color);
             text-align: left; border-left: 8px solid var(--primary-pink);
-            white-space: pre-line; box-shadow: 0 10px 30px rgba(255, 179, 193, 0.2);
+            white-space: pre-line; backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
-
-        .fade-in { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
-        .visible { opacity: 1; transform: translateY(0); }
 
         footer {
-            margin: 60px 0; font-size: 0.9rem;
-            color: var(--dark-pink); opacity: 0.8;
-            font-style: italic;
+            margin: 80px 0; color: var(--primary-pink);
+            font-style: italic; opacity: 0.9;
         }
+
+        .fade-in { opacity: 0; transform: translateY(30px); transition: all 1.2s ease-out; }
+        .visible { opacity: 1; transform: translateY(0); }
     </style>
 </head>
 <body>
 
-    <div id="overlay">
-        <div class="heart-icon">🤍</div>
-        <div id="countdown">
-            <div class="timer-unit"><span class="timer-num" id="days">00</span><span class="timer-label">Days</span></div>
-            <div class="timer-unit"><span class="timer-num" id="hours">00</span><span class="timer-label">Hrs</span></div>
-            <div class="timer-unit"><span class="timer-num" id="mins">00</span><span class="timer-label">Mins</span></div>
-        </div>
-        <button onclick="startPage()">FOR KASHVI 🤍</button>
+<div id="overlay">
+    <div style="font-size: 50px; color: white; animation: pulse 1.5s infinite;">🤍</div>
+    <div id="countdown">
+        <div class="timer-unit"><span class="timer-num" id="days">00</span><span>Days</span></div>
+        <div class="timer-unit"><span class="timer-num" id="hours">00</span><span>Hrs</span></div>
+        <div class="timer-unit"><span class="timer-num" id="mins">00</span><span>Mins</span></div>
     </div>
+    <button onclick="startPage()">OPEN YOUR GIFT, KASHVI</button>
+</div>
 
-    <audio id="bgMusic" loop>
-        <source src="birthday-song.mp3" type="audio/mpeg">
-    </audio>
+<div id="canvas-container"></div>
 
-    <div class="container" id="mainContent">
-        <div class="fade-in">
-            <h1>HAPPY 18th BIRTHDAY KASHVI</h1>
-            <p style="letter-spacing: 5px; color: var(--dark-pink); font-weight: bold;">JANUARY 20, 2026</p>
-        </div>
+<div class="content-scroll" id="mainContent" style="display:none;">
+    <div class="container">
+        <h1 class="fade-in">HAPPY 18th BIRTHDAY KASHVI</h1>
+        <p class="fade-in" style="letter-spacing: 5px; color: var(--primary-pink); font-weight: bold;">SCROLL DOWN 🤍</p>
 
         <div class="collage">
             <img src="1.jpeg" class="fade-in">
@@ -129,55 +119,168 @@
         </div>
 
         <div class="message-box fade-in">
-            Happy Birthday to someone who makes even the most ordinary days feel lighter. From the laughs we somehow always find in labs, to sharing earphones and working together with an underst[...]
+Happy Birthday to someone who makes even the most ordinary days feel lighter. From the laughs we somehow always find in labs, to sharing earphones and working together with an understanding that never needed explaining—it’s always just easy with you. 
 
-            From finishing each other’s assignments, correcting mistakes, helping each other through quizzes, to mocking and competing in the healthiest, funniest way, every moment with you fee[...]
+From finishing each other’s assignments, correcting mistakes, helping each other through quizzes, to mocking and competing in the healthiest, funniest way, every moment with you feels like teamwork at its best. Add in the random tickles and cheek-pulling that end in uncontrollable laughter, and it’s impossible not to smile around you. 
 
-            You’ve had my back quietly—keeping things discreet when needed, guiding me toward better choices, and pushing me to improve without ever making it feel heavy. Even on the days you[...]
+You’ve had my back quietly—keeping things discreet when needed, guiding me toward better choices, and pushing me to improve without ever making it feel heavy. Even on the days you said “I’m okay” when you weren’t, you still showed up with strength and care. 
 
-            I’m genuinely grateful to have you as a friend, and I hope this year gives you all the laughter, wins, and peace you deserve 🤍
+I’m genuinely grateful to have you as a friend, and I hope this year gives you all the laughter, wins, and peace you deserve 🤍
         </div>
 
-        <footer>Made from SMEET for a very special friend</footer>
+        <footer class="fade-in">Made from SMEET for a very special friend</footer>
     </div>
+</div>
 
-    <script>
-        // Countdown to Jan 20
-        const targetDate = new Date("January 20, 2026 00:00:00").getTime();
-        const timer = setInterval(function() {
-            const now = new Date().getTime();
-            const distance = targetDate - now;
-            document.getElementById("days").innerText = Math.max(0, Math.floor(distance / (1000 * 60 * 60 * 24)));
-            document.getElementById("hours").innerText = Math.max(0, Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
-            document.getElementById("mins").innerText = Math.max(0, Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)));
-            if (distance < 0) {
-                clearInterval(timer);
-                document.getElementById("countdown").innerHTML = "<h2 style='color:white'>IT'S YOUR 18th!</h2>";
-            }
-        }, 1000);
+<audio id="bgMusic" loop>
+    <source src="birthday-song.mp3" type="audio/mpeg">
+</audio>
 
-        function startPage() {
-            document.getElementById('overlay').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('overlay').style.display = 'none';
-                document.getElementById('mainContent').style.display = 'block';
-                const elements = document.querySelectorAll('.fade-in');
-                elements.forEach((el, index) => {
-                    setTimeout(() => el.classList.add('visible'), index * 250);
-                });
-            }, 1000);
+<script type="importmap">
+    { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/" } }
+</script>
 
-            document.getElementById('bgMusic').play();
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
-            // Birthday Confetti
-            var end = Date.now() + (5 * 1000);
-            var colors = ['#ffb3c1', '#fb6f92', '#ffffff'];
-            (function frame() {
-                confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: colors });
-                confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: colors });
-                if (Date.now() < end) requestAnimationFrame(frame);
-            }());
+const PARTICLE_COUNT = 25000;
+const SHAPES = ['heart', 'dna', 'galaxy', 'cube'];
+let currentShapeIdx = 0;
+let scene, camera, renderer, composer, particles, geometry;
+const targetArray = new Float32Array(PARTICLE_COUNT * 3);
+
+function init3D() {
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 18;
+
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+    composer = new EffectComposer(renderer);
+    composer.addPass(new RenderPass(scene, camera));
+    const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
+    bloomPass.strength = 1.0;
+    composer.addPass(bloomPass);
+
+    geometry = new THREE.BufferGeometry();
+    const pos = new Float32Array(PARTICLE_COUNT * 3);
+    const colors = new Float32Array(PARTICLE_COUNT * 3);
+    for(let i=0; i<PARTICLE_COUNT; i++) {
+        pos[i*3] = (Math.random()-0.5)*100;
+        pos[i*3+1] = (Math.random()-0.5)*100;
+        pos[i*3+2] = (Math.random()-0.5)*100;
+    }
+    geometry.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+    const material = new THREE.PointsMaterial({ size: 0.12, vertexColors: true, blending: THREE.AdditiveBlending, transparent: true });
+    particles = new THREE.Points(geometry, material);
+    scene.add(particles);
+
+    updateTargets();
+    animate();
+
+    // Auto-change shape every 8 seconds
+    setInterval(() => {
+        currentShapeIdx = (currentShapeIdx + 1) % SHAPES.length;
+        updateTargets();
+    }, 8000);
+}
+
+function updateTargets() {
+    const type = SHAPES[currentShapeIdx];
+    for(let i=0; i<PARTICLE_COUNT; i++) {
+        const i3 = i*3;
+        const pt = i / PARTICLE_COUNT;
+        let x, y, z;
+
+        if (type === 'heart') {
+            const t = pt * Math.PI * 2;
+            x = 16 * Math.pow(Math.sin(t), 3);
+            y = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
+            z = (Math.random()-0.5) * 4;
+            x *= 0.5; y *= 0.5;
+        } else if (type === 'dna') {
+            const h = (pt * 24) - 12;
+            const angle = h * 0.7 + (i%2 === 0 ? 0 : Math.PI);
+            x = Math.cos(angle) * 5;
+            z = Math.sin(angle) * 5;
+            y = h;
+        } else if (type === 'galaxy') {
+            const r = pt * 12;
+            const spin = pt * 15;
+            x = r * Math.cos(spin);
+            z = r * Math.sin(spin);
+            y = (Math.random()-0.5) * 3;
+        } else {
+            x = (Math.random()-0.5) * 10;
+            y = (Math.random()-0.5) * 10;
+            z = (Math.random()-0.5) * 10;
         }
-    </script>
+        targetArray[i3] = x; targetArray[i3+1] = y; targetArray[i3+2] = z;
+    }
+}
+
+function animate() {
+    requestAnimationFrame(animate);
+    const time = Date.now() * 0.001;
+    const positions = geometry.attributes.position.array;
+    const colorsArr = geometry.attributes.color.array;
+
+    for(let i=0; i<PARTICLE_COUNT; i++) {
+        const i3 = i*3;
+        // Smooth transition to target
+        positions[i3] += (targetArray[i3] - positions[i3]) * 0.05;
+        positions[i3+1] += (targetArray[i3+1] - positions[i3+1]) * 0.05;
+        positions[i3+2] += (targetArray[i3+2] - positions[i3+2]) * 0.05;
+
+        // Color logic (Rose Gold / Pink)
+        colorsArr[i3] = 1.0; 
+        colorsArr[i3+1] = 0.7 + Math.sin(time + i*0.1)*0.2; 
+        colorsArr[i3+2] = 0.8;
+    }
+    particles.rotation.y += 0.002;
+    geometry.attributes.position.needsUpdate = true;
+    geometry.attributes.color.needsUpdate = true;
+    composer.render();
+}
+
+window.startPage = function() {
+    document.getElementById('overlay').style.opacity = '0';
+    setTimeout(() => {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'flex';
+        // Trigger reveal animations
+        const elements = document.querySelectorAll('.fade-in');
+        elements.forEach((el, i) => setTimeout(() => el.classList.add('visible'), i * 300));
+    }, 1000);
+    document.getElementById('bgMusic').play();
+    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#ffb3c1', '#fb6f92'] });
+};
+
+// Countdown Logic
+const targetDate = new Date("January 20, 2026 00:00:00").getTime();
+setInterval(() => {
+    const dist = targetDate - new Date().getTime();
+    document.getElementById("days").innerText = Math.max(0, Math.floor(dist / 86400000));
+    document.getElementById("hours").innerText = Math.max(0, Math.floor((dist % 86400000) / 3600000));
+    document.getElementById("mins").innerText = Math.max(0, Math.floor((dist % 3600000) / 60000));
+}, 1000);
+
+init3D();
+
+window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    composer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
 </body>
 </html>
