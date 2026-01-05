@@ -5,12 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy 18th Kashvi! 🤍</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script async src="https://unpkg.com/es-module-shims@1.8.0/dist/es-module-shims.js"></script>
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
     <style>
         :root {
             --primary-pink: #ffb3c1;
             --soft-pink: #fff0f3;
             --dark-pink: #fb6f92;
-            --text-color: #5e548f;
+            --text-color: #5e548e;
         }
 
         body {
@@ -28,23 +37,23 @@
             background: radial-gradient(circle, #ffe5ec 0%, #ffb3c1 100%);
             display: flex; flex-direction: column;
             justify-content: center; align-items: center;
-            z-index: 2000; transition: all 1s ease-in-out;
+            z-index: 2000; transition: opacity 1s ease-in-out;
             text-align: center; color: var(--text-color);
         }
 
-        #countdown { font-family: sans-serif; margin-bottom: 30px; }
-        .timer-unit { display: inline-block; margin: 0 10px; }
+        #countdown { font-family: sans-serif; margin-bottom: 30px; display: flex; }
+        .timer-unit { margin: 0 10px; }
         .timer-num { font-size: 2.5rem; font-weight: bold; display: block; }
+        .timer-label { font-size: 0.8rem; text-transform: uppercase; }
 
         button {
             padding: 18px 40px; font-size: 1.2rem;
             background: white; color: var(--dark-pink);
             border: none; border-radius: 50px;
-            cursor: pointer; box-shadow: 0 10px 20px rgba(251, 111, 146, 0.3);
+            cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
             font-weight: bold; letter-spacing: 2px;
-            transition: 0.3s;
+            z-index: 2001;
         }
-        button:hover { transform: scale(1.05); }
 
         /* 3D Canvas Background */
         #canvas-container {
@@ -54,7 +63,7 @@
         /* Content Overlay */
         .content-scroll {
             position: relative; z-index: 10;
-            width: 100%; display: flex; flex-direction: column; align-items: center;
+            width: 100%; display: none; flex-direction: column; align-items: center;
         }
 
         .container {
@@ -62,68 +71,50 @@
             padding: 100vh 20px 50px 20px; 
         }
 
-        h1 { font-size: 2.8rem; color: var(--primary-pink); text-shadow: 0 0 20px rgba(251,111,146,0.6); margin-top: 50px; }
+        h1 { font-size: 2.5rem; color: var(--primary-pink); text-shadow: 0 0 15px rgba(251,111,146,0.6); }
 
-        /* MASONRY COLLAGE CSS */
         .collage {
-            column-count: 2;
-            column-gap: 15px;
-            margin: 40px 0;
-            width: 100%;
+            column-count: 2; column-gap: 15px; margin: 40px 0; width: 100%;
         }
 
         .collage img {
-            width: 100%;
-            height: auto; 
-            display: block;
-            margin-bottom: 15px;
-            border-radius: 15px;
-            border: 5px solid white;
+            width: 100%; height: auto; display: block; margin-bottom: 15px;
+            border-radius: 15px; border: 5px solid white;
             box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-            transition: transform 0.4s ease;
             break-inside: avoid;
         }
 
-        .collage img:hover {
-            transform: scale(1.03) translateY(-5px);
-        }
-
         .message-box {
-            background: rgba(255, 255, 255, 0.92); padding: 40px 30px;
+            background: rgba(255, 255, 255, 0.95); padding: 40px 30px;
             border-radius: 25px; line-height: 1.9; color: var(--text-color);
             text-align: left; border-left: 8px solid var(--primary-pink);
-            white-space: pre-line; backdrop-filter: blur(15px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-            margin-top: 20px;
+            white-space: pre-line; box-shadow: 0 15px 35px rgba(0,0,0,0.3);
         }
 
-        footer {
-            margin: 80px 0; color: var(--primary-pink);
-            font-style: italic; font-weight: bold; font-size: 1.1rem;
-        }
+        footer { margin: 80px 0; color: var(--primary-pink); font-style: italic; }
 
-        .fade-in { opacity: 0; transform: translateY(30px); transition: all 1.2s ease-out; }
+        .fade-in { opacity: 0; transform: translateY(30px); transition: 1s ease-out; }
         .visible { opacity: 1; transform: translateY(0); }
     </style>
 </head>
 <body>
 
 <div id="overlay">
-    <div style="font-size: 60px; color: white;">🤍</div>
+    <div style="font-size: 50px; margin-bottom: 20px;">🤍</div>
     <div id="countdown">
-        <div class="timer-unit"><span class="timer-num" id="days">00</span><span>Days</span></div>
-        <div class="timer-unit"><span class="timer-num" id="hours">00</span><span>Hrs</span></div>
-        <div class="timer-unit"><span class="timer-num" id="mins">00</span><span>Mins</span></div>
+        <div class="timer-unit"><span class="timer-num" id="days">00</span><span class="timer-label">Days</span></div>
+        <div class="timer-unit"><span class="timer-num" id="hours">00</span><span class="timer-label">Hrs</span></div>
+        <div class="timer-unit"><span class="timer-num" id="mins">00</span><span class="timer-label">Mins</span></div>
     </div>
-    <button onclick="startPage()">FOR KASHVI 🤍</button>
+    <button id="entryBtn">FOR KASHVI 🤍</button>
 </div>
 
 <div id="canvas-container"></div>
 
-<div class="content-scroll" id="mainContent" style="display:none;">
+<div class="content-scroll" id="mainContent">
     <div class="container">
         <h1 class="fade-in">HAPPY 18th BIRTHDAY KASHVI</h1>
-        <p class="fade-in" style="letter-spacing: 6px; color: var(--primary-pink); font-weight: bold;">SCROLL FOR MEMORIES 🤍</p>
+        <p class="fade-in" style="letter-spacing: 4px; color: var(--primary-pink);">SCROLL FOR MEMORIES</p>
 
         <div class="collage">
             <img src="1.jpeg" class="fade-in">
@@ -135,13 +126,11 @@
         </div>
 
         <div class="message-box fade-in">
-Happy Birthday to someone who makes even the most ordinary days feel lighter. From the laughs we somehow always find in labs, to sharing earphones and working together with an understanding that never needed explaining—it’s always just easy with you. 
+            Happy Birthday to someone who makes even the most ordinary days feel lighter. From the laughs we somehow always find in labs, to sharing earphones and working together with an understanding that never needed explaining—it’s always just easy with you. 
 
-From finishing each other’s assignments, correcting mistakes, helping each other through quizzes, to mocking and competing in the healthiest, funniest way, every moment with you feels like teamwork at its best. Add in the random tickles and cheek-pulling that end in uncontrollable laughter, and it’s impossible not to smile around you. 
-
-You’ve had my back quietly—keeping things discreet when needed, guiding me toward better choices, and pushing me to improve without ever making it feel heavy. Even on the days you said “I’m okay” when you weren’t, you still showed up with strength and care. 
-
-I’m genuinely grateful to have you as a friend, and I hope this year gives you all the laughter, wins, and peace you deserve 🤍
+            From finishing each other’s assignments, correcting mistakes, helping each other through quizzes, to mocking and competing in the healthiest, funniest way, every moment with you feels like teamwork at its best. 
+            
+            I’m genuinely grateful to have you as a friend, and I hope this year gives you all the laughter, wins, and peace you deserve 🤍
         </div>
 
         <footer class="fade-in">Made from SMEET for a very special friend</footer>
@@ -152,26 +141,126 @@ I’m genuinely grateful to have you as a friend, and I hope this year gives you
     <source src="birthday-song.mp3" type="audio/mpeg">
 </audio>
 
-<script type="importmap">
-    { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/" } }
+<script>
+    // --- 1. BASIC LOGIC (COUNTDOWN & BUTTON) ---
+    const targetDate = new Date("January 20, 2026 00:00:00").getTime();
+    
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const dist = targetDate - now;
+        document.getElementById("days").innerText = Math.max(0, Math.floor(dist / (1000 * 60 * 60 * 24)));
+        document.getElementById("hours").innerText = Math.max(0, Math.floor((dist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+        document.getElementById("mins").innerText = Math.max(0, Math.floor((dist % (1000 * 60 * 60)) / (1000 * 60)));
+    }
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    document.getElementById('entryBtn').addEventListener('click', function() {
+        // Hide overlay
+        document.getElementById('overlay').style.opacity = '0';
+        setTimeout(() => {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'flex';
+            // Fade in elements
+            const elements = document.querySelectorAll('.fade-in');
+            elements.forEach((el, i) => setTimeout(() => el.classList.add('visible'), i * 300));
+        }, 1000);
+
+        // Music & Confetti
+        const music = document.getElementById('bgMusic');
+        music.play().catch(e => console.log("Music blocked until interaction"));
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#ffb3c1', '#fb6f92'] });
+    });
 </script>
 
 <script type="module">
-import * as THREE from 'three';
-import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+    import * as THREE from 'three';
+    import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+    import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+    import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
-const PARTICLE_COUNT = 30000;
-const SHAPES = ['heart', 'dna', 'galaxy'];
-let currentShapeIdx = 0;
-let scene, camera, renderer, composer, particles, geometry;
-const targetArray = new Float32Array(PARTICLE_COUNT * 3);
+    // --- 3D PARTICLE ENGINE ---
+    const PARTICLE_COUNT = 20000;
+    const SHAPES = ['heart', 'dna', 'galaxy'];
+    let currentShapeIdx = 0;
+    const targetArray = new Float32Array(PARTICLE_COUNT * 3);
 
-function init3D() {
-    scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 18;
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 20;
 
-    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+    const composer = new EffectComposer(renderer);
+    composer.addPass(new RenderPass(scene, camera));
+    const bloom = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.0, 0.4, 0.85);
+    composer.addPass(bloom);
+
+    const geometry = new THREE.BufferGeometry();
+    const pos = new Float32Array(PARTICLE_COUNT * 3);
+    const colors = new Float32Array(PARTICLE_COUNT * 3);
+    for(let i=0; i<PARTICLE_COUNT; i++) {
+        pos[i*3] = (Math.random()-0.5)*100;
+        pos[i*3+1] = (Math.random()-0.5)*100;
+        pos[i*3+2] = (Math.random()-0.5)*100;
+    }
+    geometry.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+    const material = new THREE.PointsMaterial({ size: 0.15, vertexColors: true, blending: THREE.AdditiveBlending, transparent: true });
+    const points = new THREE.Points(geometry, material);
+    scene.add(points);
+
+    function setTargets() {
+        const type = SHAPES[currentShapeIdx];
+        for(let i=0; i<PARTICLE_COUNT; i++) {
+            const i3 = i*3; const pt = i / PARTICLE_COUNT;
+            let x, y, z;
+            if (type === 'heart') {
+                const t = pt * Math.PI * 2;
+                x = 16 * Math.pow(Math.sin(t), 3) * 0.5;
+                y = (13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t)) * 0.5;
+                z = (Math.random()-0.5) * 5;
+            } else if (type === 'dna') {
+                const h = (pt * 30) - 15;
+                const angle = h * 0.8 + (i%2===0?0:Math.PI);
+                x = Math.cos(angle) * 5; z = Math.sin(angle) * 5; y = h;
+            } else {
+                const r = pt * 15; const spin = pt * 20;
+                x = r * Math.cos(spin); z = r * Math.sin(spin); y = (Math.random()-0.5) * 4;
+            }
+            targetArray[i3] = x; targetArray[i3+1] = y; targetArray[i3+2] = z;
+        }
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        const positions = geometry.attributes.position.array;
+        const colorsArr = geometry.attributes.color.array;
+        for(let i=0; i<PARTICLE_COUNT; i++) {
+            const i3 = i*3;
+            positions[i3] += (targetArray[i3] - positions[i3]) * 0.05;
+            positions[i3+1] += (targetArray[i3+1] - positions[i3+1]) * 0.05;
+            positions[i3+2] += (targetArray[i3+2] - positions[i3+2]) * 0.05;
+            colorsArr[i3] = 1.0; colorsArr[i3+1] = 0.7; colorsArr[i3+2] = 0.8;
+        }
+        points.rotation.y += 0.005;
+        geometry.attributes.position.needsUpdate = true;
+        geometry.attributes.color.needsUpdate = true;
+        composer.render();
+    }
+
+    setTargets();
+    animate();
+    setInterval(() => { currentShapeIdx = (currentShapeIdx + 1) % SHAPES.length; setTargets(); }, 7000);
+
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+</script>
+</body>
+</html>
