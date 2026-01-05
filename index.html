@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Happy 18th Kashvi! 🧿💙</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script async src="https://unpkg.com/es-module-shims@1.8.0/dist/es-module-shims.js"></script>
@@ -18,102 +18,115 @@
         :root { --primary-blue: #00d4ff; --neon-pink: #ffb7c5; --deep-space: #010103; }
         body { margin: 0; padding: 0; background: var(--deep-space); font-family: 'Georgia', serif; color: white; overflow-x: hidden; scroll-behavior: smooth; }
 
+        /* Mobile Responsive Overlay */
         #overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             z-index: 2000; transition: opacity 1s ease; text-align: center;
             background: radial-gradient(circle at center, #001d3d 0%, #000000 100%);
+            padding: 20px; box-sizing: border-box;
         }
         
-        #countdown { display: flex; margin: 15px 0; color: var(--primary-blue); font-family: sans-serif; }
-        .timer-unit { margin: 0 10px; }
-        .timer-num { font-size: 2rem; font-weight: bold; display: block; }
+        #countdown { display: flex; margin: 15px 0; color: var(--primary-blue); font-family: sans-serif; flex-wrap: wrap; justify-content: center; }
+        .timer-unit { margin: 5px 10px; }
+        .timer-num { font-size: 1.5rem; font-weight: bold; display: block; }
 
         button {
-            padding: 14px 35px; border-radius: 50px; border: none; font-weight: bold;
+            padding: 12px 30px; border-radius: 50px; border: none; font-weight: bold;
             letter-spacing: 2px; transition: 0.4s; cursor: pointer;
-            background: var(--primary-blue); color: white; box-shadow: 0 0 25px var(--primary-blue);
+            background: var(--primary-blue); color: white; box-shadow: 0 0 20px var(--primary-blue);
+            font-size: 0.9rem;
         }
 
         #canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
         .content-scroll { position: relative; z-index: 10; width: 100%; display: none; flex-direction: column; align-items: center; }
-        .container { text-align: center; padding: 100vh 20px 50px 20px; width: 95%; }
+        
+        /* Spacing for mobile vs Desktop */
+        .container { text-align: center; padding: 100vh 15px 50px 15px; width: 100%; box-sizing: border-box; }
 
+        /* RESPONSIVE GRID: 2 columns on mobile, 4 on desktop */
         .collage { 
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; 
-            margin: 40px 0; width: 100%; max-width: 1100px; padding: 0 15px;
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 12px; 
+            margin: 30px auto; 
+            width: 100%; 
+            max-width: 1100px;
         }
         
-        .img-card { position: relative; cursor: pointer; text-align: center; }
+        @media (min-width: 768px) {
+            .collage { grid-template-columns: repeat(4, 1fr); gap: 15px; }
+        }
+        
+        .img-card { position: relative; cursor: pointer; text-align: center; display: flex; flex-direction: column; }
         
         .collage img { 
-            width: 100%; border-radius: 12px; 
-            border: 3px solid rgba(0, 212, 255, 0.2);
+            width: 100%; border-radius: 8px; 
+            border: 2px solid rgba(0, 212, 255, 0.2);
             transition: all 0.6s ease; 
             filter: grayscale(100%) brightness(0.4);
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
         }
         
         .img-card.unlocked img { 
             filter: grayscale(0%) brightness(1.1); 
             border-color: var(--primary-blue); 
-            box-shadow: 0 0 15px var(--primary-blue);
+            box-shadow: 0 0 10px var(--primary-blue);
         }
 
         .typewriter-box {
-            min-height: 100px; margin-top: 10px; font-size: 0.85rem; line-height: 1.4;
+            min-height: 80px; margin-top: 8px; font-size: 0.75rem; line-height: 1.3;
             color: #ffffff; 
             background: rgba(0, 0, 0, 0.85);
-            padding: 12px; border-radius: 8px;
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            text-shadow: 1px 1px 2px #000;
+            padding: 10px; border-radius: 6px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            text-align: left;
         }
 
         #bottom-finale {
-            opacity: 0; transform: translateY(50px);
+            opacity: 0; transform: translateY(30px);
             transition: all 1.5s ease;
-            margin: 80px 0 20px 0; padding: 40px;
-            width: 100%; max-width: 800px;
+            margin: 60px 0 20px 0; padding: 20px;
         }
         #bottom-finale.visible { opacity: 1; transform: translateY(0); }
 
         .birthday-title {
-            font-size: 3.5rem; color: var(--primary-blue);
-            text-shadow: 0 0 30px var(--primary-blue);
+            font-size: 2.2rem; color: var(--primary-blue);
+            text-shadow: 0 0 20px var(--primary-blue);
             font-weight: bold; margin-bottom: 15px;
             animation: glowPulse 2s infinite alternate;
         }
-        @keyframes glowPulse {
-            from { text-shadow: 0 0 20px var(--primary-blue); }
-            to { text-shadow: 0 0 40px #fff, 0 0 50px var(--primary-blue); }
-        }
+        
+        @media (min-width: 768px) { .birthday-title { font-size: 3.5rem; } }
 
         .neon-footer { 
-            margin-top: 50px; margin-bottom: 120px;
-            font-family: 'Arial', sans-serif; text-align: center; line-height: 1.6;
+            margin-top: 30px; margin-bottom: 80px;
+            text-align: center; line-height: 1.5;
         }
         .line-1, .line-2 {
             font-weight: bold; color: var(--neon-pink); text-transform: uppercase;
             display: block; animation: neonFlicker 4s infinite;
         }
-        .line-1 { font-size: 1.1rem; letter-spacing: 4px; margin-bottom: 8px; }
-        .line-2 { font-size: 1.7rem; letter-spacing: 2px; }
+        .line-1 { font-size: 0.8rem; letter-spacing: 2px; margin-bottom: 5px; }
+        .line-2 { font-size: 1.2rem; letter-spacing: 1px; }
 
         @keyframes neonFlicker {
             0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
                 opacity: 1;
-                text-shadow: 0 0 7px var(--neon-pink), 0 0 15px #ff1493, 0 0 30px #ff1493, 0 0 50px #ff1493;
+                text-shadow: 0 0 7px var(--neon-pink), 0 0 15px #ff1493, 0 0 30px #ff1493;
             }
             20%, 22%, 24%, 55% { opacity: 0.6; text-shadow: 0 0 2px var(--neon-pink); }
         }
 
         .click-hint {
-            position: absolute; top: -25px; left: 50%; transform: translateX(-50%);
-            background: var(--primary-blue); color: #000; padding: 4px 12px;
-            border-radius: 20px; font-size: 0.7rem; font-weight: bold;
-            animation: bounce 2s infinite; pointer-events: none;
+            position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
+            background: var(--primary-blue); color: #000; padding: 3px 10px;
+            border-radius: 15px; font-size: 0.6rem; font-weight: bold;
+            animation: bounce 2s infinite; z-index: 5;
         }
-        @keyframes bounce { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, -10px); } }
+        @keyframes bounce { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, -8px); } }
     </style>
 </head>
 <body>
@@ -132,8 +145,8 @@
 
 <div class="content-scroll" id="mainContent">
     <div class="container">
-        <h1 style="color: var(--primary-blue); font-size: 2.2rem; letter-spacing: 2px;">FOR KASHVI 🧿</h1>
-        <p style="opacity: 0.7; margin-bottom: 50px;">Tap each photo to reveal our journey...</p>
+        <h1 style="color: var(--primary-blue); font-size: 1.5rem; letter-spacing: 2px;">FOR KASHVI 🧿</h1>
+        <p style="opacity: 0.7; font-size: 0.9rem; margin-bottom: 30px;">Tap photos to reveal memories</p>
         
         <div class="collage">
             <div class="img-card" onclick="typeWriterReveal(this, 0)"><div class="click-hint">START 🤍</div><img src="1.jpeg"><div class="typewriter-box" id="text-0"></div></div>
@@ -148,11 +161,10 @@
 
         <div id="bottom-finale">
             <div class="birthday-title">HAPPY BIRTHDAY<br>KASHVI! 🧿💙</div>
-        </div>
-
-        <div class="neon-footer">
-            <span class="line-1">FOR THE WINS & THE LAUGHS. 💙</span>
-            <span class="line-2">THE BEST IS YET TO COME. 🧿</span>
+            <div class="neon-footer">
+                <span class="line-1">FOR THE WINS & THE LAUGHS. 💙</span>
+                <span class="line-2">THE BEST IS YET TO COME. 🧿</span>
+            </div>
         </div>
     </div>
 </div>
@@ -187,11 +199,11 @@
             } else if (unlockedCount === 8) {
                 const f = document.getElementById('bottom-finale');
                 f.classList.add('visible');
-                setTimeout(() => { f.scrollIntoView({ behavior: 'smooth' }); confetti({ particleCount: 150, spread: 70, origin: { y: 0.8 } }); }, 1000);
+                setTimeout(() => { f.scrollIntoView({ behavior: 'smooth' }); confetti({ particleCount: 100, spread: 60, origin: { y: 0.8 } }); }, 800);
             }
         }
         type();
-        confetti({ particleCount: 20, spread: 50, colors: ['#00d4ff'] });
+        confetti({ particleCount: 15, spread: 40, colors: ['#00d4ff'] });
     }
 
     const targetDate = new Date("January 20, 2026 00:00:00").getTime();
@@ -225,25 +237,30 @@
     camera.position.z = 25;
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Performance boost
     document.getElementById('canvas-container').appendChild(renderer.domElement);
 
     const composer = new EffectComposer(renderer);
     composer.addPass(new RenderPass(scene, camera));
-    composer.addPass(new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85));
+    composer.addPass(new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.2, 0.4, 0.85));
 
-    const PARTICLE_COUNT = 20000;
+    const PARTICLE_COUNT = window.innerWidth < 768 ? 8000 : 15000; // Fewer particles on mobile
     const geometry = new THREE.BufferGeometry();
     const pos = new Float32Array(PARTICLE_COUNT * 3);
-    const target = new Float32Array(PARTICLE_COUNT * 3);
+    const targetArr = new Float32Array(PARTICLE_COUNT * 3);
 
     for(let i=0; i<PARTICLE_COUNT; i++) {
-        pos[i*3] = (Math.random()-0.5)*100; pos[i*3+1] = (Math.random()-0.5)*100; pos[i*3+2] = (Math.random()-0.5)*100;
+        pos[i*3] = (Math.random()-0.5)*80; pos[i*3+1] = (Math.random()-0.5)*80; pos[i*3+2] = (Math.random()-0.5)*80;
     }
     geometry.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    const particles = new THREE.Points(geometry, new THREE.PointsMaterial({ size: 0.08, color: 0x00d4ff, blending: THREE.AdditiveBlending }));
+    const particles = new THREE.Points(geometry, new THREE.PointsMaterial({ size: 0.12, color: 0x00d4ff, blending: THREE.AdditiveBlending }));
     scene.add(particles);
 
     let mx = 0, my = 0;
+    window.addEventListener('touchmove', (e) => {
+        mx = (e.touches[0].clientX - window.innerWidth/2) / 2000;
+        my = (e.touches[0].clientY - window.innerHeight/2) / 2000;
+    });
     window.addEventListener('mousemove', (e) => { 
         mx = (e.clientX - window.innerWidth/2) / 1500; 
         my = (e.clientY - window.innerHeight/2) / 1500; 
@@ -251,30 +268,29 @@
 
     let shapeIdx = 0;
     function morph() {
+        const scale = window.innerWidth < 768 ? 8 : 12; // Smaller shapes on mobile
         for(let i=0; i<PARTICLE_COUNT; i++) {
             const i3 = i*3; const t = (i/PARTICLE_COUNT) * Math.PI * 2;
             let x, y, z;
             if (shapeIdx === 0) { // Infinity
-                const scale = 12; x = (scale * Math.cos(t)) / (1 + Math.pow(Math.sin(t), 2)); y = (scale * Math.sin(t) * Math.cos(t)) / (1 + Math.pow(Math.sin(t), 2)); z = (Math.random()-0.5) * 2;
+                x = (scale * Math.cos(t)) / (1 + Math.pow(Math.sin(t), 2)); y = (scale * Math.sin(t) * Math.cos(t)) / (1 + Math.pow(Math.sin(t), 2)); z = (Math.random()-0.5) * 2;
             } else if (shapeIdx === 1) { // Heart
-                x = 16 * Math.pow(Math.sin(t), 3) * 0.6; y = (13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t)) * 0.6; z = (Math.random()-0.5) * 4;
+                x = 16 * Math.pow(Math.sin(t), 3) * (scale/20); y = (13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t)) * (scale/20); z = (Math.random()-0.5) * 2;
             } else if (shapeIdx === 2) { // DNA
-                x = Math.cos(t * 10) * 6; z = Math.sin(t * 10) * 6; y = (i/PARTICLE_COUNT)*30 - 15;
-            } else if (shapeIdx === 3) { // Sphere
-                const phi = Math.acos(-1 + (2 * i) / PARTICLE_COUNT); const theta = Math.sqrt(PARTICLE_COUNT * Math.PI) * phi; x = 11 * Math.cos(theta) * Math.sin(phi); y = 11 * Math.sin(theta) * Math.sin(phi); z = 11 * Math.cos(phi);
-            } else { // Torus
-                x = (9 + 3 * Math.cos(t * 3)) * Math.cos(t * 2); y = (9 + 3 * Math.cos(t * 3)) * Math.sin(t * 2); z = 3 * Math.sin(t * 3);
+                x = Math.cos(t * 10) * (scale/2); z = Math.sin(t * 10) * (scale/2); y = (i/PARTICLE_COUNT)*30 - 15;
+            } else { // Sphere
+                const phi = Math.acos(-1 + (2 * i) / PARTICLE_COUNT); const theta = Math.sqrt(PARTICLE_COUNT * Math.PI) * phi; x = scale * Math.cos(theta) * Math.sin(phi); y = scale * Math.sin(theta) * Math.sin(phi); z = scale * Math.cos(phi);
             }
-            target[i3] = x; target[i3+1] = y; target[i3+2] = z;
+            targetArr[i3] = x; targetArr[i3+1] = y; targetArr[i3+2] = z;
         }
-        shapeIdx = (shapeIdx + 1) % 5;
+        shapeIdx = (shapeIdx + 1) % 4;
     }
 
     function animate() {
         requestAnimationFrame(animate);
         const p = geometry.attributes.position.array;
-        for(let i=0; i<PARTICLE_COUNT*3; i++) p[i] += (target[i] - p[i]) * 0.04;
-        particles.rotation.y += 0.0012 + mx;
+        for(let i=0; i<PARTICLE_COUNT*3; i++) p[i] += (targetArr[i] - p[i]) * 0.04;
+        particles.rotation.y += 0.001 + mx;
         particles.rotation.x += my;
         geometry.attributes.position.needsUpdate = true;
         composer.render();
