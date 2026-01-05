@@ -16,32 +16,25 @@
     </script>
     <style>
         :root { --primary-blue: #00d4ff; --deep-space: #010103; }
-        body { margin: 0; padding: 0; background: var(--deep-space); font-family: 'Georgia', serif; color: white; overflow-x: hidden; }
+        body { margin: 0; padding: 0; background: var(--deep-space); font-family: 'Georgia', serif; color: white; overflow-x: hidden; scroll-behavior: smooth; }
 
-        #overlay, #finale-popup {
+        #overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             z-index: 2000; transition: opacity 1s ease; text-align: center;
+            background: radial-gradient(circle at center, #001d3d 0%, #000000 100%);
         }
         
-        #overlay { background: radial-gradient(circle at center, #001d3d 0%, #000000 100%); }
-        
-        #finale-popup { 
-            background: rgba(0, 0, 0, 0.95); 
-            display: none; opacity: 0; z-index: 3000;
-        }
-
         #countdown { display: flex; margin: 15px 0; color: var(--primary-blue); font-family: sans-serif; }
         .timer-unit { margin: 0 10px; }
         .timer-num { font-size: 2rem; font-weight: bold; display: block; }
 
-        button, .close-btn {
+        button {
             padding: 14px 35px; border-radius: 50px; border: none; font-weight: bold;
             letter-spacing: 2px; transition: 0.4s; cursor: pointer;
             background: var(--primary-blue); color: white; box-shadow: 0 0 25px var(--primary-blue);
         }
 
-        /* 4-COLUMN COLLAGE */
         .collage { 
             display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; 
             margin: 40px 0; width: 100%; max-width: 1100px; padding: 0 15px;
@@ -49,10 +42,9 @@
         
         .img-card { position: relative; cursor: pointer; text-align: center; }
         
-        /* IMAGE BORDER FIX */
         .collage img { 
             width: 100%; border-radius: 12px; 
-            border: 3px solid rgba(0, 212, 255, 0.2); /* Point 4: Small Border */
+            border: 3px solid rgba(0, 212, 255, 0.2);
             transition: all 0.6s ease; 
             filter: grayscale(100%) brightness(0.4);
         }
@@ -63,13 +55,12 @@
             box-shadow: 0 0 15px var(--primary-blue);
         }
 
-        /* TEXT READABILITY FIX */
         .typewriter-box {
             min-height: 100px; margin-top: 10px; font-size: 0.8rem; line-height: 1.4;
             color: #ffffff; 
-            background: rgba(0, 0, 0, 0.7); /* Point 1: Dark background for text */
+            background: rgba(0, 0, 0, 0.85);
             padding: 12px; border-radius: 8px;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(8px);
             border: 1px solid rgba(0, 212, 255, 0.3);
             text-shadow: 1px 1px 2px #000;
         }
@@ -78,11 +69,27 @@
         .content-scroll { position: relative; z-index: 10; width: 100%; display: none; flex-direction: column; align-items: center; }
         .container { text-align: center; padding: 100vh 20px 50px 20px; width: 95%; }
 
+        #bottom-finale {
+            opacity: 0; transform: translateY(50px);
+            transition: all 1.5s ease;
+            margin: 100px 0; padding: 50px;
+            border-top: 1px solid rgba(0, 212, 255, 0.3);
+            width: 100%; max-width: 800px;
+        }
+        #bottom-finale.visible { opacity: 1; transform: translateY(0); }
+
         .finale-text {
-            font-size: 3rem; color: var(--primary-blue);
+            font-size: 4rem; color: var(--primary-blue);
             text-shadow: 0 0 30px var(--primary-blue);
             font-weight: bold; margin-bottom: 20px;
+            animation: glow 2s infinite alternate;
         }
+        @keyframes glow {
+            from { text-shadow: 0 0 20px var(--primary-blue); }
+            to { text-shadow: 0 0 40px #fff, 0 0 50px var(--primary-blue); }
+        }
+
+        footer { margin-top: 50px; color: var(--primary-blue); opacity: 0.5; font-size: 0.8rem; }
     </style>
 </head>
 <body>
@@ -97,18 +104,12 @@
     <button id="entryBtn">OPEN KASHVI'S GIFT 💙</button>
 </div>
 
-<div id="finale-popup">
-    <div class="finale-text">HAPPY BIRTHDAY<br>KASHVI! 🧿💙</div>
-    <p style="margin-bottom: 30px; font-size: 1.1rem; max-width: 80%; line-height: 1.5;">To many more chapters in this journey. Enjoy every bit of today!!</p>
-    <button class="close-btn" onclick="hideFinale()">BACK TO MEMORIES</button>
-</div>
-
 <div id="canvas-container"></div>
 
 <div class="content-scroll" id="mainContent">
     <div class="container">
-        <h1 style="color: var(--primary-blue); font-size: 2rem;">For Kashvi 🧿</h1>
-        <p style="opacity: 0.7; margin-bottom: 30px;">Tap each photo to read the journey...</p>
+        <h1 style="color: var(--primary-blue); font-size: 2.2rem;">For Kashvi 🧿</h1>
+        <p style="opacity: 0.7; margin-bottom: 40px;">Tap each photo to reveal our journey...</p>
         
         <div class="collage">
             <div class="img-card" onclick="typeWriterReveal(this, 0)"><img src="1.jpeg"><div class="typewriter-box" id="text-0"></div></div>
@@ -120,6 +121,15 @@
             <div class="img-card" onclick="typeWriterReveal(this, 6)"><img src="5.jpeg"><div class="typewriter-box" id="text-6"></div></div>
             <div class="img-card" onclick="typeWriterReveal(this, 7)"><img src="6.jpeg"><div class="typewriter-box" id="text-7"></div></div>
         </div>
+
+        <div id="bottom-finale">
+            <div class="finale-text">HAPPY BIRTHDAY<br>KASHVI! 🧿💙</div>
+            <p style="font-size: 1.3rem; line-height: 1.6; color: #bde0fe;">
+                To many more chapters in this journey.<br>
+                Enjoy every single bit of your 18th!
+            </p>
+        </div>
+
         <footer>SMEET X KASHVI | 2026</footer>
     </div>
 </div>
@@ -127,7 +137,6 @@
 <audio id="bgMusic" loop><source src="birthday-song.mp3" type="audio/mpeg"></audio>
 
 <script>
-    // Point 3: Adjusted message for the "journey" essence
     const fullMessage = [
         "Happy Birthday to someone who makes even the most ordinary days feel lighter. It's always just easy with you. 🤍",
         "From the labs to sharing earphones, every moment feels like teamwork at its best. Looking forward to more wins together. 🧪",
@@ -157,29 +166,22 @@
                 i++;
                 setTimeout(type, 30);
             } else if (unlockedCount === TOTAL_PHOTOS) {
-                showFinale();
+                showBottomFinale();
             }
         }
         type();
-        confetti({ particleCount: 20, spread: 40, colors: ['#00d4ff', '#ffffff'] });
+        confetti({ particleCount: 20, spread: 50, colors: ['#00d4ff', '#ffffff'] });
     }
 
-    function showFinale() {
+    function showBottomFinale() {
+        const finale = document.getElementById('bottom-finale');
+        finale.classList.add('visible');
         setTimeout(() => {
-            const popup = document.getElementById('finale-popup');
-            popup.style.display = 'flex';
-            setTimeout(() => popup.style.opacity = '1', 10);
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-        }, 1000);
+            finale.scrollIntoView({ behavior: 'smooth' });
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.9 } });
+        }, 800);
     }
 
-    function hideFinale() {
-        const popup = document.getElementById('finale-popup');
-        popup.style.opacity = '0';
-        setTimeout(() => popup.style.display = 'none', 1000);
-    }
-
-    // Countdown logic
     const targetDate = new Date("January 20, 2026 00:00:00").getTime();
     function updateCountdown() {
         const dist = targetDate - new Date().getTime();
@@ -216,7 +218,7 @@
 
     const composer = new EffectComposer(renderer);
     composer.addPass(new RenderPass(scene, camera));
-    composer.addPass(new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.8, 0.4, 0.85));
+    composer.addPass(new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.6, 0.4, 0.85));
 
     const PARTICLE_COUNT = 22000;
     const geometry = new THREE.BufferGeometry();
@@ -234,7 +236,11 @@
     scene.add(particles);
 
     let mouseX = 0, mouseY = 0;
-    window.addEventListener('mousemove', (e) => { mouseX = (e.clientX - window.innerWidth / 2) / 400; mouseY = (e.clientY - window.innerHeight / 2) / 400; });
+    // LOW SENSITIVITY TWEAK: Divided by 1500 instead of 400
+    window.addEventListener('mousemove', (e) => { 
+        mouseX = (e.clientX - window.innerWidth / 2) / 1500; 
+        mouseY = (e.clientY - window.innerHeight / 2) / 1500; 
+    });
 
     let shapeIdx = 0;
     function morph() {
@@ -263,13 +269,14 @@
         requestAnimationFrame(animate);
         const p = geometry.attributes.position.array;
         for(let i=0; i<PARTICLE_COUNT*3; i++) p[i] += (target[i] - p[i]) * 0.04;
-        particles.rotation.y += 0.002 + mouseX;
+        // LOW SENSITIVITY TWEAK: Slower base rotation
+        particles.rotation.y += 0.001 + mouseX;
         particles.rotation.x += mouseY;
         geometry.attributes.position.needsUpdate = true;
         composer.render();
     }
     morph(); animate();
-    setInterval(morph, 5000);
+    setInterval(morph, 6000); // Slower morphing for calmer feel
 </script>
 </body>
 </html>
