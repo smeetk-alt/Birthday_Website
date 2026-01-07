@@ -15,9 +15,10 @@
     }
     </script>
     <style>
-        :root { --primary-blue: #00d4ff; --neon-pink: #ffb7c5; --deep-space: #010103; --gold: #ffd700; }
+        :root { --primary-blue: #00d4ff; --neon-pink: #ffb7c5; --deep-space: #010103; --gold: #ffd700; --cream: #ffffff; }
         body { margin: 0; padding: 0; background: var(--deep-space); font-family: 'Segoe UI', Roboto, sans-serif; color: white; overflow-x: hidden; scroll-behavior: smooth; user-select: none; -webkit-tap-highlight-color: transparent; }
 
+        /* Welcome Screen */
         #overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -26,7 +27,7 @@
         }
         
         #countdown { display: flex; margin-bottom: 30px; gap: 15px; }
-        .timer-unit { text-align: center; min-width: 60px; }
+        .timer-unit { text-align: center; min-width: 65px; }
         .timer-num { font-size: 2.5rem; font-weight: 800; color: var(--primary-blue); display: block; text-shadow: 0 0 15px var(--primary-blue); }
         .timer-label { font-size: 0.7rem; text-transform: uppercase; opacity: 0.7; letter-spacing: 1px; }
 
@@ -41,46 +42,70 @@
         
         .container { text-align: center; padding: 85vh 20px 100px 20px; width: 100%; max-width: 700px; box-sizing: border-box; }
 
-        /* Story Grid */
-        .collage { display: flex; flex-direction: column; gap: 100px; margin: 60px 0; width: 100%; }
+        /* Story Feed - Full Size Images */
+        .collage { display: flex; flex-direction: column; gap: 120px; margin: 60px 0; width: 100%; }
         
-        .img-card { position: relative; opacity: 0.2; filter: grayscale(1); transition: 1.2s all ease; transform: scale(0.9); }
-        /* Auto-activate when in view */
-        .img-card.active { opacity: 1; filter: grayscale(0); transform: scale(1); }
+        .img-card { position: relative; opacity: 0.1; filter: grayscale(1) blur(5px); transition: 1.5s all ease; transform: scale(0.9); }
+        .img-card.active { opacity: 1; filter: grayscale(0) blur(0); transform: scale(1); }
         
-        .img-card img { width: 100%; height: auto; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 40px rgba(0,0,0,0.5); display: block; }
+        .img-card img { width: 100%; height: auto; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px rgba(0,0,0,0.6); display: block; }
         .img-card.active img { border-color: var(--primary-blue); box-shadow: 0 0 40px rgba(0, 212, 255, 0.3); }
 
         .typewriter-box {
-            margin-top: 15px; background: rgba(15, 15, 15, 0.9); backdrop-filter: blur(15px); padding: 20px;
-            border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); font-size: 1rem;
+            margin-top: 20px; background: rgba(10, 10, 10, 0.85); backdrop-filter: blur(20px); padding: 25px;
+            border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); font-size: 1.05rem;
             line-height: 1.6; text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,0.5); min-height: 50px;
         }
 
-        /* Cake & Finale */
-        .cake-box { height: 280px; position: relative; margin: 80px 0; display: none; }
-        .layer { position: absolute; left: 50%; transform: translate(-50%, -500px); border-radius: 15px; border: 2px solid #fff; transition: 1.2s cubic-bezier(0.17, 0.67, 0.83, 0.67); }
-        .l1 { bottom: 0; width: 180px; height: 60px; background: #ff4d6d; }
-        .l2 { bottom: 60px; width: 140px; height: 50px; background: #ff758f; }
-        .l3 { bottom: 110px; width: 100px; height: 40px; background: #ff85a2; }
-        .candle-stick { bottom: 150px; width: 10px; height: 35px; background: var(--primary-blue); left: 50%; transform: translate(-50%, -500px); cursor: pointer; }
-        .flame { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); width: 12px; height: 22px; background: #ffd700; border-radius: 50% 50% 20% 20%; filter: blur(1px); animation: burn 0.2s infinite alternate; }
+        /* NEW Realistic 3D Cake */
+        .cake-box { height: 350px; position: relative; margin: 100px auto; display: none; width: 250px; }
+        .layer { 
+            position: absolute; left: 50%; transform: translate(-50%, -800px); 
+            border-radius: 50% / 25px; 
+            transition: 1.5s cubic-bezier(0.17, 0.67, 0.83, 0.67); 
+            box-shadow: inset 0 -15px 20px rgba(0,0,0,0.3), 0 10px 20px rgba(0,0,0,0.4);
+        }
+        /* Icing Drips */
+        .layer::after {
+            content: ""; position: absolute; top: 12px; left: 0; width: 100%; height: 35px;
+            background-image: radial-gradient(circle at 15% 0%, var(--cream) 18px, transparent 19px),
+                              radial-gradient(circle at 45% 0%, var(--cream) 22px, transparent 23px),
+                              radial-gradient(circle at 80% 0%, var(--cream) 18px, transparent 19px);
+            opacity: 0.9;
+        }
+        .l1 { bottom: 0; width: 220px; height: 90px; background: #5d4037; border-top: 5px solid #795548; }
+        .l2 { bottom: 75px; width: 170px; height: 80px; background: #ff4d6d; border-top: 5px solid #ff758f; }
+        .l3 { bottom: 140px; width: 120px; height: 65px; background: #fff9c4; border-top: 5px solid #fff; }
 
-        @keyframes burn { from { transform: translateX(-50%) scale(1); opacity: 0.8; } to { transform: translateX(-50%) scale(1.2); opacity: 1; } }
-
-        .neon-footer { margin-top: 50px; text-align: center; }
-        .line-1, .line-2 { font-weight: bold; color: var(--neon-pink); text-transform: uppercase; display: block; animation: neonFlicker 4s infinite; }
-        .line-1 { font-size: 0.9rem; letter-spacing: 4px; margin-bottom: 10px; }
-        .line-2 { font-size: 1.6rem; letter-spacing: 2px; }
-
-        @keyframes neonFlicker {
-            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; text-shadow: 0 0 7px var(--neon-pink), 0 0 15px #ff1493, 0 0 30px #ff1493; }
-            20%, 22%, 24%, 55% { opacity: 0.6; text-shadow: 0 0 2px var(--neon-pink); }
+        .candle-stick { 
+            bottom: 195px; width: 14px; height: 50px; 
+            background: repeating-linear-gradient(45deg, var(--primary-blue), var(--primary-blue) 6px, #fff 6px, #fff 12px); 
+            left: 50%; transform: translate(-50%, -800px); border-radius: 5px; border: none; cursor: pointer;
+        }
+        .flame { 
+            position: absolute; top: -28px; left: 50%; transform: translateX(-50%); 
+            width: 20px; height: 35px; 
+            background: radial-gradient(circle at center, #ffd700, #ff8c00, transparent);
+            border-radius: 50% 50% 20% 20%; filter: blur(1px); 
+            animation: burn 0.2s infinite alternate; box-shadow: 0 0 25px #ff8c00;
         }
 
-        .scratch-wrap { display: none; margin: 50px 0 100px 0; }
-        canvas { background: transparent; border-radius: 10px; touch-action: none; cursor: crosshair; }
-        .footer-title { font-size: 2.8rem; font-weight: 900; color: var(--primary-blue); text-shadow: 0 0 20px var(--primary-blue); margin: 40px 0; line-height: 1; }
+        @keyframes burn { from { transform: translateX(-50%) scale(1); } to { transform: translateX(-50%) scale(1.15) rotate(2deg); } }
+
+        .footer-title { font-size: 3rem; font-weight: 900; color: var(--primary-blue); text-shadow: 0 0 20px var(--primary-blue); margin: 60px 0 20px 0; }
+        
+        .neon-footer { margin-bottom: 80px; text-align: center; }
+        .line-1, .line-2 { font-weight: bold; color: var(--neon-pink); text-transform: uppercase; display: block; animation: neonFlicker 4s infinite; }
+        .line-1 { font-size: 0.9rem; letter-spacing: 4px; margin-bottom: 12px; }
+        .line-2 { font-size: 1.8rem; letter-spacing: 2px; }
+
+        @keyframes neonFlicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; text-shadow: 0 0 10px var(--neon-pink), 0 0 20px #ff1493; }
+            20%, 22%, 24%, 55% { opacity: 0.6; }
+        }
+
+        .scratch-wrap { display: none; margin: 50px 0 150px 0; }
+        canvas { border-radius: 15px; touch-action: none; cursor: crosshair; }
     </style>
 </head>
 <body>
@@ -97,8 +122,8 @@
 
 <div class="content-scroll" id="mainContent">
     <div class="container">
-        <p style="letter-spacing: 5px; color: var(--primary-blue); font-weight: bold;">ADVENTURE AWAITS</p>
-        <h1 style="font-size: 2.5rem; margin-bottom: 100px;">KASHVI'S 18th</h1>
+        <p style="letter-spacing: 8px; color: var(--primary-blue); font-weight: bold; margin-bottom: 20px;">CHAPTER 18</p>
+        <h1 style="font-size: 2.8rem; margin-bottom: 120px;">KASHVI</h1>
         
         <div class="collage" id="collageGrid"></div>
 
@@ -107,21 +132,23 @@
                 <div class="layer l1" id="layer1"></div>
                 <div class="layer l2" id="layer2"></div>
                 <div class="layer l3" id="layer3"></div>
-                <div class="layer candle-stick" id="candle">
-                    <div class="flame" id="flame"></div>
-                </div>
+                <div class="layer candle-stick" id="candle"><div class="flame" id="flame"></div></div>
             </div>
-            <div class="footer-title">HAPPY BIRTHDAY<br>KASHVI! 🧿</div>
+            
+            <div class="footer-title">HAPPY 18th! 🧿</div>
+            
             <div class="neon-footer">
                 <span class="line-1">FOR THE WINS & THE LAUGHS. 💙</span>
                 <span class="line-2">THE BEST IS YET TO COME. 🧿</span>
             </div>
+
             <div class="scratch-wrap" id="scratchWrap">
-                <div style="position: relative; width: 300px; height: 150px; margin: 0 auto;">
-                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #0a0a0a; color: var(--gold); border: 1px solid var(--gold); border-radius: 10px; padding: 20px; box-sizing: border-box; font-size: 1.1rem; font-weight: bold; text-align: center;">
-                        May your 18th year be your best one yet! 🧿💙
+                <p style="opacity: 0.5; margin-bottom: 25px;">Scratch for a final wish... ✨</p>
+                <div style="position: relative; width: 300px; height: 160px; margin: 0 auto;">
+                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #0a0a0a; color: var(--gold); border: 2px solid var(--gold); border-radius: 15px; padding: 25px; box-sizing: border-box; font-size: 1.2rem; font-weight: bold; text-align: center;">
+                        May this year bring you endless success and happiness! 🧿💙
                     </div>
-                    <canvas id="scratchCanvas" width="300" height="150"></canvas>
+                    <canvas id="scratchCanvas" width="300" height="160"></canvas>
                 </div>
             </div>
         </div>
@@ -134,7 +161,7 @@
     const data = [
         { img: "1.jpeg", text: "Happy Birthday! It’s been great having someone so reliable to navigate the daily grind with. 🤝" },
         { img: "2.jpeg", text: "From lab sessions to sharing earphones, thanks for making the long hours much more manageable. 🧪" },
-        { img: "7.jpeg", text: "I really value the healthy competition we have. You definitely keep me on my toes.. 📈" },
+        { img: "7.jpeg", text: "I really value the healthy competition we have. You definitely keep me on my toes. 📈" },
         { img: "8.jpeg", text: "Grateful for the times you've had my back quietly. It hasn't gone unnoticed. 🫂" },
         { img: "9.jpeg", text: "Here's to all the random laughs that helped us get through the stressful days. 😂" },
         { img: "10.jpeg", text: "I admire your strength when things get tough. Glad to be on this journey with you. ✨" },
@@ -145,42 +172,37 @@
     const grid = document.getElementById('collageGrid');
     data.forEach((item, idx) => {
         const card = document.createElement('div');
-        card.className = 'img-card';
-        card.id = `card-${idx}`;
+        card.className = 'img-card'; card.id = `card-${idx}`;
         card.innerHTML = `<img src="${item.img}"><div class="typewriter-box" id="msg-${idx}"></div>`;
         grid.appendChild(card);
     });
 
-    // AUTO REVEAL ON SCROLL
-    const observerOptions = { threshold: 0.6 };
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const idx = parseInt(entry.target.id.split('-')[1]);
-                activateCard(idx);
+                activate(idx);
             }
         });
-    }, observerOptions);
+    }, { threshold: 0.7 });
 
-    document.querySelectorAll('.img-card').forEach(card => observer.observe(card));
+    document.querySelectorAll('.img-card').forEach(c => observer.observe(c));
 
-    const activated = new Set();
-    function activateCard(idx) {
-        if (activated.has(idx)) return;
-        activated.add(idx);
-        
+    const done = new Set();
+    function activate(idx) {
+        if (done.has(idx)) return;
+        done.add(idx);
         const card = document.getElementById(`card-${idx}`);
         card.classList.add('active');
         
-        // Typewriter Effect
         const box = document.getElementById(`msg-${idx}`);
         const text = data[idx].text;
         let i = 0;
         const type = () => {
             if (i < text.length) {
-                box.innerHTML += text.charAt(i); i++; setTimeout(type, 30);
+                box.innerHTML += text.charAt(i); i++; setTimeout(type, 35);
             } else if (idx === data.length - 1) {
-                setTimeout(triggerFinale, 1000);
+                setTimeout(triggerFinale, 1200);
             }
         };
         type();
@@ -188,38 +210,49 @@
     }
 
     function triggerFinale() {
-        const section = document.getElementById('finale-section');
-        if (section.style.display === 'block') return;
-        section.style.display = 'block';
+        const sec = document.getElementById('finale-section');
+        if (sec.style.display === 'block') return;
+        sec.style.display = 'block';
         document.getElementById('cakeBox').style.display = 'block';
+        
         ['layer1', 'layer2', 'layer3', 'candle'].forEach((id, i) => {
-            setTimeout(() => document.getElementById(id).style.transform = 'translate(-50%, 0)', i * 600);
+            setTimeout(() => {
+                document.getElementById(id).style.transform = 'translate(-50%, 0)';
+                if(navigator.vibrate) navigator.vibrate(25);
+            }, i * 750);
         });
-        setTimeout(() => { document.getElementById('scratchWrap').style.display = 'block'; initScratch(); }, 3000);
+        setTimeout(() => { 
+            document.getElementById('scratchWrap').style.display = 'block'; 
+            initScratch(); 
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+        }, 3800);
     }
+
+    document.getElementById('candle').onclick = function() {
+        document.getElementById('flame').style.display = 'none';
+        confetti({ particleCount: 300, spread: 100, origin: { y: 0.6 }, scalar: 1.3 });
+    };
 
     function initScratch() {
         const canvas = document.getElementById('scratchCanvas');
         const ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#333';
-        ctx.fillRect(0, 0, 300, 150);
-        ctx.font = 'bold 16px sans-serif'; ctx.fillStyle = '#888'; ctx.textAlign = 'center';
-        ctx.fillText('SCRATCH TO REVEAL 🧿', 150, 80);
-        let drawing = false;
-        const scratch = (e) => {
-            if(!drawing) return;
-            const rect = canvas.getBoundingClientRect();
-            const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
-            const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
+        ctx.fillStyle = '#2c2c2c'; ctx.fillRect(0, 0, 300, 160);
+        ctx.font = 'bold 15px sans-serif'; ctx.fillStyle = '#666'; ctx.textAlign = 'center';
+        ctx.fillText('SCRATCH TO REVEAL 🧿', 150, 85);
+        let active = false;
+        const draw = (e) => {
+            if(!active) return;
+            const r = canvas.getBoundingClientRect();
+            const x = (e.clientX || e.touches[0].clientX) - r.left;
+            const y = (e.clientY || e.touches[0].clientY) - r.top;
             ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath(); ctx.arc(x, y, 20, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.arc(x, y, 22, 0, Math.PI*2); ctx.fill();
         };
-        canvas.onmousedown = canvas.ontouchstart = () => drawing = true;
-        window.onmouseup = window.ontouchend = () => drawing = false;
-        canvas.onmousemove = canvas.ontouchmove = scratch;
+        canvas.onmousedown = canvas.ontouchstart = () => active = true;
+        window.onmouseup = window.ontouchend = () => active = false;
+        canvas.onmousemove = canvas.ontouchmove = draw;
     }
 
-    // Countdown & Logic
     const target = new Date("January 20, 2026 00:00:00").getTime();
     setInterval(() => {
         const d = target - new Date().getTime();
@@ -228,7 +261,7 @@
     }, 1000);
 
     document.getElementById('entryBtn').onclick = () => {
-        document.getElementById('bgMusic').volume = 0.4; document.getElementById('bgMusic').play();
+        document.getElementById('bgMusic').volume = 0.5; document.getElementById('bgMusic').play();
         document.getElementById('overlay').style.opacity = '0';
         setTimeout(() => { document.getElementById('overlay').style.display = 'none'; document.getElementById('mainContent').style.display = 'flex'; }, 1200);
     };
@@ -249,7 +282,7 @@
 
     const composer = new EffectComposer(renderer);
     composer.addPass(new RenderPass(scene, camera));
-    composer.addPass(new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85));
+    composer.addPass(new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.4, 0.4, 0.85));
 
     const count = 15000;
     const geo = new THREE.BufferGeometry();
@@ -257,7 +290,7 @@
     const targets = new Float32Array(count * 3);
 
     for(let i=0; i<count; i++) {
-        pos[i*3] = (Math.random()-0.5)*100; pos[i*3+1] = (Math.random()-0.5)*100; pos[i*3+2] = (Math.random()-0.5)*100;
+        pos[i*3] = (Math.random()-0.5)*120; pos[i*3+1] = (Math.random()-0.5)*120; pos[i*3+2] = (Math.random()-0.5)*120;
     }
     geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
     const mat = new THREE.PointsMaterial({ size: 0.1, color: 0x00d4ff, blending: THREE.AdditiveBlending });
@@ -265,26 +298,21 @@
     scene.add(points);
 
     function morph(shape) {
-        const scale = 14;
+        const s = 15;
         for(let i=0; i<count; i++) {
-            const t = (i/count) * Math.PI * 2;
-            const i3 = i*3;
+            const t = (i/count) * Math.PI * 2; const i3 = i*3;
             if(shape === 0) { // Infinity
-                targets[i3] = (scale * Math.cos(t)) / (1 + Math.pow(Math.sin(t), 2));
-                targets[i3+1] = (scale * Math.sin(t) * Math.cos(t)) / (1 + Math.pow(Math.sin(t), 2));
+                targets[i3] = (s * Math.cos(t)) / (1 + Math.pow(Math.sin(t), 2));
+                targets[i3+1] = (s * Math.sin(t) * Math.cos(t)) / (1 + Math.pow(Math.sin(t), 2));
                 targets[i3+2] = 0;
             } else { // Sphere
-                const phi = Math.acos(-1 + (2 * i) / count);
-                const theta = Math.sqrt(count * Math.PI) * phi;
-                targets[i3] = (scale+2) * Math.cos(theta) * Math.sin(phi);
-                targets[i3+1] = (scale+2) * Math.sin(theta) * Math.sin(phi);
-                targets[i3+2] = (scale+2) * Math.cos(phi);
+                const phi = Math.acos(-1 + (2 * i) / count); const theta = Math.sqrt(count * Math.PI) * phi;
+                targets[i3] = (s+2) * Math.cos(theta) * Math.sin(phi); targets[i3+1] = (s+2) * Math.sin(theta) * Math.sin(phi); targets[i3+2] = (s+2) * Math.cos(phi);
             }
         }
     }
 
-    let currentShape = 0;
-    setInterval(() => { currentShape = 1 - currentShape; morph(currentShape); }, 5000);
+    let cur = 0; setInterval(() => { cur = 1 - cur; morph(cur); }, 6000);
     morph(0);
 
     function animate() {
