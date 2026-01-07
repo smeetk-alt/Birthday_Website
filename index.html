@@ -32,91 +32,67 @@
             margin: 0; padding: 0; background: var(--deep-space); 
             font-family: 'Inter', sans-serif; color: white; 
             overflow-x: hidden; scroll-behavior: smooth;
-            -webkit-font-smoothing: antialiased;
         }
 
-        /* Progress Indicator */
         #progress-bar {
             position: fixed; top: 0; left: 0; height: 3px;
             background: linear-gradient(to right, var(--primary-blue), var(--neon-pink));
-            width: 0%; z-index: 3000; transition: width 0.2s;
+            width: 0%; z-index: 3000;
         }
 
-        /* Professional Overlay */
         #overlay {
             position: fixed; inset: 0; display: flex; flex-direction: column;
             justify-content: center; align-items: center; z-index: 2000;
             background: radial-gradient(circle at center, #001d3d 0%, #000 100%);
-            transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 1.2s ease-out;
         }
 
         .timer-unit { 
-            text-align: center; min-width: 80px; padding: 15px;
+            text-align: center; min-width: 70px; padding: 12px;
             background: var(--glass); backdrop-filter: blur(10px);
             border: 1px solid var(--glass-border); border-radius: 12px;
         }
-        .timer-num { 
-            font-size: 2.2rem; font-weight: 800; color: white; 
-            letter-spacing: -1px; text-shadow: 0 0 20px rgba(0,212,255,0.5);
-        }
-        .timer-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.5; margin-top: 5px; }
+        .timer-num { font-size: 1.8rem; font-weight: 800; color: white; }
+        .timer-label { font-size: 0.5rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.5; }
 
         .entry-btn {
-            margin-top: 40px; padding: 20px 50px; border-radius: 100px;
+            margin-top: 40px; padding: 18px 45px; border-radius: 100px;
             border: 1px solid rgba(255,255,255,0.3); background: transparent;
             color: white; font-weight: 600; letter-spacing: 4px; cursor: pointer;
-            transition: 0.4s all; text-transform: uppercase; font-size: 0.8rem;
+            transition: 0.3s; text-transform: uppercase; font-size: 0.75rem;
         }
-        .entry-btn:hover { background: white; color: black; box-shadow: 0 0 40px rgba(255,255,255,0.4); }
+        .entry-btn:active { transform: scale(0.95); background: white; color: black; }
 
-        /* Story Experience */
         #canvas-container { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
         .content-scroll { position: relative; z-index: 10; width: 100%; display: none; flex-direction: column; align-items: center; }
         
         .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-        .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(3rem, 15vw, 6rem); margin: 0; font-style: italic; }
+        .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(3.5rem, 12vw, 6rem); margin: 0; font-style: italic; }
         
         .img-card { 
-            width: 90%; max-width: 550px; margin-bottom: 150px;
-            opacity: 0; transform: translateY(50px) scale(0.95);
-            transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+            width: 90%; max-width: 500px; margin-bottom: 120px;
+            opacity: 0; transform: translateY(30px);
+            transition: 1s cubic-bezier(0.22, 1, 0.36, 1);
         }
-        .img-card.active { opacity: 1; transform: translateY(0) scale(1); }
-        
-        .img-card img { 
-            width: 100%; border-radius: 4px; /* Professional sharp edges or slight curve */
-            box-shadow: 0 30px 60px rgba(0,0,0,0.8); 
-        }
+        .img-card.active { opacity: 1; transform: translateY(0); }
+        .img-card img { width: 100%; border-radius: 8px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
 
         .typewriter-box {
-            margin-top: -30px; position: relative; z-index: 2;
-            background: rgba(10, 10, 10, 0.7); backdrop-filter: blur(20px);
-            padding: 30px; border-left: 3px solid var(--primary-blue);
-            font-size: 1.1rem; line-height: 1.8; font-weight: 300;
+            margin-top: -20px; position: relative; z-index: 2;
+            background: rgba(10, 10, 10, 0.8); backdrop-filter: blur(20px);
+            padding: 25px; border-left: 2px solid var(--primary-blue);
+            font-size: 1rem; line-height: 1.6; font-weight: 300;
         }
 
-        /* Pro Physics Cake */
-        .cake-box { height: 400px; position: relative; margin: 100px auto; width: 250px; }
-        .layer { 
-            position: absolute; left: 50%; transform: translate(-50%, -1200px); 
-            border-radius: 50% / 25px;
-            transition: 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Elastic Bounce */
-        }
-        .l1 { bottom: 0; width: 220px; height: 90px; background: #3d2b1f; z-index: 3; }
-        .l2 { bottom: 70px; width: 170px; height: 80px; background: #ff4d6d; z-index: 4; }
-        .l3 { bottom: 135px; width: 120px; height: 65px; background: #fff; z-index: 5; }
-        .candle-stick { bottom: 190px; width: 12px; height: 50px; background: white; z-index: 6; transform: translate(-50%, -1200px); border-radius: 2px; }
+        .cake-box { height: 350px; position: relative; margin: 50px auto; width: 220px; }
+        .layer { position: absolute; left: 50%; transform: translate(-50%, -1000px); border-radius: 50% / 20px; transition: 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .l1 { bottom: 0; width: 200px; height: 80px; background: #3d2b1f; }
+        .l2 { bottom: 60px; width: 150px; height: 70px; background: #ff4d6d; }
+        .l3 { bottom: 120px; width: 100px; height: 55px; background: #fff; }
+        .candle-stick { bottom: 170px; width: 10px; height: 45px; background: white; transform: translate(-50%, -1000px); }
 
-        /* Scratch Card Polish */
-        .scratch-wrap { display: none; margin: 80px 0; opacity: 0; transition: 1s opacity; }
-        .scratch-wrap.visible { opacity: 1; }
-        #scratchCanvas { cursor: url('https://cdn-icons-png.flaticon.com/32/1042/1042336.png'), auto; }
-
-        @media (max-width: 600px) {
-            .hero h1 { font-size: 4rem; }
-            .timer-unit { min-width: 60px; padding: 10px; }
-            .timer-num { font-size: 1.5rem; }
-        }
+        .scratch-wrap { display: none; margin: 60px 0; }
+        #scratchCanvas { border-radius: 12px; touch-action: none; background: transparent; }
     </style>
 </head>
 <body>
@@ -124,11 +100,11 @@
 <div id="progress-bar"></div>
 
 <div id="overlay">
-    <div id="countdown" style="display: flex; gap: 15px;">
-        <div class="timer-unit"><span class="timer-num" id="days">00</span><span class="timer-label">Days</span></div>
-        <div class="timer-unit"><span class="timer-num" id="hours">00</span><span class="timer-label">Hrs</span></div>
-        <div class="timer-unit"><span class="timer-num" id="mins">00</span><span class="timer-label">Min</span></div>
-        <div class="timer-unit"><span class="timer-num" id="secs">00</span><span class="timer-label">Sec</span></div>
+    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+        <div class="timer-unit"><span class="timer-num" id="days">00</span><br><span class="timer-label">Days</span></div>
+        <div class="timer-unit"><span class="timer-num" id="hours">00</span><br><span class="timer-label">Hrs</span></div>
+        <div class="timer-unit"><span class="timer-num" id="mins">00</span><br><span class="timer-label">Min</span></div>
+        <div class="timer-unit"><span class="timer-num" id="secs">00</span><br><span class="timer-label">Sec</span></div>
     </div>
     <button class="entry-btn" id="entryBtn">Begin Experience</button>
 </div>
@@ -137,27 +113,25 @@
 
 <div class="content-scroll" id="mainContent">
     <div class="hero">
-        <p style="letter-spacing: 12px; opacity: 0.5; font-size: 0.7rem;">ESTABLISHED 2008</p>
+        <p style="letter-spacing: 10px; opacity: 0.5; font-size: 0.6rem; text-transform: uppercase;">A Journey of 18 Years</p>
         <h1>Kashvi</h1>
-        <p style="margin-top: 20px; opacity: 0.6;">Scroll to explore the journey</p>
+        <p style="margin-top: 20px; opacity: 0.4; font-size: 0.8rem;">Scroll to explore</p>
     </div>
 
-    <div class="collage" id="collageGrid" style="width: 100%; display: flex; flex-direction: column; align-items: center;"></div>
+    <div id="collageGrid" style="display: flex; flex-direction: column; align-items: center; width: 100%;"></div>
 
-    <div id="finale-section" style="display: none; padding-bottom: 200px; width: 100%;">
+    <div id="finale-section" style="display: none; width: 100%; text-align: center; padding-bottom: 150px;">
         <div class="cake-box">
             <div class="layer l1" id="layer1"></div>
             <div class="layer l2" id="layer2"></div>
             <div class="layer l3" id="layer3"></div>
-            <div class="layer candle-stick" id="candle"><div class="flame" id="flame"></div></div>
+            <div class="layer candle-stick" id="candle"></div>
         </div>
-        
-        <h2 style="font-family: 'Playfair Display', serif; font-size: 3rem; text-align: center; margin: 50px 0;">Happy Eighteenth.</h2>
-        
+        <h2 style="font-family: 'Playfair Display', serif; font-size: 2.5rem; margin: 40px 0;">Happy 18th Birthday.</h2>
         <div class="scratch-wrap" id="scratchWrap">
             <div style="position: relative; width: 300px; height: 160px; margin: 0 auto;">
-                <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: #111; color: var(--gold); border: 1px solid var(--gold); border-radius: 8px; font-weight: 500; text-align: center; padding: 20px;">
-                    May this chapter be your most successful one yet. 🧿💙
+                <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: #0a0a0a; color: var(--gold); border: 1px solid var(--gold); border-radius: 12px; font-weight: 500; padding: 20px;">
+                    May this chapter be your best one yet. 🧿💙
                 </div>
                 <canvas id="scratchCanvas" width="300" height="160"></canvas>
             </div>
@@ -165,7 +139,9 @@
     </div>
 </div>
 
-<audio id="bgMusic" loop preload="auto"><source src="birthday-song.mp3" type="audio/mpeg"></audio>
+<audio id="bgMusic" loop preload="auto">
+    <source src="birthday-song.mp3" type="audio/mpeg">
+</audio>
 
 <script>
     const data = [
@@ -181,26 +157,14 @@
 
     const grid = document.getElementById('collageGrid');
     data.forEach((item, idx) => {
-        grid.innerHTML += `
-            <div class="img-card" id="card-${idx}">
-                <img src="${item.img}">
-                <div class="typewriter-box" id="msg-${idx}"></div>
-            </div>`;
+        grid.innerHTML += `<div class="img-card" id="card-${idx}"><img src="${item.img}"><div class="typewriter-box" id="msg-${idx}"></div></div>`;
     });
-
-    // Progress Bar Logic
-    window.onscroll = () => {
-        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        const scrolled = (winScroll / height) * 100;
-        document.getElementById("progress-bar").style.width = scrolled + "%";
-    };
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) activate(parseInt(entry.target.id.split('-')[1]));
         });
-    }, { threshold: 0.6 });
+    }, { threshold: 0.5 });
     document.querySelectorAll('.img-card').forEach(c => observer.observe(c));
 
     const activated = new Set();
@@ -213,43 +177,35 @@
         let i = 0;
         const type = () => {
             if (i < text.length) { box.innerHTML += text.charAt(i); i++; setTimeout(type, 30); }
-            else if (idx === data.length - 1) { 
-                setTimeout(revealFinale, 1500);
-            }
+            else if (idx === data.length - 1) setTimeout(revealFinale, 1500);
         };
         type();
     }
 
     function revealFinale() {
-        const finale = document.getElementById('finale-section');
-        finale.style.display = 'block';
+        document.getElementById('finale-section').style.display = 'block';
         ['layer1', 'layer2', 'layer3', 'candle'].forEach((id, i) => {
-            setTimeout(() => { 
-                document.getElementById(id).style.transform = 'translate(-50%, 0)';
-                if(navigator.vibrate) navigator.vibrate(20);
-            }, i * 600);
+            setTimeout(() => { document.getElementById(id).style.transform = 'translate(-50%, 0)'; }, i * 600);
         });
         setTimeout(() => {
             document.getElementById('scratchWrap').style.display = 'block';
-            setTimeout(() => document.getElementById('scratchWrap').classList.add('visible'), 100);
+            initScratch();
         }, 3000);
     }
 
-    // Scratch Card Polish
     function initScratch() {
         const canvas = document.getElementById('scratchCanvas');
         const ctx = canvas.getContext('2d');
         ctx.fillStyle = '#333'; ctx.fillRect(0, 0, 300, 160);
-        ctx.font = '500 14px Inter'; ctx.fillStyle = '#777'; ctx.textAlign = 'center';
+        ctx.font = '500 14px Inter'; ctx.fillStyle = '#888'; ctx.textAlign = 'center';
         ctx.fillText('REVEAL FINAL WISH', 150, 85);
-
         let drawing = false;
         const scratch = (e) => {
             if(!drawing) return;
             e.preventDefault();
             const r = canvas.getBoundingClientRect();
-            const x = (e.clientX || e.touches[0].clientX) - r.left;
-            const y = (e.clientY || e.touches[0].clientY) - r.top;
+            const x = (e.clientX || (e.touches && e.touches[0].clientX)) - r.left;
+            const y = (e.clientY || (e.touches && e.touches[0].clientY)) - r.top;
             ctx.globalCompositeOperation = 'destination-out';
             ctx.beginPath(); ctx.arc(x, y, 25, 0, Math.PI*2); ctx.fill();
         };
@@ -258,7 +214,22 @@
         canvas.onmousemove = canvas.ontouchmove = scratch;
     }
 
-    window.onload = initScratch;
+    // Fixed Button Logic
+    document.getElementById('entryBtn').addEventListener('click', function() {
+        const audio = document.getElementById('bgMusic');
+        audio.play().catch(e => console.log("Audio play blocked, but continuing experience."));
+        
+        document.getElementById('overlay').style.opacity = '0';
+        setTimeout(() => {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'flex';
+        }, 1200);
+    });
+
+    window.onscroll = () => {
+        const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+        document.getElementById("progress-bar").style.width = scrolled + "%";
+    };
 
     // Countdown
     const target = new Date("January 20, 2026 00:00:00").getTime();
@@ -269,15 +240,6 @@
         document.getElementById('mins').innerText = String(Math.max(0, Math.floor((diff % 3600000) / 60000))).padStart(2, '0');
         document.getElementById('secs').innerText = String(Math.max(0, Math.floor((diff % 60000) / 1000))).padStart(2, '0');
     }, 1000);
-
-    document.getElementById('entryBtn').onclick = () => {
-        document.getElementById('bgMusic').play();
-        document.getElementById('overlay').style.opacity = '0';
-        setTimeout(() => { 
-            document.getElementById('overlay').style.display = 'none'; 
-            document.getElementById('mainContent').style.display = 'flex';
-        }, 1500);
-    };
 </script>
 
 <script type="module">
@@ -287,23 +249,21 @@
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.getElementById('canvas-container').appendChild(renderer.domElement);
-
-    const count = 8000;
+    const count = 5000;
     const geo = new THREE.BufferGeometry();
     const pos = new Float32Array(count * 3);
     for(let i=0; i<count*3; i++) pos[i] = (Math.random()-0.5)*100;
     geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    const mat = new THREE.PointsMaterial({ size: 0.05, color: 0x00d4ff, transparent: true, opacity: 0.6 });
+    const mat = new THREE.PointsMaterial({ size: 0.05, color: 0x00d4ff, transparent: true, opacity: 0.4 });
     const points = new THREE.Points(geo, mat);
     scene.add(points);
     camera.position.z = 30;
-
-    function animate() {
-        requestAnimationFrame(animate);
-        points.rotation.y += 0.001;
-        renderer.render(scene, camera);
-    }
+    function animate() { requestAnimationFrame(animate); points.rotation.y += 0.0008; renderer.render(scene, camera); }
     animate();
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
 </script>
 </body>
 </html>
