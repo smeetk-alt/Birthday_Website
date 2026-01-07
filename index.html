@@ -1,307 +1,323 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kashvi | 18</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;800&family=Playfair+Display:ital,wght@1,700&family=Fira+Code:wght@300;500&display=swap" rel="stylesheet">
-    
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script async src="https://unpkg.com/es-module-shims@1.8.0/dist/es-module-shims.js"></script>
-    <script type="importmap">
-    {
-        "imports": {
-            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-        }
-    }
-    </script>
-    
-    <style>
-        :root { 
-            --primary-blue: #00d4ff; 
-            --neon-pink: #ffb7c5; 
-            --deep-space: #030305; 
-            --gold: #ffd700; 
-            --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.1);
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kashvi | 18</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;800&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script async src="https://unpkg.com/es-module-shims@1.8.0/dist/es-module-shims.js"></script>
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+    
+    <style>
+        :root { 
+            --primary-blue: #00d4ff; 
+            --neon-pink: #ffb7c5; 
+            --deep-space: #030305; 
+            --gold: #ffd700; 
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
 
-        body { 
-            margin: 0; padding: 0; background: var(--deep-space); 
-            font-family: 'Inter', sans-serif; color: white; 
-            overflow-x: hidden; scroll-behavior: smooth;
-        }
+        body { 
+            margin: 0; padding: 0; background: var(--deep-space); 
+            font-family: 'Inter', sans-serif; color: white; 
+            overflow-x: hidden; scroll-behavior: smooth;
+        }
 
-        .smeet-brand {
-            position: fixed; bottom: 20px; right: 20px; font-family: 'Fira Code', monospace;
-            font-size: 0.6rem; letter-spacing: 2px; opacity: 0.4; z-index: 1000; color: white;
-            text-transform: uppercase; pointer-events: none;
-        }
+        #progress-bar {
+            position: fixed; top: 0; left: 0; height: 3px;
+            background: linear-gradient(to right, var(--primary-blue), var(--neon-pink));
+            width: 0%; z-index: 3000;
+        }
 
-        #progress-bar {
-            position: fixed; top: 0; left: 0; height: 3px;
-            background: linear-gradient(to right, var(--primary-blue), var(--neon-pink));
-            width: 0%; z-index: 3000;
-        }
+        #overlay {
+            position: fixed; inset: 0; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 2000;
+            background: radial-gradient(circle at center, #001d3d 0%, #000000 100%);
+            transition: opacity 1.2s ease-out;
+        }
 
-        #overlay {
-            position: fixed; inset: 0; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; z-index: 2000;
-            background: radial-gradient(circle at center, #001d3d 0%, #000000 100%);
-            transition: opacity 1.2s ease-out;
-        }
+        .timer-unit { 
+            text-align: center; min-width: 75px; padding: 12px;
+            background: var(--glass); backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border); border-radius: 12px;
+        }
+        .timer-num { font-size: 1.8rem; font-weight: 800; color: white; letter-spacing: -1px; }
+        .timer-label { font-size: 0.5rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.5; }
 
-        .timer-unit { 
-            text-align: center; min-width: 70px; padding: 10px;
-            background: var(--glass); backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border); border-radius: 12px;
-        }
-        .timer-num { font-size: 1.6rem; font-weight: 800; color: white; }
-        .timer-label { font-size: 0.5rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.5; }
+        .entry-btn {
+            margin-top: 40px; padding: 18px 45px; border-radius: 100px;
+            border: 1px solid rgba(255,255,255,0.3); background: transparent;
+            color: white; font-weight: 600; letter-spacing: 4px; cursor: pointer;
+            transition: 0.3s; text-transform: uppercase; font-size: 0.75rem;
+        }
+        .entry-btn:hover { background: white; color: black; }
 
-        .entry-btn {
-            margin-top: 40px; padding: 15px 40px; border-radius: 100px;
-            border: 1px solid rgba(255,255,255,0.3); background: transparent;
-            color: white; font-weight: 600; letter-spacing: 4px; cursor: pointer;
-            transition: 0.3s; text-transform: uppercase; font-size: 0.7rem;
-        }
-        .entry-btn:hover { background: white; color: black; box-shadow: 0 0 20px rgba(255,255,255,0.2); }
+        #canvas-container { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+        .content-scroll { position: relative; z-index: 10; width: 100%; display: none; flex-direction: column; align-items: center; }
+        
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(3.5rem, 12vw, 6rem); margin: 0; font-style: italic; }
+        
+        .img-card { 
+            width: 90%; max-width: 500px; margin-bottom: 120px;
+            opacity: 0; transform: translateY(40px);
+            transition: 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .img-card.active { opacity: 1; transform: translateY(0); }
+        .img-card img { width: 100%; border-radius: 4px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
 
-        #canvas-container { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
-        .content-scroll { position: relative; z-index: 10; width: 100%; display: none; flex-direction: column; align-items: center; }
-        
-        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-        .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(3.5rem, 12vw, 6rem); margin: 0; font-style: italic; }
-        
-        .img-card { 
-            width: 85%; max-width: 380px; margin-bottom: 120px; 
-            opacity: 0; transform: translateY(40px);
-            transition: 1.2s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        .img-card.active { opacity: 1; transform: translateY(0); }
-        .img-card img { width: 100%; border-radius: 4px; box-shadow: 0 15px 40px rgba(0,0,0,0.7); }
+        .typewriter-box {
+            margin-top: -25px; position: relative; z-index: 2;
+            background: rgba(10, 10, 10, 0.75); backdrop-filter: blur(25px);
+            padding: 25px; border-left: 3px solid var(--primary-blue);
+            font-size: 1.05rem; line-height: 1.7; font-weight: 300;
+        }
 
-        .typewriter-box {
-            margin-top: -20px; position: relative; z-index: 2;
-            background: rgba(10, 10, 10, 0.9); backdrop-filter: blur(20px);
-            padding: 20px; border-left: 2px solid var(--primary-blue);
-            font-size: 0.9rem; line-height: 1.6; font-weight: 300; color: #ddd;
-        }
+        .cake-box { height: 380px; position: relative; margin: 50px auto; width: 220px; }
+        .layer { position: absolute; left: 50%; transform: translate(-50%, -1200px); border-radius: 50% / 20px; transition: 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .l1 { bottom: 0; width: 200px; height: 85px; background: #3d2b1f; box-shadow: inset 0 -10px 20px rgba(0,0,0,0.4); }
+        .l2 { bottom: 65px; width: 155px; height: 75px; background: #ff4d6d; }
+        .l3 { bottom: 125px; width: 105px; height: 60px; background: #fff; }
+        .candle-stick { bottom: 180px; width: 12px; height: 50px; background: linear-gradient(to bottom, #fff, var(--primary-blue)); transform: translate(-50%, -1200px); border-radius: 4px; }
 
-        #finale-section { display: none; width: 100%; text-align: center; padding-bottom: 150px; }
-        .scratch-wrap { margin: 60px auto; width: 300px; opacity: 0; transition: 1s opacity; }
-        .scratch-wrap.visible { opacity: 1; }
-        .scratch-container { position: relative; width: 300px; height: 160px; margin: 0 auto; user-select: none; }
-        .scratch-content { 
-            position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; 
-            background: #0a0a0a; color: var(--gold); border: 1px solid var(--gold); 
-            border-radius: 12px; padding: 20px; font-weight: 500; text-align: center; font-size: 0.95rem;
-        }
-        #scratchCanvas { position: absolute; top: 0; left: 0; border-radius: 12px; touch-action: none; cursor: crosshair; z-index: 5; }
-    </style>
+        .scratch-wrap { display: none; margin: 60px 0; opacity: 0; transition: 1s opacity; }
+        .scratch-wrap.visible { opacity: 1; }
+        #scratchCanvas { border-radius: 12px; touch-action: none; cursor: crosshair; }
+    </style>
 </head>
 <body>
 
 <div id="progress-bar"></div>
-<div class="smeet-brand">ENGINEERED_BY_SMEET // 2026</div>
 
 <div id="overlay">
-    <div style="font-family: 'Fira Code'; font-size: 0.6rem; color: var(--primary-blue); margin-bottom: 20px; letter-spacing: 5px;">[ SYSTEM_INITIALIZING ]</div>
-    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-        <div class="timer-unit"><span class="timer-num" id="days">00</span><br><span class="timer-label">Days</span></div>
-        <div class="timer-unit"><span class="timer-num" id="hours">00</span><br><span class="timer-label">Hrs</span></div>
-        <div class="timer-unit"><span class="timer-num" id="mins">00</span><br><span class="timer-label">Min</span></div>
-        <div class="timer-unit"><span class="timer-num" id="secs">00</span><br><span class="timer-label">Sec</span></div>
-    </div>
-    <button class="entry-btn" id="entryBtn">Begin Experience</button>
+    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+        <div class="timer-unit"><span class="timer-num" id="days">00</span><br><span class="timer-label">Days</span></div>
+        <div class="timer-unit"><span class="timer-num" id="hours">00</span><br><span class="timer-label">Hrs</span></div>
+        <div class="timer-unit"><span class="timer-num" id="mins">00</span><br><span class="timer-label">Min</span></div>
+        <div class="timer-unit"><span class="timer-num" id="secs">00</span><br><span class="timer-label">Sec</span></div>
+    </div>
+    <button class="entry-btn" id="entryBtn">Begin Experience</button>
 </div>
 
 <div id="canvas-container"></div>
 
 <div class="content-scroll" id="mainContent">
-    <div class="hero">
-        <p style="letter-spacing: 12px; opacity: 0.5; font-size: 0.65rem; text-transform: uppercase;">The 18th Chapter</p>
-        <h1>Kashvi</h1>
-        <p style="margin-top: 25px; opacity: 0.3; font-size: 0.7rem; font-family: 'Fira Code';">SCROLL TO DECRYPT MEMORIES</p>
-    </div>
+    <div class="hero">
+        <p style="letter-spacing: 12px; opacity: 0.5; font-size: 0.65rem; text-transform: uppercase;">The 18th Chapter</p>
+        <h1>Kashvi</h1>
+        <p style="margin-top: 25px; opacity: 0.4; font-size: 0.8rem; font-weight: 300;">Scroll to begin</p>
+    </div>
 
-    <div id="collageGrid" style="display: flex; flex-direction: column; align-items: center; width: 100%;"></div>
+    <div id="collageGrid" style="display: flex; flex-direction: column; align-items: center; width: 100%;"></div>
 
-    <div id="finale-section">
-        <h2 style="font-family: 'Playfair Display', serif; font-size: 2.2rem; margin: 40px 0; font-style: italic;">Happy 18th Birthday.</h2>
-        <div class="scratch-wrap" id="scratchWrap">
-            <div class="scratch-container">
-                <div class="scratch-content">May your 18th year be your most powerful build yet. 🧿💙</div>
-                <canvas id="scratchCanvas" width="300" height="160"></canvas>
-            </div>
-            <p style="font-size: 0.6rem; opacity: 0.4; margin-top: 20px; font-family: 'Fira Code'; letter-spacing: 2px;">DECRYPT THE FINAL MODULE</p>
-        </div>
-    </div>
+    <div id="finale-section" style="display: none; width: 100%; text-align: center; padding-bottom: 150px;">
+        <div class="cake-box">
+            <div class="layer l1" id="layer1"></div>
+            <div class="layer l2" id="layer2"></div>
+            <div class="layer l3" id="layer3"></div>
+            <div class="layer candle-stick" id="candle"></div>
+        </div>
+        <h2 style="font-family: 'Playfair Display', serif; font-size: 2.8rem; margin: 40px 0; font-style: italic;">Happy 18th Birthday.</h2>
+        <div class="scratch-wrap" id="scratchWrap">
+            <div style="position: relative; width: 300px; height: 160px; margin: 0 auto;">
+                <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: #0a0a0a; color: var(--gold); border: 1px solid var(--gold); border-radius: 12px; font-weight: 500; padding: 25px; text-align: center;">
+                    May this year bring you endless success and joy. 🧿💙
+                </div>
+                <canvas id="scratchCanvas" width="300" height="160"></canvas>
+            </div>
+        </div>
+    </div>
 </div>
 
 <audio id="bgMusic" loop preload="auto"><source src="birthday-song.mp3" type="audio/mpeg"></audio>
 
 <script>
-    const data = [
-        { img: "1.jpeg", text: "Happy Birthday! It’s been great having someone so reliable to navigate the daily grind with. 🤝" },
-        { img: "2.jpeg", text: "From lab sessions to sharing earphones, thanks for making the long hours much more manageable. 🧪" },
-        { img: "7.jpeg", text: "I really value the healthy competition we have. You definitely keep me on my toes. 📈" },
-        { img: "8.jpeg", text: "Grateful for the times you've had my back quietly. It hasn't gone unnoticed. 🫂" },
-        { img: "9.jpeg", text: "Here's to all the random laughs that helped us get through the stressful days. 😂" },
-        { img: "10.jpeg", text: "I admire your strength when things get tough. Glad to be on this journey with you. ✨" },
-        { img: "5.jpeg", text: "Enjoy your 18th! It's a big milestone, and I know you're going to achieve great things. 🧿" },
-        { img: "6.jpeg", text: "Genuinely glad for this bond. Looking forward to more wins and successful projects ahead. 💙" }
-    ];
+    const data = [
+        { img: "1.jpeg", text: "Happy Birthday! It’s been great having someone so reliable to navigate the daily grind with. 🤝" },
+        { img: "2.jpeg", text: "From lab sessions to sharing earphones, thanks for making the long hours much more manageable. 🧪" },
+        { img: "7.jpeg", text: "I really value the healthy competition we have. You definitely keep me on my toes. 📈" },
+        { img: "8.jpeg", text: "Grateful for the times you've had my back quietly. It hasn't gone unnoticed. 🫂" },
+        { img: "9.jpeg", text: "Here's to all the random laughs that helped us get through the stressful days. 😂" },
+        { img: "10.jpeg", text: "I admire your strength when things get tough. Glad to be on this journey with you. ✨" },
+        { img: "5.jpeg", text: "Enjoy your 18th! It's a big milestone, and I know you're going to achieve great things. 🧿" },
+        { img: "6.jpeg", text: "Genuinely glad for this bond. Looking forward to more wins and successful projects ahead. 💙" }
+    ];
 
-    const grid = document.getElementById('collageGrid');
-    data.forEach((item, idx) => {
-        grid.innerHTML += `<div class="img-card" id="card-${idx}"><img src="${item.img}"><div class="typewriter-box" id="msg-${idx}"></div></div>`;
-    });
+    const grid = document.getElementById('collageGrid');
+    data.forEach((item, idx) => {
+        grid.innerHTML += `<div class="img-card" id="card-${idx}"><img src="${item.img}"><div class="typewriter-box" id="msg-${idx}"></div></div>`;
+    });
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) activate(parseInt(entry.target.id.split('-')[1]));
-        });
-    }, { threshold: 0.6 });
-    document.querySelectorAll('.img-card').forEach(c => observer.observe(c));
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) activate(parseInt(entry.target.id.split('-')[1]));
+        });
+    }, { threshold: 0.6 });
+    document.querySelectorAll('.img-card').forEach(c => observer.observe(c));
 
-    const activated = new Set();
-    function activate(idx) {
-        if (activated.has(idx)) return;
-        activated.add(idx);
-        document.getElementById(`card-${idx}`).classList.add('active');
-        const box = document.getElementById(`msg-${idx}`);
-        const text = data[idx].text;
-        let i = 0;
-        function type() {
-            if (i < text.length) { box.innerHTML += text.charAt(i++); setTimeout(type, 35); }
-            else if (idx === data.length - 1) {
-                document.getElementById('finale-section').style.display = 'block';
-                setTimeout(() => {
-                    const wrap = document.getElementById('scratchWrap');
-                    wrap.classList.add('visible');
-                    initScratch();
-                }, 1000);
-            }
-        }
-        type();
-    }
+    const activated = new Set();
+    function activate(idx) {
+        if (activated.has(idx)) return;
+        activated.add(idx);
+        document.getElementById(`card-${idx}`).classList.add('active');
+        const box = document.getElementById(`msg-${idx}`);
+        const text = data[idx].text;
+        let i = 0;
+        const type = () => {
+            if (i < text.length) { box.innerHTML += text.charAt(i); i++; setTimeout(type, 30); }
+            else if (idx === data.length - 1) setTimeout(revealFinale, 1500);
+        };
+        type();
+        confetti({ particleCount: 15, spread: 40, origin: { y: 0.8 }, colors: ['#00d4ff'] });
+    }
 
-    function initScratch() {
-        const canvas = document.getElementById('scratchCanvas');
-        const ctx = canvas.getContext('2d', { willReadFrequently: true });
-        
-        // Metallic Blue Gradient
-        const grad = ctx.createLinearGradient(0, 0, 300, 160);
-        grad.addColorStop(0, '#001d3d');
-        grad.addColorStop(0.5, '#005f73');
-        grad.addColorStop(1, '#001219');
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, 300, 160);
+    function revealFinale() {
+        document.getElementById('finale-section').style.display = 'block';
+        ['layer1', 'layer2', 'layer3', 'candle'].forEach((id, i) => {
+            setTimeout(() => { 
+                document.getElementById(id).style.transform = 'translate(-50%, 0)';
+                if(navigator.vibrate) navigator.vibrate(25);
+            }, i * 700);
+        });
+        setTimeout(() => {
+            document.getElementById('scratchWrap').style.display = 'block';
+            setTimeout(() => document.getElementById('scratchWrap').classList.add('visible'), 100);
+            initScratch();
+        }, 3500);
+    }
 
-        // Add Glitter Particles
-        for(let i=0; i<400; i++) {
-            ctx.fillStyle = Math.random() > 0.5 ? '#00d4ff' : '#ffffff';
-            ctx.globalAlpha = Math.random();
-            ctx.fillRect(Math.random()*300, Math.random()*160, 1.5, 1.5);
-        }
-        
-        ctx.globalAlpha = 1.0;
-        ctx.font = '500 11px Fira Code';
-        ctx.fillStyle = '#fff';
-        ctx.textAlign = 'center';
-        ctx.fillText('ENCRYPTED FOIL // SCRATCH', 150, 85);
+    function initScratch() {
+        const canvas = document.getElementById('scratchCanvas');
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#2c2c2c'; ctx.fillRect(0, 0, 300, 160);
+        ctx.font = '500 14px Inter'; ctx.fillStyle = '#666'; ctx.textAlign = 'center';
+        ctx.fillText('SCRATCH TO REVEAL 🧿', 150, 85);
+        let drawing = false;
+        const scratch = (e) => {
+            if(!drawing) return;
+            e.preventDefault();
+            const r = canvas.getBoundingClientRect();
+            const x = (e.clientX || (e.touches && e.touches[0].clientX)) - r.left;
+            const y = (e.clientY || (e.touches && e.touches[0].clientY)) - r.top;
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath(); ctx.arc(x, y, 25, 0, Math.PI*2); ctx.fill();
+        };
+        canvas.onmousedown = canvas.ontouchstart = () => drawing = true;
+        window.onmouseup = window.ontouchend = () => drawing = false;
+        canvas.onmousemove = canvas.ontouchmove = scratch;
+    }
 
-        let drawing = false;
-        let pointsScratched = 0;
+    document.getElementById('entryBtn').onclick = function() {
+        document.getElementById('bgMusic').play().catch(() => {});
+        document.getElementById('overlay').style.opacity = '0';
+        setTimeout(() => {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'flex';
+        }, 1200);
+    };
 
-        function scratch(e) {
-            if (!drawing) return;
-            const rect = canvas.getBoundingClientRect();
-            const x = (e.pageX || e.touches[0].pageX) - rect.left - window.scrollX;
-            const y = (e.pageY || e.touches[0].pageY) - rect.top - window.scrollY;
+    window.onscroll = () => {
+        const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+        document.getElementById("progress-bar").style.width = scrolled + "%";
+    };
 
-            ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath();
-            ctx.arc(x, y, 22, 0, Math.PI * 2);
-            ctx.fill();
-
-            pointsScratched++;
-            if (pointsScratched > 80) checkClear();
-        }
-
-        function checkClear() {
-            const imageData = ctx.getImageData(0, 0, 300, 160);
-            let count = 0;
-            for (let i = 0; i < imageData.data.length; i += 4) {
-                if (imageData.data[i + 3] === 0) count++;
-            }
-            if (count > (imageData.data.length / 4) * 0.45) {
-                canvas.style.opacity = '0';
-                canvas.style.transition = 'opacity 0.8s ease';
-                confetti({ particleCount: 180, spread: 80, origin: { y: 0.8 }, colors: ['#00d4ff', '#ffffff', '#ffb7c5'] });
-                pointsScratched = -10000;
-            }
-        }
-
-        canvas.addEventListener('mousedown', () => drawing = true);
-        canvas.addEventListener('touchstart', (e) => { drawing = true; e.preventDefault(); });
-        window.addEventListener('mouseup', () => drawing = false);
-        window.addEventListener('touchend', () => drawing = false);
-        canvas.addEventListener('mousemove', scratch);
-        canvas.addEventListener('touchmove', (e) => { scratch(e); e.preventDefault(); });
-    }
-
-    document.getElementById('entryBtn').onclick = function() {
-        document.getElementById('bgMusic').play().catch(() => {});
-        document.getElementById('overlay').style.opacity = '0';
-        setTimeout(() => {
-            document.getElementById('overlay').style.display = 'none';
-            document.getElementById('mainContent').style.display = 'flex';
-        }, 1200);
-    };
-
-    window.onscroll = () => {
-        const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-        document.getElementById("progress-bar").style.width = scrolled + "%";
-    };
-
-    const target = new Date("January 20, 2026 00:00:00").getTime();
-    setInterval(() => {
-        const diff = target - new Date().getTime();
-        document.getElementById('days').innerText = String(Math.max(0, Math.floor(diff / 86400000))).padStart(2, '0');
-        document.getElementById('hours').innerText = String(Math.max(0, Math.floor((diff % 86400000) / 3600000))).padStart(2, '0');
-        document.getElementById('mins').innerText = String(Math.max(0, Math.floor((diff % 3600000) / 60000))).padStart(2, '0');
-        document.getElementById('secs').innerText = String(Math.max(0, Math.floor((diff % 60000) / 1000))).padStart(2, '0');
-    }, 1000);
+    const target = new Date("January 20, 2026 00:00:00").getTime();
+    setInterval(() => {
+        const diff = target - new Date().getTime();
+        document.getElementById('days').innerText = String(Math.max(0, Math.floor(diff / 86400000))).padStart(2, '0');
+        document.getElementById('hours').innerText = String(Math.max(0, Math.floor((diff % 86400000) / 3600000))).padStart(2, '0');
+        document.getElementById('mins').innerText = String(Math.max(0, Math.floor((diff % 3600000) / 60000))).padStart(2, '0');
+        document.getElementById('secs').innerText = String(Math.max(0, Math.floor((diff % 60000) / 1000))).padStart(2, '0');
+    }, 1000);
 </script>
 
 <script type="module">
-    import * as THREE from 'three';
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.getElementById('canvas-container').appendChild(renderer.domElement);
+    import * as THREE from 'three';
+    import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+    import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+    import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
-    const count = 7000;
-    const geo = new THREE.BufferGeometry();
-    const pos = new Float32Array(count * 3);
-    for(let i=0; i<count*3; i++) pos[i] = (Math.random()-0.5)*100;
-    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    const mat = new THREE.PointsMaterial({ size: 0.1, color: 0x00d4ff, transparent: true, opacity: 0.5 });
-    const points = new THREE.Points(geo, mat);
-    scene.add(points);
-    camera.position.z = 40;
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+    camera.position.z = 30;
+    
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    document.getElementById('canvas-container').appendChild(renderer.domElement);
 
-    function animate() {
-        requestAnimationFrame(animate);
-        points.rotation.y += 0.001;
-        renderer.render(scene, camera);
-    }
-    animate();
+    const composer = new EffectComposer(renderer);
+    composer.addPass(new RenderPass(scene, camera));
+    composer.addPass(new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85));
+
+    const count = 12000;
+    const geo = new THREE.BufferGeometry();
+    const pos = new Float32Array(count * 3);
+    const targets = new Float32Array(count * 3);
+
+    for(let i=0; i<count; i++) {
+        pos[i*3] = (Math.random()-0.5)*120; 
+        pos[i*3+1] = (Math.random()-0.5)*120; 
+        pos[i*3+2] = (Math.random()-0.5)*120;
+    }
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    
+    const mat = new THREE.PointsMaterial({ size: 0.08, color: 0x00d4ff, blending: THREE.AdditiveBlending, transparent: true, opacity: 0.8 });
+    const points = new THREE.Points(geo, mat);
+    scene.add(points);
+
+    function morph(shape) {
+        const s = 15;
+        for(let i=0; i<count; i++) {
+            const t = (i/count) * Math.PI * 2; const i3 = i*3;
+            if(shape === 0) { // Infinity Morph
+                targets[i3] = (s * Math.cos(t)) / (1 + Math.pow(Math.sin(t), 2));
+                targets[i3+1] = (s * Math.sin(t) * Math.cos(t)) / (1 + Math.pow(Math.sin(t), 2));
+                targets[i3+2] = (Math.random()-0.5) * 2;
+            } else { // Sphere Morph
+                const phi = Math.acos(-1 + (2 * i) / count); 
+                const theta = Math.sqrt(count * Math.PI) * phi;
+                targets[i3] = (s+2) * Math.cos(theta) * Math.sin(phi); 
+                targets[i3+1] = (s+2) * Math.sin(theta) * Math.sin(phi); 
+                targets[i3+2] = (s+2) * Math.cos(phi);
+            }
+        }
+    }
+
+    let currentShape = 0;
+    setInterval(() => { currentShape = 1 - currentShape; morph(currentShape); }, 6000);
+    morph(0);
+
+    function animate() {
+        requestAnimationFrame(animate);
+        const p = geo.attributes.position.array;
+        for(let i=0; i<count*3; i++) {
+            p[i] += (targets[i] - p[i]) * 0.025; // Smooth transition
+        }
+        points.rotation.y += 0.0015;
+        points.rotation.x += 0.0005;
+        geo.attributes.position.needsUpdate = true;
+        composer.render();
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        composer.setSize(window.innerWidth, window.innerHeight);
+    });
 </script>
 </body>
 </html>
