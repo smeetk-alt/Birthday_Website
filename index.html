@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Happy 18th Kashvi! 🧿💙</title>
+    <title>Kashvi's 18th | Journey 🧿</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;800&family=Playfair+Display:ital,wght@0,400;1,700&family=Fira+Code:wght@300;500&display=swap" rel="stylesheet">
+    
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script async src="https://unpkg.com/es-module-shims@1.8.0/dist/es-module-shims.js"></script>
     <script type="importmap">
@@ -14,46 +17,80 @@
         }
     }
     </script>
+    
     <style>
-        :root { --primary-blue: #00d4ff; --neon-pink: #ffb7c5; --deep-space: #010103; --gold: #ffd700; --cream: #ffffff; }
-        body { margin: 0; padding: 0; background: var(--deep-space); font-family: 'Segoe UI', Roboto, sans-serif; color: white; overflow-x: hidden; scroll-behavior: smooth; user-select: none; -webkit-tap-highlight-color: transparent; }
-
-        /* Welcome Overlay */
-        #overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 2000; transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-            background: radial-gradient(circle at center, #001d3d 0%, #000000 100%);
+        :root { 
+            --primary-blue: #00d4ff; 
+            --neon-pink: #ffb7c5; 
+            --deep-space: #010103; 
+            --gold: #ffd700; 
+            --cream: #ffffff; 
         }
+
+        body { 
+            margin: 0; padding: 0; background: var(--deep-space); 
+            font-family: 'Inter', sans-serif; color: white; 
+            overflow: hidden; scroll-behavior: smooth; 
+            user-select: none; -webkit-tap-highlight-color: transparent;
+        }
+
+        /* --- LOCK SCREEN OVERLAY --- */
+        #overlay {
+            position: fixed; inset: 0; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 2000;
+            background: radial-gradient(circle at center, rgba(0, 29, 61, 0.9) 0%, #000000 100%);
+            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 1s ease-in-out;
+        }
+
+        #secret-trigger { 
+            letter-spacing: 8px; color: var(--primary-blue); font-weight: bold; 
+            margin-bottom: 30px; cursor: pointer; font-size: 0.9rem; 
+            text-shadow: 0 0 10px rgba(0,212,255,0.5); font-family: 'Fira Code';
+        }
+
+        .journey-header { text-align: center; margin-bottom: 40px; padding: 0 30px; }
+        .journey-header h1 { 
+            font-family: 'Playfair Display', serif; font-size: 2.5rem; font-style: italic; margin: 0;
+            background: linear-gradient(to right, #fff, var(--primary-blue));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .journey-line { width: 50px; height: 1px; background: var(--neon-pink); margin: 15px auto; opacity: 0.6; }
+        .journey-sub { font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 20px; }
         
+        .system-logs { font-family: 'Fira Code', monospace; font-size: 0.6rem; color: var(--primary-blue); opacity: 0.5; line-height: 2; text-align: left; display: inline-block; }
+
         #countdown { display: flex; margin-bottom: 30px; gap: 10px; flex-wrap: wrap; justify-content: center; }
-        .timer-unit { text-align: center; min-width: 70px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; border: 1px solid rgba(0, 212, 255, 0.2); }
-        .timer-num { font-size: 2rem; font-weight: 800; color: var(--primary-blue); display: block; text-shadow: 0 0 15px var(--primary-blue); }
-        .timer-label { font-size: 0.6rem; text-transform: uppercase; opacity: 0.7; letter-spacing: 1px; }
+        .timer-unit { text-align: center; min-width: 65px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; border: 1px solid rgba(0, 212, 255, 0.2); }
+        .timer-num { font-size: 1.8rem; font-weight: 800; color: var(--primary-blue); display: block; text-shadow: 0 0 15px var(--primary-blue); }
+        .timer-label { font-size: 0.5rem; text-transform: uppercase; opacity: 0.7; letter-spacing: 1px; }
 
         .entry-btn {
-            padding: 18px 45px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.2); font-weight: bold;
-            letter-spacing: 3px; transition: 0.5s; cursor: pointer; background: rgba(0, 212, 255, 0.1);
-            color: white; backdrop-filter: blur(10px); box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
+            padding: 18px 45px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.1); font-weight: bold;
+            letter-spacing: 3px; transition: 0.5s; cursor: not-allowed; background: rgba(255, 255, 255, 0.05);
+            color: rgba(255,255,255,0.3); backdrop-filter: blur(10px); font-size: 0.7rem;
+        }
+        .entry-btn.active {
+            cursor: pointer; background: rgba(0, 212, 255, 0.1); color: white; border: 1px solid var(--primary-blue);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
         }
 
-        #canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
-        .content-scroll { position: relative; z-index: 10; width: 100%; display: none; flex-direction: column; align-items: center; }
+        /* --- MAIN CONTENT --- */
+        #canvas-container { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+        .content-scroll { position: relative; z-index: 10; width: 100%; display: none; flex-direction: column; align-items: center; height: 100vh; overflow-y: scroll; }
         .container { text-align: center; padding: 85vh 20px 0 20px; width: 100%; max-width: 700px; box-sizing: border-box; }
 
-        /* Story Feed */
         .collage { display: flex; flex-direction: column; gap: 120px; margin: 60px 0; width: 100%; }
         .img-card { position: relative; opacity: 0.1; filter: grayscale(1) blur(5px); transition: 1.5s all ease; transform: scale(0.9); }
         .img-card.active { opacity: 1; filter: grayscale(0) blur(0); transform: scale(1); }
-        .img-card img { width: 100%; height: auto; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px rgba(0,0,0,0.6); display: block; }
+        .img-card img { width: 100%; max-width: 380px; margin: 0 auto; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px rgba(0,0,0,0.6); display: block; }
         
         .typewriter-box {
-            margin-top: 20px; background: rgba(10, 10, 10, 0.85); backdrop-filter: blur(20px); padding: 25px;
-            border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); font-size: 1.05rem;
-            line-height: 1.6; text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,0.5); min-height: 50px;
+            margin: 20px auto 0 auto; max-width: 380px; background: rgba(10, 10, 10, 0.85); backdrop-filter: blur(20px); padding: 25px;
+            border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); font-size: 0.95rem;
+            line-height: 1.6; text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,0.5); min-height: 50px; color: #eee;
         }
 
-        /* 3D Cake Section */
+        /* --- FINALE / CAKE --- */
         #finale-section { display: none; padding-top: 100px; padding-bottom: 200px; width: 100%; }
         .cake-box { height: 350px; position: relative; margin: 50px auto; width: 250px; }
         .layer { position: absolute; left: 50%; transform: translate(-50%, -1000px); border-radius: 50% / 25px; transition: 1.5s cubic-bezier(0.17, 0.67, 0.83, 0.67); box-shadow: inset 0 -15px 20px rgba(0,0,0,0.3), 0 10px 20px rgba(0,0,0,0.4); }
@@ -65,38 +102,52 @@
         .flame { position: absolute; top: -28px; left: 50%; transform: translateX(-50%); width: 20px; height: 35px; background: radial-gradient(circle at center, #ffd700, #ff8c00, transparent); border-radius: 50% 50% 20% 20%; filter: blur(1px); animation: burn 0.2s infinite alternate; box-shadow: 0 0 25px #ff8c00; }
         @keyframes burn { from { transform: translateX(-50%) scale(1); } to { transform: translateX(-50%) scale(1.15) rotate(2deg); } }
 
-        /* Finale Elements */
-        .footer-title { font-size: 3rem; font-weight: 900; color: var(--primary-blue); text-shadow: 0 0 20px var(--primary-blue); margin: 60px 0 20px 0; }
+        .footer-title { font-size: 2.8rem; font-weight: 900; color: var(--primary-blue); text-shadow: 0 0 20px var(--primary-blue); margin: 60px 0 20px 0; font-family: 'Playfair Display'; }
         .neon-footer { margin-bottom: 80px; text-align: center; }
         .line-1, .line-2 { font-weight: bold; color: var(--neon-pink); text-transform: uppercase; display: block; animation: neonFlicker 4s infinite; }
-        .line-1 { font-size: 0.9rem; letter-spacing: 4px; margin-bottom: 12px; }
-        .line-2 { font-size: 1.8rem; letter-spacing: 2px; }
+        .line-1 { font-size: 0.8rem; letter-spacing: 4px; margin-bottom: 12px; }
+        .line-2 { font-size: 1.4rem; letter-spacing: 2px; }
         @keyframes neonFlicker { 0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; text-shadow: 0 0 10px var(--neon-pink), 0 0 20px #ff1493; } 20%, 22%, 24%, 55% { opacity: 0.6; } }
 
-        /* Scratch Card */
-        .scratch-wrap { display: none; margin: 50px 0 100px 0; position: relative; }
+        /* --- SCRATCH CARD --- */
+        .scratch-wrap { display: none; margin: 50px 0 100px 0; position: relative; opacity: 0; transition: 1s opacity; }
         #scratchCanvas { position: absolute; top: 0; left: 50%; transform: translateX(-50%); border-radius: 15px; touch-action: none; cursor: crosshair; z-index: 100; }
-        .scratch-content { width: 300px; height: 160px; margin: 0 auto; display: flex; align-items: center; justify-content: center; background: #0a0a0a; color: var(--gold); border: 2px solid var(--gold); border-radius: 15px; padding: 25px; box-sizing: border-box; font-size: 1.2rem; font-weight: bold; text-align: center; }
+        .scratch-content { width: 300px; height: 160px; margin: 0 auto; display: flex; align-items: center; justify-content: center; background: #0a0a0a; color: var(--gold); border: 1px solid var(--gold); border-radius: 15px; padding: 25px; box-sizing: border-box; font-size: 1rem; font-weight: bold; text-align: center; }
     </style>
 </head>
 <body>
 
 <div id="overlay">
+    <div id="secret-trigger" onclick="checkPass()">[ CHAPTER 18 ]</div>
+    
+    <div class="journey-header">
+        <h1>Kashvi's Journey</h1>
+        <div class="journey-line"></div>
+        <p class="journey-sub">Synchronizing 18 Years of Memories</p>
+        
+        <div class="system-logs">
+            <div>> Childhood_Modules... [DONE]</div>
+            <div>> School_Days.rar... [DONE]</div>
+            <div>> Teenage_Rebellion... [IN_PROGRESS]</div>
+        </div>
+    </div>
+
     <div id="countdown">
         <div class="timer-unit"><span class="timer-num" id="days">00</span><span class="timer-label">Days</span></div>
         <div class="timer-unit"><span class="timer-num" id="hours">00</span><span class="timer-label">Hours</span></div>
         <div class="timer-unit"><span class="timer-num" id="mins">00</span><span class="timer-label">Mins</span></div>
         <div class="timer-unit"><span class="timer-num" id="secs">00</span><span class="timer-label">Secs</span></div>
     </div>
-    <button class="entry-btn" id="entryBtn">ENTER THE GALAXY 🧿</button>
+
+    <button class="entry-btn" id="entryBtn">FINAL CHAPTER LOCKED 🔒</button>
 </div>
 
 <div id="canvas-container"></div>
 
 <div class="content-scroll" id="mainContent">
     <div class="container">
-        <p style="letter-spacing: 8px; color: var(--primary-blue); font-weight: bold; margin-bottom: 20px;">CHAPTER 18</p>
-        <h1 style="font-size: 2.8rem; margin-bottom: 120px;">KASHVI</h1>
+        <p style="letter-spacing: 12px; color: var(--primary-blue); font-weight: bold; margin-bottom: 20px; font-size: 0.8rem;">THE 18th CHAPTER</p>
+        <h1 style="font-size: 3.5rem; margin-bottom: 120px; font-family: 'Playfair Display'; font-style: italic;">Kashvi</h1>
         <div class="collage" id="collageGrid"></div>
 
         <div id="finale-section">
@@ -106,13 +157,17 @@
                 <div class="layer l3" id="layer3"></div>
                 <div class="layer candle-stick" id="candle"><div class="flame" id="flame"></div></div>
             </div>
-            <div class="footer-title">HAPPY 18th! 🧿</div>
-            <div class="neon-footer"><span class="line-1">FOR THE WINS & THE LAUGHS. 💙</span><span class="line-2">THE BEST IS YET TO COME. 🧿</span></div>
+            <div class="footer-title">Happy 18th! 🧿</div>
+            <div class="neon-footer">
+                <span class="line-1">FOR THE WINS & THE LAUGHS. 💙</span>
+                <span class="line-2">THE BEST IS YET TO COME. 🧿</span>
+            </div>
             <div class="scratch-wrap" id="scratchWrap">
                 <div style="position: relative; width: 300px; height: 160px; margin: 0 auto;">
-                    <div class="scratch-content">May this year bring you endless success and happiness! 🧿💙</div>
+                    <div class="scratch-content">May your 18th year be your most powerful build yet. 🧿💙</div>
                     <canvas id="scratchCanvas" width="300" height="160"></canvas>
                 </div>
+                <p style="font-size: 0.6rem; opacity: 0.4; margin-top: 15px; letter-spacing: 2px; font-family: 'Fira Code';">DECRYPT THE FINAL MODULE</p>
             </div>
         </div>
     </div>
@@ -121,6 +176,7 @@
 <audio id="bgMusic" loop><source src="birthday-song.mp3" type="audio/mpeg"></audio>
 
 <script>
+    // --- DATA ---
     const data = [
         { img: "1.jpeg", text: "Happy Birthday! It’s been great having someone so reliable to navigate the daily grind with. 🤝" },
         { img: "2.jpeg", text: "From lab sessions to sharing earphones, thanks for making the long hours much more manageable. 🧪" },
@@ -132,6 +188,7 @@
         { img: "6.jpeg", text: "Genuinely glad for this bond. Looking forward to more wins and successful projects ahead. 💙" }
     ];
 
+    // --- SETUP GRID ---
     const grid = document.getElementById('collageGrid');
     data.forEach((item, idx) => {
         const card = document.createElement('div');
@@ -140,11 +197,13 @@
         grid.appendChild(card);
     });
 
+    // --- INTERSECTION OBSERVER ---
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) { activate(parseInt(entry.target.id.split('-')[1])); }
         });
-    }, { threshold: 0.75 });
+    }, { threshold: 0.7 });
+
     document.querySelectorAll('.img-card').forEach(c => observer.observe(c));
 
     const activated = new Set();
@@ -168,12 +227,15 @@
         confetti({ particleCount: 15, spread: 40, origin: { y: 0.8 }, colors: ['#00d4ff'] });
     }
 
+    // --- CAKE & FINALE ---
     function triggerCakeDrop() {
         ['layer1', 'layer2', 'layer3', 'candle'].forEach((id, i) => {
             setTimeout(() => { document.getElementById(id).style.transform = 'translate(-50%, 0)'; }, i * 750);
         });
         setTimeout(() => { 
-            document.getElementById('scratchWrap').style.display = 'block'; 
+            const sw = document.getElementById('scratchWrap');
+            sw.style.display = 'block'; 
+            setTimeout(() => { sw.style.opacity = '1'; initScratch(); }, 100);
             confetti({ particleCount: 150, spread: 100, origin: { y: 0.5 } });
         }, 3800);
     }
@@ -183,51 +245,74 @@
         confetti({ particleCount: 400, spread: 130, origin: { y: 0.6 } });
     };
 
-    // PRE-INITIALIZE SCRATCH CARD
+    // --- SCRATCH CARD LOGIC ---
     function initScratch() {
         const canvas = document.getElementById('scratchCanvas');
         const ctx = canvas.getContext('2d');
-        // Paint the silver cover immediately
-        ctx.fillStyle = '#444'; ctx.fillRect(0, 0, 300, 160);
-        ctx.font = 'bold 16px sans-serif'; ctx.fillStyle = '#999'; ctx.textAlign = 'center';
-        ctx.fillText('SCRATCH HERE 🧿', 150, 85);
+        
+        // Metallic Blue Glitter Effect
+        const grad = ctx.createLinearGradient(0, 0, 300, 160);
+        grad.addColorStop(0, '#001d3d'); grad.addColorStop(0.5, '#005f73'); grad.addColorStop(1, '#001219');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, 300, 160);
+        for(let i=0; i<400; i++) {
+            ctx.fillStyle = Math.random() > 0.5 ? '#00d4ff' : '#ffffff';
+            ctx.globalAlpha = Math.random();
+            ctx.fillRect(Math.random()*300, Math.random()*160, 1.5, 1.5);
+        }
+        ctx.globalAlpha = 1.0;
+        ctx.font = 'bold 12px Fira Code'; ctx.fillStyle = '#fff'; ctx.textAlign = 'center';
+        ctx.fillText('SCRATCH TO DECRYPT 🧿', 150, 85);
 
         let drawing = false;
         const scratch = (e) => {
             if(!drawing) return;
-            e.preventDefault();
             const r = canvas.getBoundingClientRect();
-            const x = (e.clientX || (e.touches && e.touches[0].clientX)) - r.left;
-            const y = (e.clientY || (e.touches && e.touches[0].clientY)) - r.top;
+            const x = (e.pageX || (e.touches && e.touches[0].pageX)) - r.left - window.scrollX;
+            const y = (e.pageY || (e.touches && e.touches[0].pageY)) - r.top - window.scrollY;
             ctx.globalCompositeOperation = 'destination-out';
             ctx.beginPath(); ctx.arc(x, y, 25, 0, Math.PI*2); ctx.fill();
         };
         canvas.addEventListener('mousedown', () => drawing = true);
-        canvas.addEventListener('touchstart', (e) => { drawing = true; scratch(e); });
+        canvas.addEventListener('touchstart', (e) => { drawing = true; e.preventDefault(); scratch(e); });
         window.addEventListener('mouseup', () => drawing = false);
         window.addEventListener('touchend', () => drawing = false);
         canvas.addEventListener('mousemove', scratch);
-        canvas.addEventListener('touchmove', scratch);
+        canvas.addEventListener('touchmove', (e) => { scratch(e); e.preventDefault(); });
     }
 
-    // Call init immediately on load
-    window.onload = initScratch;
+    // --- UNLOCK LOGIC ---
+    function checkPass() {
+        const p = prompt("ENTER ACCESS KEY:");
+        if(p && p.toUpperCase() === "KASHVI18") unlock();
+    }
 
-    // Timer Logic
+    function unlock() {
+        document.getElementById('bgMusic').volume = 0.5; 
+        document.getElementById('bgMusic').play().catch(() => {});
+        document.getElementById('overlay').style.opacity = '0';
+        document.body.style.overflow = 'auto';
+        setTimeout(() => { 
+            document.getElementById('overlay').style.display = 'none'; 
+            document.getElementById('mainContent').style.display = 'flex'; 
+        }, 1200);
+    }
+
+    // --- TIMER ---
     const target = new Date("January 20, 2026 00:00:00").getTime();
     setInterval(() => {
         const diff = target - new Date().getTime();
+        if(diff <= 0) {
+            const btn = document.getElementById('entryBtn');
+            btn.innerText = "ENTER THE GALAXY 🧿";
+            btn.classList.add('active');
+            btn.onclick = unlock;
+        }
         document.getElementById('days').innerText = String(Math.max(0, Math.floor(diff / 86400000))).padStart(2, '0');
         document.getElementById('hours').innerText = String(Math.max(0, Math.floor((diff % 86400000) / 3600000))).padStart(2, '0');
         document.getElementById('mins').innerText = String(Math.max(0, Math.floor((diff % 3600000) / 60000))).padStart(2, '0');
         document.getElementById('secs').innerText = String(Math.max(0, Math.floor((diff % 60000) / 1000))).padStart(2, '0');
     }, 1000);
-
-    document.getElementById('entryBtn').onclick = () => {
-        document.getElementById('bgMusic').volume = 0.5; document.getElementById('bgMusic').play();
-        document.getElementById('overlay').style.opacity = '0';
-        setTimeout(() => { document.getElementById('overlay').style.display = 'none'; document.getElementById('mainContent').style.display = 'flex'; }, 1200);
-    };
 </script>
 
 <script type="module">
@@ -247,7 +332,7 @@
     composer.addPass(new RenderPass(scene, camera));
     composer.addPass(new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85));
 
-    const count = 15000;
+    const count = 12000;
     const geo = new THREE.BufferGeometry();
     const pos = new Float32Array(count * 3);
     const targets = new Float32Array(count * 3);
@@ -256,7 +341,7 @@
         pos[i*3] = (Math.random()-0.5)*120; pos[i*3+1] = (Math.random()-0.5)*120; pos[i*3+2] = (Math.random()-0.5)*120;
     }
     geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    const mat = new THREE.PointsMaterial({ size: 0.1, color: 0x00d4ff, blending: THREE.AdditiveBlending });
+    const mat = new THREE.PointsMaterial({ size: 0.12, color: 0x00d4ff, blending: THREE.AdditiveBlending });
     const points = new THREE.Points(geo, mat);
     scene.add(points);
 
@@ -264,11 +349,11 @@
         const s = 15;
         for(let i=0; i<count; i++) {
             const t = (i/count) * Math.PI * 2; const i3 = i*3;
-            if(shape === 0) {
+            if(shape === 0) { // Infinity Shape
                 targets[i3] = (s * Math.cos(t)) / (1 + Math.pow(Math.sin(t), 2));
                 targets[i3+1] = (s * Math.sin(t) * Math.cos(t)) / (1 + Math.pow(Math.sin(t), 2));
                 targets[i3+2] = 0;
-            } else {
+            } else { // Sphere Shape
                 const phi = Math.acos(-1 + (2 * i) / count); const theta = Math.sqrt(count * Math.PI) * phi;
                 targets[i3] = (s+2) * Math.cos(theta) * Math.sin(phi); targets[i3+1] = (s+2) * Math.sin(theta) * Math.sin(phi); targets[i3+2] = (s+2) * Math.cos(phi);
             }
