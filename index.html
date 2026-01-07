@@ -43,16 +43,16 @@
         #overlay {
             position: fixed; inset: 0; display: flex; flex-direction: column;
             justify-content: center; align-items: center; z-index: 2000;
-            background: radial-gradient(circle at center, #001d3d 0%, #000 100%);
+            background: radial-gradient(circle at center, #001d3d 0%, #000000 100%);
             transition: opacity 1.2s ease-out;
         }
 
         .timer-unit { 
-            text-align: center; min-width: 70px; padding: 12px;
+            text-align: center; min-width: 75px; padding: 12px;
             background: var(--glass); backdrop-filter: blur(10px);
             border: 1px solid var(--glass-border); border-radius: 12px;
         }
-        .timer-num { font-size: 1.8rem; font-weight: 800; color: white; }
+        .timer-num { font-size: 1.8rem; font-weight: 800; color: white; letter-spacing: -1px; }
         .timer-label { font-size: 0.5rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.5; }
 
         .entry-btn {
@@ -61,7 +61,7 @@
             color: white; font-weight: 600; letter-spacing: 4px; cursor: pointer;
             transition: 0.3s; text-transform: uppercase; font-size: 0.75rem;
         }
-        .entry-btn:active { transform: scale(0.95); background: white; color: black; }
+        .entry-btn:hover { background: white; color: black; }
 
         #canvas-container { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
         .content-scroll { position: relative; z-index: 10; width: 100%; display: none; flex-direction: column; align-items: center; }
@@ -71,28 +71,29 @@
         
         .img-card { 
             width: 90%; max-width: 500px; margin-bottom: 120px;
-            opacity: 0; transform: translateY(30px);
-            transition: 1s cubic-bezier(0.22, 1, 0.36, 1);
+            opacity: 0; transform: translateY(40px);
+            transition: 1.2s cubic-bezier(0.22, 1, 0.36, 1);
         }
         .img-card.active { opacity: 1; transform: translateY(0); }
-        .img-card img { width: 100%; border-radius: 8px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
+        .img-card img { width: 100%; border-radius: 4px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
 
         .typewriter-box {
-            margin-top: -20px; position: relative; z-index: 2;
-            background: rgba(10, 10, 10, 0.8); backdrop-filter: blur(20px);
-            padding: 25px; border-left: 2px solid var(--primary-blue);
-            font-size: 1rem; line-height: 1.6; font-weight: 300;
+            margin-top: -25px; position: relative; z-index: 2;
+            background: rgba(10, 10, 10, 0.75); backdrop-filter: blur(25px);
+            padding: 25px; border-left: 3px solid var(--primary-blue);
+            font-size: 1.05rem; line-height: 1.7; font-weight: 300;
         }
 
-        .cake-box { height: 350px; position: relative; margin: 50px auto; width: 220px; }
-        .layer { position: absolute; left: 50%; transform: translate(-50%, -1000px); border-radius: 50% / 20px; transition: 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .l1 { bottom: 0; width: 200px; height: 80px; background: #3d2b1f; }
-        .l2 { bottom: 60px; width: 150px; height: 70px; background: #ff4d6d; }
-        .l3 { bottom: 120px; width: 100px; height: 55px; background: #fff; }
-        .candle-stick { bottom: 170px; width: 10px; height: 45px; background: white; transform: translate(-50%, -1000px); }
+        .cake-box { height: 380px; position: relative; margin: 50px auto; width: 220px; }
+        .layer { position: absolute; left: 50%; transform: translate(-50%, -1200px); border-radius: 50% / 20px; transition: 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .l1 { bottom: 0; width: 200px; height: 85px; background: #3d2b1f; box-shadow: inset 0 -10px 20px rgba(0,0,0,0.4); }
+        .l2 { bottom: 65px; width: 155px; height: 75px; background: #ff4d6d; }
+        .l3 { bottom: 125px; width: 105px; height: 60px; background: #fff; }
+        .candle-stick { bottom: 180px; width: 12px; height: 50px; background: linear-gradient(to bottom, #fff, var(--primary-blue)); transform: translate(-50%, -1200px); border-radius: 4px; }
 
-        .scratch-wrap { display: none; margin: 60px 0; }
-        #scratchCanvas { border-radius: 12px; touch-action: none; background: transparent; }
+        .scratch-wrap { display: none; margin: 60px 0; opacity: 0; transition: 1s opacity; }
+        .scratch-wrap.visible { opacity: 1; }
+        #scratchCanvas { border-radius: 12px; touch-action: none; cursor: crosshair; }
     </style>
 </head>
 <body>
@@ -113,9 +114,9 @@
 
 <div class="content-scroll" id="mainContent">
     <div class="hero">
-        <p style="letter-spacing: 10px; opacity: 0.5; font-size: 0.6rem; text-transform: uppercase;">A Journey of 18 Years</p>
+        <p style="letter-spacing: 12px; opacity: 0.5; font-size: 0.65rem; text-transform: uppercase;">The 18th Chapter</p>
         <h1>Kashvi</h1>
-        <p style="margin-top: 20px; opacity: 0.4; font-size: 0.8rem;">Scroll to explore</p>
+        <p style="margin-top: 25px; opacity: 0.4; font-size: 0.8rem; font-weight: 300;">Scroll to begin</p>
     </div>
 
     <div id="collageGrid" style="display: flex; flex-direction: column; align-items: center; width: 100%;"></div>
@@ -127,11 +128,11 @@
             <div class="layer l3" id="layer3"></div>
             <div class="layer candle-stick" id="candle"></div>
         </div>
-        <h2 style="font-family: 'Playfair Display', serif; font-size: 2.5rem; margin: 40px 0;">Happy 18th Birthday.</h2>
+        <h2 style="font-family: 'Playfair Display', serif; font-size: 2.8rem; margin: 40px 0; font-style: italic;">Happy 18th Birthday.</h2>
         <div class="scratch-wrap" id="scratchWrap">
             <div style="position: relative; width: 300px; height: 160px; margin: 0 auto;">
-                <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: #0a0a0a; color: var(--gold); border: 1px solid var(--gold); border-radius: 12px; font-weight: 500; padding: 20px;">
-                    May this chapter be your best one yet. 🧿💙
+                <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: #0a0a0a; color: var(--gold); border: 1px solid var(--gold); border-radius: 12px; font-weight: 500; padding: 25px; text-align: center;">
+                    May this year bring you endless success and joy. 🧿💙
                 </div>
                 <canvas id="scratchCanvas" width="300" height="160"></canvas>
             </div>
@@ -139,9 +140,7 @@
     </div>
 </div>
 
-<audio id="bgMusic" loop preload="auto">
-    <source src="birthday-song.mp3" type="audio/mpeg">
-</audio>
+<audio id="bgMusic" loop preload="auto"><source src="birthday-song.mp3" type="audio/mpeg"></audio>
 
 <script>
     const data = [
@@ -164,7 +163,7 @@
         entries.forEach(entry => {
             if (entry.isIntersecting) activate(parseInt(entry.target.id.split('-')[1]));
         });
-    }, { threshold: 0.5 });
+    }, { threshold: 0.6 });
     document.querySelectorAll('.img-card').forEach(c => observer.observe(c));
 
     const activated = new Set();
@@ -180,25 +179,30 @@
             else if (idx === data.length - 1) setTimeout(revealFinale, 1500);
         };
         type();
+        confetti({ particleCount: 15, spread: 40, origin: { y: 0.8 }, colors: ['#00d4ff'] });
     }
 
     function revealFinale() {
         document.getElementById('finale-section').style.display = 'block';
         ['layer1', 'layer2', 'layer3', 'candle'].forEach((id, i) => {
-            setTimeout(() => { document.getElementById(id).style.transform = 'translate(-50%, 0)'; }, i * 600);
+            setTimeout(() => { 
+                document.getElementById(id).style.transform = 'translate(-50%, 0)';
+                if(navigator.vibrate) navigator.vibrate(25);
+            }, i * 700);
         });
         setTimeout(() => {
             document.getElementById('scratchWrap').style.display = 'block';
+            setTimeout(() => document.getElementById('scratchWrap').classList.add('visible'), 100);
             initScratch();
-        }, 3000);
+        }, 3500);
     }
 
     function initScratch() {
         const canvas = document.getElementById('scratchCanvas');
         const ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#333'; ctx.fillRect(0, 0, 300, 160);
-        ctx.font = '500 14px Inter'; ctx.fillStyle = '#888'; ctx.textAlign = 'center';
-        ctx.fillText('REVEAL FINAL WISH', 150, 85);
+        ctx.fillStyle = '#2c2c2c'; ctx.fillRect(0, 0, 300, 160);
+        ctx.font = '500 14px Inter'; ctx.fillStyle = '#666'; ctx.textAlign = 'center';
+        ctx.fillText('SCRATCH TO REVEAL 🧿', 150, 85);
         let drawing = false;
         const scratch = (e) => {
             if(!drawing) return;
@@ -214,24 +218,20 @@
         canvas.onmousemove = canvas.ontouchmove = scratch;
     }
 
-    // Fixed Button Logic
-    document.getElementById('entryBtn').addEventListener('click', function() {
-        const audio = document.getElementById('bgMusic');
-        audio.play().catch(e => console.log("Audio play blocked, but continuing experience."));
-        
+    document.getElementById('entryBtn').onclick = function() {
+        document.getElementById('bgMusic').play().catch(() => {});
         document.getElementById('overlay').style.opacity = '0';
         setTimeout(() => {
             document.getElementById('overlay').style.display = 'none';
             document.getElementById('mainContent').style.display = 'flex';
         }, 1200);
-    });
+    };
 
     window.onscroll = () => {
         const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
         document.getElementById("progress-bar").style.width = scrolled + "%";
     };
 
-    // Countdown
     const target = new Date("January 20, 2026 00:00:00").getTime();
     setInterval(() => {
         const diff = target - new Date().getTime();
@@ -244,25 +244,79 @@
 
 <script type="module">
     import * as THREE from 'three';
+    import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+    import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+    import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+    camera.position.z = 30;
+    
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
     document.getElementById('canvas-container').appendChild(renderer.domElement);
-    const count = 5000;
+
+    const composer = new EffectComposer(renderer);
+    composer.addPass(new RenderPass(scene, camera));
+    composer.addPass(new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85));
+
+    const count = 12000;
     const geo = new THREE.BufferGeometry();
     const pos = new Float32Array(count * 3);
-    for(let i=0; i<count*3; i++) pos[i] = (Math.random()-0.5)*100;
+    const targets = new Float32Array(count * 3);
+
+    for(let i=0; i<count; i++) {
+        pos[i*3] = (Math.random()-0.5)*120; 
+        pos[i*3+1] = (Math.random()-0.5)*120; 
+        pos[i*3+2] = (Math.random()-0.5)*120;
+    }
     geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    const mat = new THREE.PointsMaterial({ size: 0.05, color: 0x00d4ff, transparent: true, opacity: 0.4 });
+    
+    const mat = new THREE.PointsMaterial({ size: 0.08, color: 0x00d4ff, blending: THREE.AdditiveBlending, transparent: true, opacity: 0.8 });
     const points = new THREE.Points(geo, mat);
     scene.add(points);
-    camera.position.z = 30;
-    function animate() { requestAnimationFrame(animate); points.rotation.y += 0.0008; renderer.render(scene, camera); }
+
+    function morph(shape) {
+        const s = 15;
+        for(let i=0; i<count; i++) {
+            const t = (i/count) * Math.PI * 2; const i3 = i*3;
+            if(shape === 0) { // Infinity Morph
+                targets[i3] = (s * Math.cos(t)) / (1 + Math.pow(Math.sin(t), 2));
+                targets[i3+1] = (s * Math.sin(t) * Math.cos(t)) / (1 + Math.pow(Math.sin(t), 2));
+                targets[i3+2] = (Math.random()-0.5) * 2;
+            } else { // Sphere Morph
+                const phi = Math.acos(-1 + (2 * i) / count); 
+                const theta = Math.sqrt(count * Math.PI) * phi;
+                targets[i3] = (s+2) * Math.cos(theta) * Math.sin(phi); 
+                targets[i3+1] = (s+2) * Math.sin(theta) * Math.sin(phi); 
+                targets[i3+2] = (s+2) * Math.cos(phi);
+            }
+        }
+    }
+
+    let currentShape = 0;
+    setInterval(() => { currentShape = 1 - currentShape; morph(currentShape); }, 6000);
+    morph(0);
+
+    function animate() {
+        requestAnimationFrame(animate);
+        const p = geo.attributes.position.array;
+        for(let i=0; i<count*3; i++) {
+            p[i] += (targets[i] - p[i]) * 0.025; // Smooth transition
+        }
+        points.rotation.y += 0.0015;
+        points.rotation.x += 0.0005;
+        geo.attributes.position.needsUpdate = true;
+        composer.render();
+    }
     animate();
+
     window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix();
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
+        composer.setSize(window.innerWidth, window.innerHeight);
     });
 </script>
 </body>
