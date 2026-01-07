@@ -18,7 +18,6 @@
         :root { --primary-blue: #00d4ff; --neon-pink: #ffb7c5; --deep-space: #010103; --gold: #ffd700; }
         body { margin: 0; padding: 0; background: var(--deep-space); font-family: 'Segoe UI', Roboto, sans-serif; color: white; overflow-x: hidden; scroll-behavior: smooth; user-select: none; -webkit-tap-highlight-color: transparent; }
 
-        /* Overlay & Countdown */
         #overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -36,47 +35,52 @@
             letter-spacing: 3px; transition: 0.5s; cursor: pointer; background: rgba(0, 212, 255, 0.1);
             color: white; backdrop-filter: blur(10px); box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
         }
-        .entry-btn:hover { background: var(--primary-blue); box-shadow: 0 0 50px var(--primary-blue); transform: scale(1.05); }
 
         #canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
         .content-scroll { position: relative; z-index: 10; width: 100%; display: none; flex-direction: column; align-items: center; }
         
-        .container { text-align: center; padding: 85vh 20px 100px 20px; width: 100%; max-width: 800px; box-sizing: border-box; }
+        .container { text-align: center; padding: 85vh 20px 100px 20px; width: 100%; max-width: 700px; box-sizing: border-box; }
 
-        /* Gallery */
-        .collage { display: grid; grid-template-columns: 1fr; gap: 80px; margin: 60px 0; width: 100%; }
-        @media (min-width: 768px) { .collage { grid-template-columns: 1fr 1fr; gap: 50px; } }
+        /* Story Grid */
+        .collage { display: flex; flex-direction: column; gap: 100px; margin: 60px 0; width: 100%; }
         
-        .img-card { position: relative; opacity: 0.4; filter: grayscale(1); transition: 0.8s all ease; transform: translateY(30px); pointer-events: none; }
-        .img-card.active { opacity: 1; filter: grayscale(0); transform: translateY(0); pointer-events: auto; }
-        .img-card.unlocked { transform: scale(1.05); }
+        .img-card { position: relative; opacity: 0.2; filter: grayscale(1); transition: 1.2s all ease; transform: scale(0.9); }
+        /* Auto-activate when in view */
+        .img-card.active { opacity: 1; filter: grayscale(0); transform: scale(1); }
         
-        .img-card img { width: 100%; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-        .img-card.unlocked img { border-color: var(--primary-blue); box-shadow: 0 0 40px rgba(0, 212, 255, 0.3); }
+        .img-card img { width: 100%; height: auto; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 40px rgba(0,0,0,0.5); display: block; }
+        .img-card.active img { border-color: var(--primary-blue); box-shadow: 0 0 40px rgba(0, 212, 255, 0.3); }
 
         .typewriter-box {
-            margin-top: -20px; position: relative; z-index: 2; width: 90%; margin-left: auto; margin-right: auto;
-            background: rgba(15, 15, 15, 0.8); backdrop-filter: blur(15px); padding: 20px;
-            border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem;
-            line-height: 1.6; text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,0.5); min-height: 60px;
+            margin-top: 15px; background: rgba(15, 15, 15, 0.9); backdrop-filter: blur(15px); padding: 20px;
+            border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); font-size: 1rem;
+            line-height: 1.6; text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,0.5); min-height: 50px;
         }
 
-        /* Cake Build */
-        .cake-box { height: 300px; position: relative; margin: 100px 0; display: none; }
-        .layer { position: absolute; left: 50%; transform: translate(-50%, -500px); border-radius: 15px; border: 3px solid #fff; transition: 1s cubic-bezier(0.17, 0.67, 0.83, 0.67); }
-        .l1 { bottom: 0; width: 200px; height: 70px; background: #ff4d6d; }
-        .l2 { bottom: 70px; width: 160px; height: 60px; background: #ff758f; }
-        .l3 { bottom: 130px; width: 110px; height: 50px; background: #ff85a2; }
-        .candle-stick { bottom: 180px; width: 12px; height: 40px; background: var(--primary-blue); left: 50%; transform: translate(-50%, -500px); cursor: pointer; }
-        .flame { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); width: 15px; height: 25px; background: #ffd700; border-radius: 50% 50% 20% 20%; filter: blur(1px); animation: burn 0.2s infinite alternate; }
+        /* Cake & Finale */
+        .cake-box { height: 280px; position: relative; margin: 80px 0; display: none; }
+        .layer { position: absolute; left: 50%; transform: translate(-50%, -500px); border-radius: 15px; border: 2px solid #fff; transition: 1.2s cubic-bezier(0.17, 0.67, 0.83, 0.67); }
+        .l1 { bottom: 0; width: 180px; height: 60px; background: #ff4d6d; }
+        .l2 { bottom: 60px; width: 140px; height: 50px; background: #ff758f; }
+        .l3 { bottom: 110px; width: 100px; height: 40px; background: #ff85a2; }
+        .candle-stick { bottom: 150px; width: 10px; height: 35px; background: var(--primary-blue); left: 50%; transform: translate(-50%, -500px); cursor: pointer; }
+        .flame { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); width: 12px; height: 22px; background: #ffd700; border-radius: 50% 50% 20% 20%; filter: blur(1px); animation: burn 0.2s infinite alternate; }
 
         @keyframes burn { from { transform: translateX(-50%) scale(1); opacity: 0.8; } to { transform: translateX(-50%) scale(1.2); opacity: 1; } }
 
-        /* Scratch Area */
-        .scratch-wrap { display: none; margin-top: 50px; }
-        canvas { background: transparent; border-radius: 10px; touch-action: none; cursor: crosshair; }
+        .neon-footer { margin-top: 50px; text-align: center; }
+        .line-1, .line-2 { font-weight: bold; color: var(--neon-pink); text-transform: uppercase; display: block; animation: neonFlicker 4s infinite; }
+        .line-1 { font-size: 0.9rem; letter-spacing: 4px; margin-bottom: 10px; }
+        .line-2 { font-size: 1.6rem; letter-spacing: 2px; }
 
-        .footer-text { font-size: 3rem; font-weight: 900; background: linear-gradient(to right, #fff, var(--primary-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 40px 0; }
+        @keyframes neonFlicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; text-shadow: 0 0 7px var(--neon-pink), 0 0 15px #ff1493, 0 0 30px #ff1493; }
+            20%, 22%, 24%, 55% { opacity: 0.6; text-shadow: 0 0 2px var(--neon-pink); }
+        }
+
+        .scratch-wrap { display: none; margin: 50px 0 100px 0; }
+        canvas { background: transparent; border-radius: 10px; touch-action: none; cursor: crosshair; }
+        .footer-title { font-size: 2.8rem; font-weight: 900; color: var(--primary-blue); text-shadow: 0 0 20px var(--primary-blue); margin: 40px 0; line-height: 1; }
     </style>
 </head>
 <body>
@@ -96,8 +100,7 @@
         <p style="letter-spacing: 5px; color: var(--primary-blue); font-weight: bold;">ADVENTURE AWAITS</p>
         <h1 style="font-size: 2.5rem; margin-bottom: 100px;">KASHVI'S 18th</h1>
         
-        <div class="collage" id="collageGrid">
-            </div>
+        <div class="collage" id="collageGrid"></div>
 
         <div id="finale-section" style="display: none;">
             <div class="cake-box" id="cakeBox">
@@ -108,13 +111,14 @@
                     <div class="flame" id="flame"></div>
                 </div>
             </div>
-
-            <div class="footer-text">HAPPY BIRTHDAY!</div>
-
+            <div class="footer-title">HAPPY BIRTHDAY<br>KASHVI! 🧿</div>
+            <div class="neon-footer">
+                <span class="line-1">FOR THE WINS & THE LAUGHS. 💙</span>
+                <span class="line-2">THE BEST IS YET TO COME. 🧿</span>
+            </div>
             <div class="scratch-wrap" id="scratchWrap">
-                <p style="opacity: 0.6; margin-bottom: 20px;">Scratch for a final wish... ✨</p>
                 <div style="position: relative; width: 300px; height: 150px; margin: 0 auto;">
-                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #0a0a0a; color: var(--gold); border: 1px solid var(--gold); border-radius: 10px;">
+                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #0a0a0a; color: var(--gold); border: 1px solid var(--gold); border-radius: 10px; padding: 20px; box-sizing: border-box; font-size: 1.1rem; font-weight: bold; text-align: center;">
                         May your 18th year be your best one yet! 🧿💙
                     </div>
                     <canvas id="scratchCanvas" width="300" height="150"></canvas>
@@ -139,117 +143,94 @@
     ];
 
     const grid = document.getElementById('collageGrid');
-    let currentUnlock = 0;
-
-    // Initialize Grid
     data.forEach((item, idx) => {
         const card = document.createElement('div');
-        card.className = `img-card ${idx === 0 ? 'active' : ''}`;
+        card.className = 'img-card';
         card.id = `card-${idx}`;
-        card.onclick = () => reveal(idx);
-        card.innerHTML = `
-            <img src="${item.img}">
-            <div class="typewriter-box" id="msg-${idx}"></div>
-        `;
+        card.innerHTML = `<img src="${item.img}"><div class="typewriter-box" id="msg-${idx}"></div>`;
         grid.appendChild(card);
     });
 
-    function reveal(idx) {
-        const card = document.getElementById(`card-${idx}`);
-        if(card.classList.contains('unlocked')) return;
-        
-        card.classList.add('unlocked');
-        if(navigator.vibrate) navigator.vibrate(40);
-        confetti({ particleCount: 20, spread: 50, origin: { y: 0.8 }, colors: ['#00d4ff'] });
+    // AUTO REVEAL ON SCROLL
+    const observerOptions = { threshold: 0.6 };
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const idx = parseInt(entry.target.id.split('-')[1]);
+                activateCard(idx);
+            }
+        });
+    }, observerOptions);
 
+    document.querySelectorAll('.img-card').forEach(card => observer.observe(card));
+
+    const activated = new Set();
+    function activateCard(idx) {
+        if (activated.has(idx)) return;
+        activated.add(idx);
+        
+        const card = document.getElementById(`card-${idx}`);
+        card.classList.add('active');
+        
+        // Typewriter Effect
         const box = document.getElementById(`msg-${idx}`);
+        const text = data[idx].text;
         let i = 0;
         const type = () => {
-            if (i < data[idx].text.length) {
-                box.innerHTML += data[idx].text.charAt(i); i++;
-                setTimeout(type, 30);
-            } else {
-                // Unlock next card
-                currentUnlock++;
-                if (currentUnlock < data.length) {
-                    const next = document.getElementById(`card-${currentUnlock}`);
-                    next.classList.add('active');
-                    next.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                } else {
-                    triggerFinale();
-                }
+            if (i < text.length) {
+                box.innerHTML += text.charAt(i); i++; setTimeout(type, 30);
+            } else if (idx === data.length - 1) {
+                setTimeout(triggerFinale, 1000);
             }
         };
         type();
+        confetti({ particleCount: 15, spread: 40, origin: { y: 0.8 }, colors: ['#00d4ff'] });
     }
 
     function triggerFinale() {
         const section = document.getElementById('finale-section');
+        if (section.style.display === 'block') return;
         section.style.display = 'block';
         document.getElementById('cakeBox').style.display = 'block';
-        
-        const sequence = ['layer1', 'layer2', 'layer3', 'candle'];
-        sequence.forEach((id, i) => {
-            setTimeout(() => {
-                document.getElementById(id).style.transform = 'translate(-50%, 0)';
-            }, i * 600);
+        ['layer1', 'layer2', 'layer3', 'candle'].forEach((id, i) => {
+            setTimeout(() => document.getElementById(id).style.transform = 'translate(-50%, 0)', i * 600);
         });
-
-        setTimeout(() => {
-            document.getElementById('scratchWrap').style.display = 'block';
-            initScratch();
-        }, 3000);
+        setTimeout(() => { document.getElementById('scratchWrap').style.display = 'block'; initScratch(); }, 3000);
     }
-
-    // Interactive Candle
-    document.getElementById('candle').onclick = function() {
-        document.getElementById('flame').style.display = 'none';
-        confetti({ particleCount: 250, spread: 100, origin: { y: 0.6 }, scalar: 1.2 });
-        if(navigator.vibrate) navigator.vibrate([100, 50, 100]);
-    };
 
     function initScratch() {
         const canvas = document.getElementById('scratchCanvas');
         const ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#222';
+        ctx.fillStyle = '#333';
         ctx.fillRect(0, 0, 300, 150);
-        ctx.font = 'bold 14px sans-serif';
-        ctx.fillStyle = '#444';
-        ctx.fillText('SCRATCH TO REVEAL 🧿', 70, 80);
-
-        let isDrawing = false;
+        ctx.font = 'bold 16px sans-serif'; ctx.fillStyle = '#888'; ctx.textAlign = 'center';
+        ctx.fillText('SCRATCH TO REVEAL 🧿', 150, 80);
+        let drawing = false;
         const scratch = (e) => {
-            if(!isDrawing) return;
+            if(!drawing) return;
             const rect = canvas.getBoundingClientRect();
-            const x = (e.clientX || e.touches[0].clientX) - rect.left;
-            const y = (e.clientY || e.touches[0].clientY) - rect.top;
+            const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
+            const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
             ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath(); ctx.arc(x, y, 18, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.arc(x, y, 20, 0, Math.PI*2); ctx.fill();
         };
-        canvas.onmousedown = canvas.ontouchstart = () => isDrawing = true;
-        window.onmouseup = window.ontouchend = () => isDrawing = false;
+        canvas.onmousedown = canvas.ontouchstart = () => drawing = true;
+        window.onmouseup = window.ontouchend = () => drawing = false;
         canvas.onmousemove = canvas.ontouchmove = scratch;
     }
 
-    // Countdown & Entry
+    // Countdown & Logic
     const target = new Date("January 20, 2026 00:00:00").getTime();
     setInterval(() => {
-        const now = new Date().getTime();
-        const d = target - now;
-        document.getElementById('days').innerText = Math.max(0, Math.floor(d/86400000));
-        document.getElementById('secs').innerText = Math.max(0, Math.floor((d%60000)/1000));
+        const d = target - new Date().getTime();
+        document.getElementById('days').innerText = String(Math.max(0, Math.floor(d/86400000))).padStart(2,'0');
+        document.getElementById('secs').innerText = String(Math.max(0, Math.floor((d%60000)/1000))).padStart(2,'0');
     }, 1000);
 
     document.getElementById('entryBtn').onclick = () => {
-        const music = document.getElementById('bgMusic');
-        music.volume = 0; music.play();
-        let v = 0; const f = setInterval(() => { if(v<0.4){v+=0.02; music.volume=v;} else clearInterval(f); }, 100);
-        
+        document.getElementById('bgMusic').volume = 0.4; document.getElementById('bgMusic').play();
         document.getElementById('overlay').style.opacity = '0';
-        setTimeout(() => {
-            document.getElementById('overlay').style.display = 'none';
-            document.getElementById('mainContent').style.display = 'flex';
-        }, 1200);
+        setTimeout(() => { document.getElementById('overlay').style.display = 'none'; document.getElementById('mainContent').style.display = 'flex'; }, 1200);
     };
 </script>
 
@@ -273,40 +254,33 @@
     const count = 15000;
     const geo = new THREE.BufferGeometry();
     const pos = new Float32Array(count * 3);
-    const colors = new Float32Array(count * 3);
     const targets = new Float32Array(count * 3);
 
     for(let i=0; i<count; i++) {
-        pos[i*3] = (Math.random()-0.5)*100;
-        pos[i*3+1] = (Math.random()-0.5)*100;
-        pos[i*3+2] = (Math.random()-0.5)*100;
+        pos[i*3] = (Math.random()-0.5)*100; pos[i*3+1] = (Math.random()-0.5)*100; pos[i*3+2] = (Math.random()-0.5)*100;
     }
     geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    const mat = new THREE.PointsMaterial({ size: 0.08, vertexColors: true, blending: THREE.AdditiveBlending });
+    const mat = new THREE.PointsMaterial({ size: 0.1, color: 0x00d4ff, blending: THREE.AdditiveBlending });
     const points = new THREE.Points(geo, mat);
     scene.add(points);
 
     function morph(shape) {
+        const scale = 14;
         for(let i=0; i<count; i++) {
             const t = (i/count) * Math.PI * 2;
             const i3 = i*3;
             if(shape === 0) { // Infinity
-                targets[i3] = (15 * Math.cos(t)) / (1 + Math.pow(Math.sin(t), 2));
-                targets[i3+1] = (15 * Math.sin(t) * Math.cos(t)) / (1 + Math.pow(Math.sin(t), 2));
+                targets[i3] = (scale * Math.cos(t)) / (1 + Math.pow(Math.sin(t), 2));
+                targets[i3+1] = (scale * Math.sin(t) * Math.cos(t)) / (1 + Math.pow(Math.sin(t), 2));
                 targets[i3+2] = 0;
             } else { // Sphere
                 const phi = Math.acos(-1 + (2 * i) / count);
                 const theta = Math.sqrt(count * Math.PI) * phi;
-                targets[i3] = 15 * Math.cos(theta) * Math.sin(phi);
-                targets[i3+1] = 15 * Math.sin(theta) * Math.sin(phi);
-                targets[i3+2] = 15 * Math.cos(phi);
+                targets[i3] = (scale+2) * Math.cos(theta) * Math.sin(phi);
+                targets[i3+1] = (scale+2) * Math.sin(theta) * Math.sin(phi);
+                targets[i3+2] = (scale+2) * Math.cos(phi);
             }
-            // Update Colors
-            colors[i3] = shape === 0 ? 0 : 1; // R
-            colors[i3+1] = shape === 0 ? 0.8 : 0.7; // G
-            colors[i3+2] = 1; // B
         }
-        geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
     }
 
     let currentShape = 0;
@@ -316,7 +290,7 @@
     function animate() {
         requestAnimationFrame(animate);
         const p = geo.attributes.position.array;
-        for(let i=0; i<count*3; i++) p[i] += (targets[i] - p[i]) * 0.02;
+        for(let i=0; i<count*3; i++) p[i] += (targets[i] - p[i]) * 0.03;
         points.rotation.y += 0.002;
         geo.attributes.position.needsUpdate = true;
         composer.render();
