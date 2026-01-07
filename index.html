@@ -19,209 +19,170 @@
     </script>
     
     <style>
-        :root { 
-            --accent: #00ffcc; 
-            --bg: #050505; 
-            --panel: rgba(0, 255, 204, 0.05);
-        }
+        :root { --accent: #00ffcc; --bg: #050505; }
+        body { margin: 0; background: var(--bg); font-family: 'Space Grotesk', sans-serif; color: white; overflow-x: hidden; }
 
-        body { 
-            margin: 0; background: var(--bg); 
-            font-family: 'Space Grotesk', sans-serif; color: white; 
-            overflow-x: hidden;
-        }
-
-        /* Hackathon-style Scrollbar */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: #000; }
-        ::-webkit-scrollbar-thumb { background: var(--accent); }
-
-        /* Fake Console Boot */
-        #boot-log {
-            position: fixed; top: 20px; left: 20px; font-family: 'Fira Code', monospace;
-            font-size: 0.7rem; color: var(--accent); z-index: 3000; pointer-events: none;
-        }
-
-        #overlay {
-            position: fixed; inset: 0; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; z-index: 2000;
-            background: #000; transition: transform 1s cubic-bezier(1, 0, 0, 1);
-        }
-
-        .system-status {
-            font-family: 'Fira Code', monospace; font-size: 0.8rem;
-            color: var(--accent); margin-bottom: 20px; text-transform: uppercase;
-        }
-
-        .timer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        .t-box { 
-            border: 1px solid var(--accent); padding: 15px; text-align: center;
-            background: var(--panel); min-width: 60px;
-        }
-        .t-num { font-size: 1.8rem; font-weight: 700; display: block; }
-        .t-lab { font-size: 0.5rem; opacity: 0.6; }
-
-        .execute-btn {
-            margin-top: 50px; background: transparent; border: 1px solid var(--accent);
-            color: var(--accent); padding: 15px 40px; font-family: 'Fira Code', monospace;
-            cursor: pointer; transition: 0.3s; position: relative; overflow: hidden;
-        }
-        .execute-btn:hover { background: var(--accent); color: black; box-shadow: 0 0 20px var(--accent); }
-
-        #canvas-container { position: fixed; inset: 0; z-index: 1; opacity: 0.6; }
-
-        .content-scroll { position: relative; z-index: 10; display: none; flex-direction: column; align-items: center; }
+        /* Rolex-style Sticky Section */
+        .scrollytelling-container { position: relative; width: 100%; }
         
-        /* Modern Narrative Cards */
-        .card { 
-            width: 90%; max-width: 600px; margin: 100px 0;
-            border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.02);
-            backdrop-filter: blur(10px); padding: 20px; opacity: 0; transform: translateX(-30px);
-            transition: 0.8s;
-        }
-        .card.active { opacity: 1; transform: translateX(0); }
-        .card img { width: 100%; filter: grayscale(100%) contrast(1.1); transition: 0.5s; }
-        .card:hover img { filter: grayscale(0%); }
-
-        .terminal-text {
-            font-family: 'Fira Code', monospace; font-size: 0.9rem;
-            margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 15px; color: #aaa;
+        .sticky-wrapper {
+            position: sticky; top: 0; height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden;
         }
 
-        /* Final Reveal */
-        #finale { display: none; text-align: center; padding: 100px 0; }
-        .cake-poly { height: 300px; margin: 20px auto; position: relative; width: 200px; }
-        .p-layer { 
-            position: absolute; left: 50%; transform: translate(-50%, -1000px);
-            border: 1px solid var(--accent); transition: 1s cubic-bezier(0.19, 1, 0.22, 1);
+        .image-monitor {
+            position: relative; width: 320px; height: 450px; /* Reduced Size */
+            border: 1px solid rgba(0, 255, 204, 0.2); background: #000;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden; box-shadow: 0 0 50px rgba(0,0,0,1);
         }
-        .pl1 { bottom: 0; width: 180px; height: 60px; background: #111; }
-        .pl2 { bottom: 60px; width: 140px; height: 60px; background: #181818; }
-        .pl3 { bottom: 120px; width: 100px; height: 60px; background: #222; }
+
+        .image-monitor img {
+            position: absolute; width: 100%; height: 100%; object-fit: cover;
+            opacity: 0; transition: opacity 0.8s ease-in-out, transform 1.2s ease-out;
+            filter: grayscale(1) contrast(1.2); transform: scale(1.1);
+        }
+        .image-monitor img.active { opacity: 1; transform: scale(1); filter: grayscale(0); }
+
+        .text-overlay {
+            position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+            width: 80%; max-width: 400px; text-align: center;
+            font-family: 'Fira Code', monospace; font-size: 0.85rem;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
+            padding: 15px; border: 1px solid var(--accent); color: var(--accent);
+        }
+
+        /* Scroll Triggers */
+        .step { height: 100vh; position: relative; z-index: 1; pointer-events: none; }
+
+        /* Other UI */
+        #overlay { position: fixed; inset: 0; z-index: 5000; background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .execute-btn { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 15px 40px; font-family: 'Fira Code', monospace; cursor: pointer; }
+        #canvas-container { position: fixed; inset: 0; z-index: 0; opacity: 0.5; }
+
+        /* Finale & Scratch */
+        #finale { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; z-index: 100; background: var(--bg); }
+        #scratchCanvas { border: 1px solid var(--accent); cursor: crosshair; touch-action: none; border-radius: 8px; }
+        
+        .footer-credit {
+            position: fixed; bottom: 20px; right: 20px; font-family: 'Fira Code', monospace;
+            font-size: 0.6rem; color: var(--accent); opacity: 0.4; z-index: 1000;
+        }
     </style>
 </head>
 <body>
 
-<div id="boot-log"></div>
-
 <div id="overlay">
-    <div class="system-status">// SYSTEM_AUTH_REQUIRED // v18.0</div>
-    <div class="timer-grid">
-        <div class="t-box"><span class="t-num" id="days">00</span><span class="t-lab">DAYS</span></div>
-        <div class="t-box"><span class="t-num" id="hours">00</span><span class="t-lab">HRS</span></div>
-        <div class="t-box"><span class="t-num" id="mins">00</span><span class="t-lab">MIN</span></div>
-        <div class="t-box"><span class="t-num" id="secs">00</span><span class="t-lab">SEC</span></div>
-    </div>
-    <button class="execute-btn" id="runBtn">> RUN INITIALIZE_MEMORIES</button>
+    <div style="font-family: 'Fira Code'; color: var(--accent); margin-bottom: 20px;">// AUTH_REQ_V18 //</div>
+    <button class="execute-btn" id="runBtn">> ACCESS_FILES</button>
 </div>
+
+<div class="footer-credit">ENGINEERED_BY_SMEET // 2026</div>
 
 <div id="canvas-container"></div>
 
-<div class="content-scroll" id="main">
-    <div style="height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-        <h1 style="font-size: 5rem; letter-spacing: -2px; margin: 0;">KASHVI</h1>
-        <div style="color: var(--accent); font-family: 'Fira Code'; font-size: 0.8rem;">[ STATUS: CHAPTER 18 ACTIVE ]</div>
+<div id="mainContent" style="display:none;">
+    <div class="scrollytelling-container">
+        <div class="sticky-wrapper">
+            <div class="image-monitor" id="monitor">
+                </div>
+            <div class="text-overlay" id="status-text">INITIALIZING...</div>
+        </div>
+
+        <div class="step" data-index="0"></div>
+        <div class="step" data-index="1"></div>
+        <div class="step" data-index="2"></div>
+        <div class="step" data-index="3"></div>
+        <div class="step" data-index="4"></div>
+        <div class="step" data-index="5"></div>
+        <div class="step" data-index="6"></div>
+        <div class="step" data-index="7"></div>
     </div>
 
-    <div id="grid"></div>
-
     <div id="finale">
-        <div class="cake-poly">
-            <div class="p-layer pl1" id="l1"></div>
-            <div class="p-layer pl2" id="l2"></div>
-            <div class="p-layer pl3" id="l3"></div>
+        <h2 style="font-family: 'Fira Code'; color: var(--accent); margin-bottom: 30px;">[ FINAL_WISH_DECRYPTED ]</h2>
+        <div style="position: relative; width: 300px; height: 160px;">
+            <div style="position: absolute; inset:0; display:flex; align-items:center; justify-content:center; background:#111; color:#fff; border-radius:8px; padding:20px; text-align:center; font-size:0.9rem;">
+                May your 18th year be your most powerful build yet. 🧿💙
+            </div>
+            <canvas id="scratchCanvas" width="300" height="160"></canvas>
         </div>
-        <h2 style="font-family: 'Fira Code'; color: var(--accent);">HAPPY_BIRTHDAY.exe</h2>
+        <p style="margin-top: 40px; font-family: 'Fira Code'; font-size: 0.6rem; opacity: 0.5;">EOF // END OF FILE</p>
     </div>
 </div>
 
-<audio id="audio" src="birthday-song.mp3" loop></audio>
+<audio id="audio" loop src="birthday-song.mp3"></audio>
 
 <script>
-    const log = document.getElementById('boot-log');
-    const messages = [
-        "Initializing core.js...",
-        "Loading assets/memories/2008_2026",
-        "Bypassing security filters...",
-        "Establishing neural link...",
-        "KASHVI_OS version 18.0.4 loaded.",
-        "System: READY."
-    ];
-
-    function printLog(idx) {
-        if (idx < messages.length) {
-            log.innerHTML += `> ${messages[idx]}<br>`;
-            setTimeout(() => printLog(idx + 1), 400);
-        }
-    }
-    printLog(0);
-
     const data = [
-        { img: "1.jpeg", text: "Compiling memories... Node_01: Reliability check passed." },
-        { img: "2.jpeg", text: "Node_02: Lab collaboration protocols active. Optimized shared data." },
-        { img: "7.jpeg", text: "Node_03: High-performance competition detected. Leveling up." },
-        { img: "8.jpeg", text: "Node_04: Security backup verified. Support system online." },
-        { img: "9.jpeg", text: "Node_05: Random.laugh_generator initialized." },
-        { img: "10.jpeg", text: "Node_06: Resilience stress-test: EXCELLENT." },
-        { img: "5.jpeg", text: "Node_07: Milestone 18 detected. Scalability enabled." },
-        { img: "6.jpeg", text: "Node_08: Finalizing bond... Success." }
+        { img: "1.jpeg", text: "LOG: Memory_01 // Reliability.test = SUCCESS" },
+        { img: "2.jpeg", text: "LOG: Memory_02 // Collaboration.protocols = ACTIVE" },
+        { img: "7.jpeg", text: "LOG: Memory_03 // Competition.factor = EVOLVING" },
+        { img: "8.jpeg", text: "LOG: Memory_04 // Support.system = STABLE" },
+        { img: "9.jpeg", text: "LOG: Memory_05 // Humor.logic = OPTIMIZED" },
+        { img: "10.jpeg", text: "LOG: Memory_06 // Resilience.buffer = MAX_CAPACITY" },
+        { img: "5.jpeg", text: "LOG: Memory_07 // Milestone_18 = REACHED" },
+        { img: "6.jpeg", text: "LOG: Memory_08 // Bond.integrity = 100%" }
     ];
 
-    const grid = document.getElementById('grid');
+    const monitor = document.getElementById('monitor');
     data.forEach((item, i) => {
-        grid.innerHTML += `
-            <div class="card" id="card-${i}">
-                <img src="${item.img}">
-                <div class="terminal-text" id="text-${i}"></div>
-            </div>`;
+        const img = document.createElement('img');
+        img.src = item.img;
+        img.id = `img-${i}`;
+        if(i === 0) img.classList.add('active');
+        monitor.appendChild(img);
     });
+
+    // Rolex Scroll Logic
+    const steps = document.querySelectorAll('.step');
+    window.addEventListener('scroll', () => {
+        let current = 0;
+        steps.forEach((step, i) => {
+            const rect = step.getBoundingClientRect();
+            if(rect.top <= window.innerHeight/2) current = i;
+        });
+
+        document.querySelectorAll('.image-monitor img').forEach(img => img.classList.remove('active'));
+        document.getElementById(`img-${current}`).classList.add('active');
+        document.getElementById('status-text').innerText = data[current].text;
+    });
+
+    // Scratch Card Logic - Re-engineered for reliability
+    function initScratch() {
+        const canvas = document.getElementById('scratchCanvas');
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#333';
+        ctx.fillRect(0, 0, 300, 160);
+        ctx.font = '12px Fira Code';
+        ctx.fillStyle = '#00ffcc';
+        ctx.textAlign = 'center';
+        ctx.fillText('SCRATCH TO DECRYPT', 150, 85);
+
+        let isDrawing = false;
+        function scratch(e) {
+            if (!isDrawing) return;
+            const rect = canvas.getBoundingClientRect();
+            const x = (e.clientX || e.touches[0].clientX) - rect.left;
+            const y = (e.clientY || e.touches[0].clientY) - rect.top;
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath();
+            ctx.arc(x, y, 20, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        canvas.onmousedown = canvas.ontouchstart = (e) => { isDrawing = true; scratch(e); };
+        window.onmouseup = window.ontouchend = () => isDrawing = false;
+        canvas.onmousemove = canvas.ontouchmove = scratch;
+    }
 
     document.getElementById('runBtn').onclick = () => {
         document.getElementById('audio').play();
-        document.getElementById('overlay').style.transform = "translateY(-100%)";
-        setTimeout(() => {
-            document.getElementById('main').style.display = 'flex';
-        }, 800);
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'block';
+        initScratch(); // Initialize scratch card immediately after entry
     };
-
-    const obs = new IntersectionObserver(entries => {
-        entries.forEach(e => {
-            if(e.isIntersecting) {
-                const id = e.target.id.split('-')[1];
-                e.target.classList.add('active');
-                typeText(id);
-            }
-        });
-    }, {threshold: 0.5});
-    document.querySelectorAll('.card').forEach(c => obs.observe(c));
-
-    function typeText(idx) {
-        const el = document.getElementById(`text-${idx}`);
-        if(el.innerHTML !== "") return;
-        let str = data[idx].text;
-        let j = 0;
-        function t() {
-            if(j < str.length) { el.innerHTML += str[j++]; setTimeout(t, 20); }
-            else if (idx == 7) { 
-                document.getElementById('finale').style.display = 'block';
-                ['l1','l2','l3'].forEach((l, k) => {
-                    setTimeout(() => document.getElementById(l).style.transform = "translate(-50%, 0)", k * 500);
-                });
-            }
-        }
-        t();
-    }
-
-    // Timer Logic
-    const target = new Date("January 20, 2026 00:00:00").getTime();
-    setInterval(() => {
-        const diff = target - new Date().getTime();
-        document.getElementById('days').innerText = Math.max(0, Math.floor(diff / 86400000));
-        document.getElementById('hours').innerText = Math.max(0, Math.floor((diff % 86400000) / 3600000));
-        document.getElementById('mins').innerText = Math.max(0, Math.floor((diff % 3600000) / 60000));
-        document.getElementById('secs').innerText = Math.max(0, Math.floor((diff % 60000) / 1000));
-    }, 1000);
 </script>
 
 <script type="module">
@@ -231,23 +192,16 @@
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.getElementById('canvas-container').appendChild(renderer.domElement);
-
-    // Advanced Hackathon Background: Points Grid
     const geo = new THREE.BufferGeometry();
-    const count = 3000;
+    const count = 4000;
     const pos = new Float32Array(count * 3);
     for(let i=0; i<count*3; i++) pos[i] = (Math.random()-0.5)*100;
     geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    const mat = new THREE.PointsMaterial({ size: 0.1, color: 0x00ffcc });
+    const mat = new THREE.PointsMaterial({ size: 0.1, color: 0x00ffcc, transparent: true, opacity: 0.4 });
     const points = new THREE.Points(geo, mat);
     scene.add(points);
     camera.position.z = 40;
-
-    function animate() {
-        requestAnimationFrame(animate);
-        points.rotation.y += 0.001;
-        renderer.render(scene, camera);
-    }
+    function animate() { requestAnimationFrame(animate); points.rotation.y += 0.001; renderer.render(scene, camera); }
     animate();
 </script>
 </body>
