@@ -39,30 +39,33 @@
 
         #canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
         .content-scroll { position: relative; z-index: 10; width: 100%; display: none; flex-direction: column; align-items: center; }
-        .container { text-align: center; padding: 85vh 20px 100px 20px; width: 100%; max-width: 700px; box-sizing: border-box; }
+        .container { text-align: center; padding: 85vh 20px 0 20px; width: 100%; max-width: 700px; box-sizing: border-box; }
 
         /* Story Feed */
         .collage { display: flex; flex-direction: column; gap: 120px; margin: 60px 0; width: 100%; }
         .img-card { position: relative; opacity: 0.1; filter: grayscale(1) blur(5px); transition: 1.5s all ease; transform: scale(0.9); }
         .img-card.active { opacity: 1; filter: grayscale(0) blur(0); transform: scale(1); }
         .img-card img { width: 100%; height: auto; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px rgba(0,0,0,0.6); display: block; }
+        
         .typewriter-box {
             margin-top: 20px; background: rgba(10, 10, 10, 0.85); backdrop-filter: blur(20px); padding: 25px;
             border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); font-size: 1.05rem;
             line-height: 1.6; text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,0.5); min-height: 50px;
         }
 
-        /* 3D Cake */
-        .cake-box { height: 350px; position: relative; margin: 100px auto; display: none; width: 250px; }
-        .layer { position: absolute; left: 50%; transform: translate(-50%, -800px); border-radius: 50% / 25px; transition: 1.5s cubic-bezier(0.17, 0.67, 0.83, 0.67); box-shadow: inset 0 -15px 20px rgba(0,0,0,0.3), 0 10px 20px rgba(0,0,0,0.4); }
+        /* 3D Cake Section */
+        #finale-section { display: none; padding-top: 100px; padding-bottom: 200px; width: 100%; }
+        .cake-box { height: 350px; position: relative; margin: 50px auto; width: 250px; }
+        .layer { position: absolute; left: 50%; transform: translate(-50%, -1000px); border-radius: 50% / 25px; transition: 1.5s cubic-bezier(0.17, 0.67, 0.83, 0.67); box-shadow: inset 0 -15px 20px rgba(0,0,0,0.3), 0 10px 20px rgba(0,0,0,0.4); }
         .layer::after { content: ""; position: absolute; top: 12px; left: 0; width: 100%; height: 35px; background-image: radial-gradient(circle at 15% 0%, var(--cream) 18px, transparent 19px), radial-gradient(circle at 45% 0%, var(--cream) 22px, transparent 23px), radial-gradient(circle at 80% 0%, var(--cream) 18px, transparent 19px); opacity: 0.9; }
         .l1 { bottom: 0; width: 220px; height: 90px; background: #5d4037; border-top: 5px solid #795548; }
         .l2 { bottom: 75px; width: 170px; height: 80px; background: #ff4d6d; border-top: 5px solid #ff758f; }
         .l3 { bottom: 140px; width: 120px; height: 65px; background: #fff9c4; border-top: 5px solid #fff; }
-        .candle-stick { bottom: 195px; width: 14px; height: 50px; background: repeating-linear-gradient(45deg, var(--primary-blue), var(--primary-blue) 6px, #fff 6px, #fff 12px); left: 50%; transform: translate(-50%, -800px); border-radius: 5px; cursor: pointer; }
+        .candle-stick { bottom: 195px; width: 14px; height: 50px; background: repeating-linear-gradient(45deg, var(--primary-blue), var(--primary-blue) 6px, #fff 6px, #fff 12px); left: 50%; transform: translate(-50%, -1000px); border-radius: 5px; cursor: pointer; }
         .flame { position: absolute; top: -28px; left: 50%; transform: translateX(-50%); width: 20px; height: 35px; background: radial-gradient(circle at center, #ffd700, #ff8c00, transparent); border-radius: 50% 50% 20% 20%; filter: blur(1px); animation: burn 0.2s infinite alternate; box-shadow: 0 0 25px #ff8c00; }
         @keyframes burn { from { transform: translateX(-50%) scale(1); } to { transform: translateX(-50%) scale(1.15) rotate(2deg); } }
 
+        /* Finale Elements */
         .footer-title { font-size: 3rem; font-weight: 900; color: var(--primary-blue); text-shadow: 0 0 20px var(--primary-blue); margin: 60px 0 20px 0; }
         .neon-footer { margin-bottom: 80px; text-align: center; }
         .line-1, .line-2 { font-weight: bold; color: var(--neon-pink); text-transform: uppercase; display: block; animation: neonFlicker 4s infinite; }
@@ -70,8 +73,10 @@
         .line-2 { font-size: 1.8rem; letter-spacing: 2px; }
         @keyframes neonFlicker { 0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; text-shadow: 0 0 10px var(--neon-pink), 0 0 20px #ff1493; } 20%, 22%, 24%, 55% { opacity: 0.6; } }
 
-        .scratch-wrap { display: none; margin: 50px 0 150px 0; }
-        canvas { border-radius: 15px; touch-action: none; cursor: crosshair; }
+        /* Scratch Card */
+        .scratch-wrap { display: none; margin: 50px 0 100px 0; position: relative; }
+        #scratchCanvas { position: absolute; top: 0; left: 50%; transform: translateX(-50%); border-radius: 15px; touch-action: none; cursor: crosshair; z-index: 100; }
+        .scratch-content { width: 300px; height: 160px; margin: 0 auto; display: flex; align-items: center; justify-content: center; background: #0a0a0a; color: var(--gold); border: 2px solid var(--gold); border-radius: 15px; padding: 25px; box-sizing: border-box; font-size: 1.2rem; font-weight: bold; text-align: center; }
     </style>
 </head>
 <body>
@@ -93,7 +98,8 @@
         <p style="letter-spacing: 8px; color: var(--primary-blue); font-weight: bold; margin-bottom: 20px;">CHAPTER 18</p>
         <h1 style="font-size: 2.8rem; margin-bottom: 120px;">KASHVI</h1>
         <div class="collage" id="collageGrid"></div>
-        <div id="finale-section" style="display: none;">
+
+        <div id="finale-section">
             <div class="cake-box" id="cakeBox">
                 <div class="layer l1" id="layer1"></div>
                 <div class="layer l2" id="layer2"></div>
@@ -104,9 +110,7 @@
             <div class="neon-footer"><span class="line-1">FOR THE WINS & THE LAUGHS. 💙</span><span class="line-2">THE BEST IS YET TO COME. 🧿</span></div>
             <div class="scratch-wrap" id="scratchWrap">
                 <div style="position: relative; width: 300px; height: 160px; margin: 0 auto;">
-                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #0a0a0a; color: var(--gold); border: 2px solid var(--gold); border-radius: 15px; padding: 25px; box-sizing: border-box; font-size: 1.2rem; font-weight: bold; text-align: center;">
-                        May this year bring you endless success and happiness! 🧿💙
-                    </div>
+                    <div class="scratch-content">May this year bring you endless success and happiness! 🧿💙</div>
                     <canvas id="scratchCanvas" width="300" height="160"></canvas>
                 </div>
             </div>
@@ -153,63 +157,70 @@
         let i = 0;
         const type = () => {
             if (i < text.length) { box.innerHTML += text.charAt(i); i++; setTimeout(type, 35); }
-            else if (idx === data.length - 1) { setTimeout(triggerFinale, 1000); }
+            else if (idx === data.length - 1) { 
+                setTimeout(() => {
+                    document.getElementById('finale-section').style.display = 'block';
+                    triggerCakeDrop();
+                }, 1500);
+            }
         };
         type();
         confetti({ particleCount: 15, spread: 40, origin: { y: 0.8 }, colors: ['#00d4ff'] });
     }
 
-    function triggerFinale() {
-        const sec = document.getElementById('finale-section');
-        if (sec.style.display === 'block') return;
-        sec.style.display = 'block';
-        document.getElementById('cakeBox').style.display = 'block';
+    function triggerCakeDrop() {
         ['layer1', 'layer2', 'layer3', 'candle'].forEach((id, i) => {
             setTimeout(() => { document.getElementById(id).style.transform = 'translate(-50%, 0)'; }, i * 750);
         });
-        setTimeout(() => { document.getElementById('scratchWrap').style.display = 'block'; initScratch(); }, 3800);
+        setTimeout(() => { 
+            document.getElementById('scratchWrap').style.display = 'block'; 
+            confetti({ particleCount: 150, spread: 100, origin: { y: 0.5 } });
+        }, 3800);
     }
 
     document.getElementById('candle').onclick = function() {
         document.getElementById('flame').style.display = 'none';
-        confetti({ particleCount: 350, spread: 120, origin: { y: 0.6 } });
+        confetti({ particleCount: 400, spread: 130, origin: { y: 0.6 } });
     };
 
+    // PRE-INITIALIZE SCRATCH CARD
     function initScratch() {
         const canvas = document.getElementById('scratchCanvas');
         const ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#2c2c2c'; ctx.fillRect(0, 0, 300, 160);
-        ctx.font = 'bold 15px sans-serif'; ctx.fillStyle = '#666'; ctx.textAlign = 'center';
-        ctx.fillText('SCRATCH TO REVEAL 🧿', 150, 85);
+        // Paint the silver cover immediately
+        ctx.fillStyle = '#444'; ctx.fillRect(0, 0, 300, 160);
+        ctx.font = 'bold 16px sans-serif'; ctx.fillStyle = '#999'; ctx.textAlign = 'center';
+        ctx.fillText('SCRATCH HERE 🧿', 150, 85);
+
         let drawing = false;
         const scratch = (e) => {
             if(!drawing) return;
+            e.preventDefault();
             const r = canvas.getBoundingClientRect();
-            const x = (e.clientX || e.touches[0].clientX) - r.left;
-            const y = (e.clientY || e.touches[0].clientY) - r.top;
+            const x = (e.clientX || (e.touches && e.touches[0].clientX)) - r.left;
+            const y = (e.clientY || (e.touches && e.touches[0].clientY)) - r.top;
             ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath(); ctx.arc(x, y, 22, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.arc(x, y, 25, 0, Math.PI*2); ctx.fill();
         };
-        canvas.onmousedown = canvas.ontouchstart = () => drawing = true;
-        window.onmouseup = window.ontouchend = () => drawing = false;
-        canvas.onmousemove = canvas.ontouchmove = scratch;
+        canvas.addEventListener('mousedown', () => drawing = true);
+        canvas.addEventListener('touchstart', (e) => { drawing = true; scratch(e); });
+        window.addEventListener('mouseup', () => drawing = false);
+        window.addEventListener('touchend', () => drawing = false);
+        canvas.addEventListener('mousemove', scratch);
+        canvas.addEventListener('touchmove', scratch);
     }
 
-    // UPDATED TIMER LOGIC
+    // Call init immediately on load
+    window.onload = initScratch;
+
+    // Timer Logic
     const target = new Date("January 20, 2026 00:00:00").getTime();
     setInterval(() => {
-        const now = new Date().getTime();
-        const diff = target - now;
-        
-        const d = Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
-        const h = Math.max(0, Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
-        const m = Math.max(0, Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)));
-        const s = Math.max(0, Math.floor((diff % (1000 * 60)) / 1000));
-
-        document.getElementById('days').innerText = String(d).padStart(2, '0');
-        document.getElementById('hours').innerText = String(h).padStart(2, '0');
-        document.getElementById('mins').innerText = String(m).padStart(2, '0');
-        document.getElementById('secs').innerText = String(s).padStart(2, '0');
+        const diff = target - new Date().getTime();
+        document.getElementById('days').innerText = String(Math.max(0, Math.floor(diff / 86400000))).padStart(2, '0');
+        document.getElementById('hours').innerText = String(Math.max(0, Math.floor((diff % 86400000) / 3600000))).padStart(2, '0');
+        document.getElementById('mins').innerText = String(Math.max(0, Math.floor((diff % 3600000) / 60000))).padStart(2, '0');
+        document.getElementById('secs').innerText = String(Math.max(0, Math.floor((diff % 60000) / 1000))).padStart(2, '0');
     }, 1000);
 
     document.getElementById('entryBtn').onclick = () => {
@@ -253,20 +264,18 @@
         const s = 15;
         for(let i=0; i<count; i++) {
             const t = (i/count) * Math.PI * 2; const i3 = i*3;
-            if(shape === 0) { // Infinity
+            if(shape === 0) {
                 targets[i3] = (s * Math.cos(t)) / (1 + Math.pow(Math.sin(t), 2));
                 targets[i3+1] = (s * Math.sin(t) * Math.cos(t)) / (1 + Math.pow(Math.sin(t), 2));
                 targets[i3+2] = 0;
-            } else { // Sphere
+            } else {
                 const phi = Math.acos(-1 + (2 * i) / count); const theta = Math.sqrt(count * Math.PI) * phi;
                 targets[i3] = (s+2) * Math.cos(theta) * Math.sin(phi); targets[i3+1] = (s+2) * Math.sin(theta) * Math.sin(phi); targets[i3+2] = (s+2) * Math.cos(phi);
             }
         }
     }
-
     let cur = 0; setInterval(() => { cur = 1 - cur; morph(cur); }, 6000);
     morph(0);
-
     function animate() {
         requestAnimationFrame(animate);
         const p = geo.attributes.position.array;
