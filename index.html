@@ -26,10 +26,10 @@
             background: radial-gradient(circle at center, #001d3d 0%, #000000 100%);
         }
         
-        #countdown { display: flex; margin-bottom: 30px; gap: 15px; }
-        .timer-unit { text-align: center; min-width: 65px; }
-        .timer-num { font-size: 2.5rem; font-weight: 800; color: var(--primary-blue); display: block; text-shadow: 0 0 15px var(--primary-blue); }
-        .timer-label { font-size: 0.7rem; text-transform: uppercase; opacity: 0.7; letter-spacing: 1px; }
+        #countdown { display: flex; margin-bottom: 30px; gap: 10px; flex-wrap: wrap; justify-content: center; }
+        .timer-unit { text-align: center; min-width: 70px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; border: 1px solid rgba(0, 212, 255, 0.2); }
+        .timer-num { font-size: 2rem; font-weight: 800; color: var(--primary-blue); display: block; text-shadow: 0 0 15px var(--primary-blue); }
+        .timer-label { font-size: 0.6rem; text-transform: uppercase; opacity: 0.7; letter-spacing: 1px; }
 
         .entry-btn {
             padding: 18px 45px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.2); font-weight: bold;
@@ -39,70 +39,36 @@
 
         #canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
         .content-scroll { position: relative; z-index: 10; width: 100%; display: none; flex-direction: column; align-items: center; }
-        
         .container { text-align: center; padding: 85vh 20px 100px 20px; width: 100%; max-width: 700px; box-sizing: border-box; }
 
-        /* Story Feed - Full Size Images */
+        /* Story Feed */
         .collage { display: flex; flex-direction: column; gap: 120px; margin: 60px 0; width: 100%; }
-        
         .img-card { position: relative; opacity: 0.1; filter: grayscale(1) blur(5px); transition: 1.5s all ease; transform: scale(0.9); }
         .img-card.active { opacity: 1; filter: grayscale(0) blur(0); transform: scale(1); }
-        
         .img-card img { width: 100%; height: auto; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px rgba(0,0,0,0.6); display: block; }
-        .img-card.active img { border-color: var(--primary-blue); box-shadow: 0 0 40px rgba(0, 212, 255, 0.3); }
-
         .typewriter-box {
             margin-top: 20px; background: rgba(10, 10, 10, 0.85); backdrop-filter: blur(20px); padding: 25px;
             border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); font-size: 1.05rem;
             line-height: 1.6; text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,0.5); min-height: 50px;
         }
 
-        /* 3D Realistic Cake Style */
+        /* 3D Cake */
         .cake-box { height: 350px; position: relative; margin: 100px auto; display: none; width: 250px; }
-        .layer { 
-            position: absolute; left: 50%; transform: translate(-50%, -800px); 
-            border-radius: 50% / 25px; 
-            transition: 1.5s cubic-bezier(0.17, 0.67, 0.83, 0.67); 
-            box-shadow: inset 0 -15px 20px rgba(0,0,0,0.3), 0 10px 20px rgba(0,0,0,0.4);
-        }
-        /* Cream Drips */
-        .layer::after {
-            content: ""; position: absolute; top: 12px; left: 0; width: 100%; height: 35px;
-            background-image: radial-gradient(circle at 15% 0%, var(--cream) 18px, transparent 19px),
-                              radial-gradient(circle at 45% 0%, var(--cream) 22px, transparent 23px),
-                              radial-gradient(circle at 80% 0%, var(--cream) 18px, transparent 19px);
-            opacity: 0.9;
-        }
+        .layer { position: absolute; left: 50%; transform: translate(-50%, -800px); border-radius: 50% / 25px; transition: 1.5s cubic-bezier(0.17, 0.67, 0.83, 0.67); box-shadow: inset 0 -15px 20px rgba(0,0,0,0.3), 0 10px 20px rgba(0,0,0,0.4); }
+        .layer::after { content: ""; position: absolute; top: 12px; left: 0; width: 100%; height: 35px; background-image: radial-gradient(circle at 15% 0%, var(--cream) 18px, transparent 19px), radial-gradient(circle at 45% 0%, var(--cream) 22px, transparent 23px), radial-gradient(circle at 80% 0%, var(--cream) 18px, transparent 19px); opacity: 0.9; }
         .l1 { bottom: 0; width: 220px; height: 90px; background: #5d4037; border-top: 5px solid #795548; }
         .l2 { bottom: 75px; width: 170px; height: 80px; background: #ff4d6d; border-top: 5px solid #ff758f; }
         .l3 { bottom: 140px; width: 120px; height: 65px; background: #fff9c4; border-top: 5px solid #fff; }
-
-        .candle-stick { 
-            bottom: 195px; width: 14px; height: 50px; 
-            background: repeating-linear-gradient(45deg, var(--primary-blue), var(--primary-blue) 6px, #fff 6px, #fff 12px); 
-            left: 50%; transform: translate(-50%, -800px); border-radius: 5px; cursor: pointer;
-        }
-        .flame { 
-            position: absolute; top: -28px; left: 50%; transform: translateX(-50%); 
-            width: 20px; height: 35px; 
-            background: radial-gradient(circle at center, #ffd700, #ff8c00, transparent);
-            border-radius: 50% 50% 20% 20%; filter: blur(1px); 
-            animation: burn 0.2s infinite alternate; box-shadow: 0 0 25px #ff8c00;
-        }
-
+        .candle-stick { bottom: 195px; width: 14px; height: 50px; background: repeating-linear-gradient(45deg, var(--primary-blue), var(--primary-blue) 6px, #fff 6px, #fff 12px); left: 50%; transform: translate(-50%, -800px); border-radius: 5px; cursor: pointer; }
+        .flame { position: absolute; top: -28px; left: 50%; transform: translateX(-50%); width: 20px; height: 35px; background: radial-gradient(circle at center, #ffd700, #ff8c00, transparent); border-radius: 50% 50% 20% 20%; filter: blur(1px); animation: burn 0.2s infinite alternate; box-shadow: 0 0 25px #ff8c00; }
         @keyframes burn { from { transform: translateX(-50%) scale(1); } to { transform: translateX(-50%) scale(1.15) rotate(2deg); } }
 
-        /* Finale Elements */
         .footer-title { font-size: 3rem; font-weight: 900; color: var(--primary-blue); text-shadow: 0 0 20px var(--primary-blue); margin: 60px 0 20px 0; }
         .neon-footer { margin-bottom: 80px; text-align: center; }
         .line-1, .line-2 { font-weight: bold; color: var(--neon-pink); text-transform: uppercase; display: block; animation: neonFlicker 4s infinite; }
         .line-1 { font-size: 0.9rem; letter-spacing: 4px; margin-bottom: 12px; }
         .line-2 { font-size: 1.8rem; letter-spacing: 2px; }
-
-        @keyframes neonFlicker {
-            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; text-shadow: 0 0 10px var(--neon-pink), 0 0 20px #ff1493; }
-            20%, 22%, 24%, 55% { opacity: 0.6; }
-        }
+        @keyframes neonFlicker { 0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; text-shadow: 0 0 10px var(--neon-pink), 0 0 20px #ff1493; } 20%, 22%, 24%, 55% { opacity: 0.6; } }
 
         .scratch-wrap { display: none; margin: 50px 0 150px 0; }
         canvas { border-radius: 15px; touch-action: none; cursor: crosshair; }
@@ -113,6 +79,8 @@
 <div id="overlay">
     <div id="countdown">
         <div class="timer-unit"><span class="timer-num" id="days">00</span><span class="timer-label">Days</span></div>
+        <div class="timer-unit"><span class="timer-num" id="hours">00</span><span class="timer-label">Hours</span></div>
+        <div class="timer-unit"><span class="timer-num" id="mins">00</span><span class="timer-label">Mins</span></div>
         <div class="timer-unit"><span class="timer-num" id="secs">00</span><span class="timer-label">Secs</span></div>
     </div>
     <button class="entry-btn" id="entryBtn">ENTER THE GALAXY 🧿</button>
@@ -124,9 +92,7 @@
     <div class="container">
         <p style="letter-spacing: 8px; color: var(--primary-blue); font-weight: bold; margin-bottom: 20px;">CHAPTER 18</p>
         <h1 style="font-size: 2.8rem; margin-bottom: 120px;">KASHVI</h1>
-        
         <div class="collage" id="collageGrid"></div>
-
         <div id="finale-section" style="display: none;">
             <div class="cake-box" id="cakeBox">
                 <div class="layer l1" id="layer1"></div>
@@ -134,16 +100,9 @@
                 <div class="layer l3" id="layer3"></div>
                 <div class="layer candle-stick" id="candle"><div class="flame" id="flame"></div></div>
             </div>
-            
             <div class="footer-title">HAPPY 18th! 🧿</div>
-            
-            <div class="neon-footer">
-                <span class="line-1">FOR THE WINS & THE LAUGHS. 💙</span>
-                <span class="line-2">THE BEST IS YET TO COME. 🧿</span>
-            </div>
-
+            <div class="neon-footer"><span class="line-1">FOR THE WINS & THE LAUGHS. 💙</span><span class="line-2">THE BEST IS YET TO COME. 🧿</span></div>
             <div class="scratch-wrap" id="scratchWrap">
-                <p style="opacity: 0.5; margin-bottom: 25px;">Scratch for a final wish... ✨</p>
                 <div style="position: relative; width: 300px; height: 160px; margin: 0 auto;">
                     <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #0a0a0a; color: var(--gold); border: 2px solid var(--gold); border-radius: 15px; padding: 25px; box-sizing: border-box; font-size: 1.2rem; font-weight: bold; text-align: center;">
                         May this year bring you endless success and happiness! 🧿💙
@@ -177,34 +136,24 @@
         grid.appendChild(card);
     });
 
-    // Auto-reveal logic
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const idx = parseInt(entry.target.id.split('-')[1]);
-                activate(idx);
-            }
+            if (entry.isIntersecting) { activate(parseInt(entry.target.id.split('-')[1])); }
         });
     }, { threshold: 0.75 });
-
     document.querySelectorAll('.img-card').forEach(c => observer.observe(c));
 
     const activated = new Set();
     function activate(idx) {
         if (activated.has(idx)) return;
         activated.add(idx);
-        const card = document.getElementById(`card-${idx}`);
-        card.classList.add('active');
-        
+        document.getElementById(`card-${idx}`).classList.add('active');
         const box = document.getElementById(`msg-${idx}`);
         const text = data[idx].text;
         let i = 0;
         const type = () => {
-            if (i < text.length) {
-                box.innerHTML += text.charAt(i); i++; setTimeout(type, 35);
-            } else if (idx === data.length - 1) {
-                setTimeout(triggerFinale, 1000);
-            }
+            if (i < text.length) { box.innerHTML += text.charAt(i); i++; setTimeout(type, 35); }
+            else if (idx === data.length - 1) { setTimeout(triggerFinale, 1000); }
         };
         type();
         confetti({ particleCount: 15, spread: 40, origin: { y: 0.8 }, colors: ['#00d4ff'] });
@@ -215,24 +164,15 @@
         if (sec.style.display === 'block') return;
         sec.style.display = 'block';
         document.getElementById('cakeBox').style.display = 'block';
-        
         ['layer1', 'layer2', 'layer3', 'candle'].forEach((id, i) => {
-            setTimeout(() => {
-                document.getElementById(id).style.transform = 'translate(-50%, 0)';
-                if(navigator.vibrate) navigator.vibrate(30);
-            }, i * 750);
+            setTimeout(() => { document.getElementById(id).style.transform = 'translate(-50%, 0)'; }, i * 750);
         });
-        setTimeout(() => { 
-            document.getElementById('scratchWrap').style.display = 'block'; 
-            initScratch(); 
-            confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
-        }, 3800);
+        setTimeout(() => { document.getElementById('scratchWrap').style.display = 'block'; initScratch(); }, 3800);
     }
 
-    // Candle Interaction
     document.getElementById('candle').onclick = function() {
         document.getElementById('flame').style.display = 'none';
-        confetti({ particleCount: 350, spread: 120, origin: { y: 0.6 }, scalar: 1.4 });
+        confetti({ particleCount: 350, spread: 120, origin: { y: 0.6 } });
     };
 
     function initScratch() {
@@ -255,17 +195,25 @@
         canvas.onmousemove = canvas.ontouchmove = scratch;
     }
 
-    // Countdown Logic
+    // UPDATED TIMER LOGIC
     const target = new Date("January 20, 2026 00:00:00").getTime();
     setInterval(() => {
-        const d = target - new Date().getTime();
-        document.getElementById('days').innerText = String(Math.max(0, Math.floor(d/86400000))).padStart(2,'0');
-        document.getElementById('secs').innerText = String(Math.max(0, Math.floor((d%60000)/1000))).padStart(2,'0');
+        const now = new Date().getTime();
+        const diff = target - now;
+        
+        const d = Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
+        const h = Math.max(0, Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+        const m = Math.max(0, Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)));
+        const s = Math.max(0, Math.floor((diff % (1000 * 60)) / 1000));
+
+        document.getElementById('days').innerText = String(d).padStart(2, '0');
+        document.getElementById('hours').innerText = String(h).padStart(2, '0');
+        document.getElementById('mins').innerText = String(m).padStart(2, '0');
+        document.getElementById('secs').innerText = String(s).padStart(2, '0');
     }, 1000);
 
     document.getElementById('entryBtn').onclick = () => {
-        const bgm = document.getElementById('bgMusic');
-        bgm.volume = 0.5; bgm.play();
+        document.getElementById('bgMusic').volume = 0.5; document.getElementById('bgMusic').play();
         document.getElementById('overlay').style.opacity = '0';
         setTimeout(() => { document.getElementById('overlay').style.display = 'none'; document.getElementById('mainContent').style.display = 'flex'; }, 1200);
     };
@@ -305,11 +253,11 @@
         const s = 15;
         for(let i=0; i<count; i++) {
             const t = (i/count) * Math.PI * 2; const i3 = i*3;
-            if(shape === 0) { // Infinity Shape
+            if(shape === 0) { // Infinity
                 targets[i3] = (s * Math.cos(t)) / (1 + Math.pow(Math.sin(t), 2));
                 targets[i3+1] = (s * Math.sin(t) * Math.cos(t)) / (1 + Math.pow(Math.sin(t), 2));
                 targets[i3+2] = 0;
-            } else { // Galaxy Sphere
+            } else { // Sphere
                 const phi = Math.acos(-1 + (2 * i) / count); const theta = Math.sqrt(count * Math.PI) * phi;
                 targets[i3] = (s+2) * Math.cos(theta) * Math.sin(phi); targets[i3+1] = (s+2) * Math.sin(theta) * Math.sin(phi); targets[i3+2] = (s+2) * Math.cos(phi);
             }
