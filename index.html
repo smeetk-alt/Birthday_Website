@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kashvi's 18th | Digital Journey 🧿</title>
+    <title>Kashvi's 18th | Journey 🧿</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;800&family=Playfair+Display:ital,wght@0,400;1,700&family=Fira+Code:wght@300;500&display=swap" rel="stylesheet">
     
@@ -24,7 +24,6 @@
             --neon-pink: #ffb7c5; 
             --deep-space: #010103; 
             --gold: #ffd700; 
-            --glass: rgba(255, 255, 255, 0.05);
         }
 
         body { 
@@ -48,16 +47,10 @@
             text-shadow: 0 0 10px var(--primary-blue); font-family: 'Fira Code';
         }
 
-        .journey-header { text-align: center; margin-bottom: 40px; padding: 0 30px; }
-        .journey-header h1 { 
-            font-family: 'Playfair Display', serif; font-size: 2.5rem; font-style: italic; margin: 0;
-            background: linear-gradient(to right, #fff, var(--primary-blue));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
         .system-logs { font-family: 'Fira Code', monospace; font-size: 0.6rem; color: var(--primary-blue); opacity: 0.5; line-height: 2; text-align: left; display: inline-block; min-height: 80px; }
 
         #countdown { display: flex; margin-bottom: 30px; gap: 10px; justify-content: center; }
-        .timer-unit { text-align: center; min-width: 65px; background: var(--glass); padding: 10px; border-radius: 10px; border: 1px solid rgba(0, 212, 255, 0.2); }
+        .timer-unit { text-align: center; min-width: 65px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; border: 1px solid rgba(0, 212, 255, 0.2); }
         .timer-num { font-size: 1.8rem; font-weight: 800; color: var(--primary-blue); display: block; }
 
         /* --- CONTENT --- */
@@ -74,32 +67,29 @@
             border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); font-size: 0.95rem; text-align: left;
         }
 
-        /* --- IMPROVISED HOLOGRAPHIC CAKE --- */
+        /* --- SOLID FILLED CAKE --- */
         #finale-section { display: none; width: 100%; padding-bottom: 150px; }
         .cake-box { height: 350px; position: relative; margin: 50px auto; width: 250px; }
         .layer { 
             position: absolute; left: 50%; transform: translate(-50%, -1000px); 
             border-radius: 50% / 25px; transition: 1.2s cubic-bezier(0.17, 0.67, 0.25, 1);
-            border: 1px solid rgba(0, 212, 255, 0.4); backdrop-filter: blur(8px);
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
+            box-shadow: inset 0 -15px 20px rgba(0,0,0,0.3), 0 10px 20px rgba(0,0,0,0.4);
         }
-        .l1 { bottom: 0; width: 220px; height: 90px; background: rgba(0, 212, 255, 0.1); }
-        .l2 { bottom: 75px; width: 170px; height: 80px; background: rgba(255, 183, 197, 0.15); border-color: var(--neon-pink); }
-        .l3 { bottom: 140px; width: 120px; height: 65px; background: rgba(255, 255, 255, 0.05); }
+        .l1 { bottom: 0; width: 220px; height: 90px; background: #5d4037; border-top: 5px solid #795548; }
+        .l2 { bottom: 75px; width: 170px; height: 80px; background: #ff4d6d; border-top: 5px solid #ff758f; }
+        .l3 { bottom: 140px; width: 120px; height: 65px; background: #fff9c4; border-top: 5px solid #ffffff; }
         
         .candle-stick { 
-            bottom: 195px; width: 6px; height: 45px; background: var(--primary-blue); 
-            left: 50%; transform: translate(-50%, -1000px); box-shadow: 0 0 15px var(--primary-blue);
+            bottom: 195px; width: 12px; height: 50px; 
+            background: repeating-linear-gradient(45deg, var(--primary-blue), var(--primary-blue) 6px, #fff 6px, #fff 12px);
+            left: 50%; transform: translate(-50%, -1000px); border-radius: 5px;
         }
         .flame { 
-            position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
-            width: 25px; height: 25px; background: var(--gold); border-radius: 50%; 
-            filter: blur(4px); animation: corePulse 0.8s infinite alternate; 
+            position: absolute; top: -28px; left: 50%; transform: translateX(-50%);
+            width: 20px; height: 35px; background: radial-gradient(circle at center, #ffd700, #ff8c00, transparent); 
+            border-radius: 50% 50% 20% 20%; filter: blur(1px); animation: burn 0.2s infinite alternate; box-shadow: 0 0 25px #ff8c00;
         }
-        @keyframes corePulse { 
-            from { transform: translateX(-50%) scale(0.8); opacity: 0.5; } 
-            to { transform: translateX(-50%) scale(1.3); opacity: 1; box-shadow: 0 0 30px var(--gold); } 
-        }
+        @keyframes burn { from { transform: translateX(-50%) scale(1); } to { transform: translateX(-50%) scale(1.15) rotate(2deg); } }
 
         /* --- POPUP & STARS --- */
         .system-popup {
@@ -122,18 +112,14 @@
 
 <div id="overlay">
     <div id="secret-trigger" onclick="checkPass()">[ CHAPTER 18 ]</div>
-    <div class="journey-header">
-        <h1>Kashvi's Journey</h1>
-        <p style="font-size: 0.7rem; letter-spacing: 3px; color: rgba(255,255,255,0.5);">INITIALIZING ADULTHOOD_V1.0</p>
-        <div class="system-logs" id="logContainer"></div>
-    </div>
+    <div class="system-logs" id="logContainer"></div>
     <div id="countdown">
         <div class="timer-unit"><span class="timer-num" id="days">00</span><span class="timer-label">DAYS</span></div>
         <div class="timer-unit"><span class="timer-num" id="hours">00</span><span class="timer-label">HRS</span></div>
         <div class="timer-unit"><span class="timer-num" id="mins">00</span><span class="timer-label">MINS</span></div>
         <div class="timer-unit"><span class="timer-num" id="secs">00</span><span class="timer-label">SECS</span></div>
     </div>
-    <button id="entryBtn" class="entry-btn" style="padding: 15px 40px; border-radius: 50px; background: var(--glass); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.3); font-size: 0.7rem; letter-spacing: 2px;">SECURE_LINE_OFFLINE 🔒</button>
+    <button id="entryBtn" class="entry-btn" style="padding: 15px 40px; border-radius: 50px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.3); font-size: 0.7rem; letter-spacing: 2px;">SECURE_LINE_OFFLINE 🔒</button>
 </div>
 
 <div id="starPopup" class="system-popup">
@@ -147,7 +133,7 @@
 
 <div class="content-scroll" id="mainContent">
     <div class="container">
-        <h1 id="k-title" onclick="kEasterEgg()" style="font-size: 3.5rem; font-family: 'Playfair Display'; font-style: italic; margin-bottom: 10px;">Kashvi</h1>
+        <h1 id="k-title" onclick="kEasterEgg()" style="font-size: 3.5rem; font-family: 'Playfair Display'; font-style: italic; margin-bottom: 10px; cursor: pointer;">Kashvi</h1>
         <div id="override-msg" style="display:none; color:var(--neon-pink); font-family:'Fira Code'; font-size:0.6rem; margin-bottom: 80px;">OVERRIDE: PARTNER_STABILITY_100% 🧿</div>
         
         <div id="collageGrid"></div>
@@ -197,7 +183,6 @@
         grid.innerHTML += `<div class="img-card" id="card-${idx}"><img src="${item.img}"><div class="typewriter-box" id="msg-${idx}"></div></div>`;
     });
 
-    // --- LOGS ANIMATION ---
     const logs = ["> Booting Life_Modules...", "> Compiling School_Memories...", "> Teenage_Phase... [100%]", "> Final_Chapter... [LOCKED]"];
     let logIdx = 0;
     function typeLogs() {
@@ -213,7 +198,6 @@
     }
     typeLogs();
 
-    // --- INTERSECTION OBSERVER ---
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => { if(entry.isIntersecting) activate(entry.target.id.split('-')[1]); });
     }, { threshold: 0.7 });
@@ -238,13 +222,12 @@
         confetti({ particleCount: 10, origin: { y: 0.8 }, colors: ['#00d4ff'] });
     }
 
-    // --- IMPROVISED CAKE DROP ---
     function triggerCakeDrop() {
         ['layer1', 'layer2', 'layer3', 'candle'].forEach((id, i) => {
             setTimeout(() => {
                 document.getElementById(id).style.transform = 'translate(-50%, 0)';
                 if(navigator.vibrate) navigator.vibrate(20);
-                confetti({ particleCount: 25, spread: 60, origin: { y: 0.7 }, colors: [i%2==0?'#00d4ff':'#ffb7c5'] });
+                confetti({ particleCount: 25, spread: 60, origin: { y: 0.7 }, colors: [i%2==0?'#5d4037':'#ff4d6d'] });
             }, i * 800);
         });
         setTimeout(() => { 
@@ -253,13 +236,10 @@
         }, 4000);
     }
 
-    // --- SCRATCH ---
     function initScratch() {
         const canvas = document.getElementById('scratchCanvas'), ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#001d3d'; ctx.fillRect(0,0,300,160);
-        for(let i=0; i<200; i++) { ctx.fillStyle = Math.random()>0.5?'#00d4ff':'#fff'; ctx.globalAlpha = Math.random(); ctx.fillRect(Math.random()*300, Math.random()*160, 1, 1); }
-        ctx.globalAlpha = 1; ctx.font = 'bold 10px Fira Code'; ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.fillText('SCRATCH TO DECRYPT FINAL MODULE 🧿', 150, 85);
-        
+        ctx.fillStyle = '#111'; ctx.fillRect(0,0,300,160);
+        ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.fillText('SCRATCH TO DECRYPT FINAL MODULE 🧿', 150, 85);
         let drawing = false, vibed = false;
         const scratch = (e) => {
             if(!drawing) return;
@@ -277,7 +257,6 @@
         canvas.addEventListener('touchmove', scratch);
     }
 
-    // --- CORE LOGIC ---
     let kCount = 0;
     function kEasterEgg() { if(++kCount === 5) { window.glowPink(); document.getElementById('override-msg').style.display = 'block'; } }
     function revealStarMsg() { 
@@ -340,11 +319,11 @@
     function morph(shape) {
         for(let i=0; i<count; i++) {
             let t = (i/count) * Math.PI * 2, i3 = i*3, s = 15;
-            if(shape === 0) { // Infinity
+            if(shape === 0) {
                 targets[i3] = (s * Math.cos(t)) / (1 + Math.sin(t)**2);
                 targets[i3+1] = (s * Math.sin(t) * Math.cos(t)) / (1 + Math.sin(t)**2);
                 targets[i3+2] = 0;
-            } else { // Sphere
+            } else {
                 let phi = Math.acos(-1 + (2 * i) / count), theta = Math.sqrt(count * Math.PI) * phi;
                 targets[i3] = s * Math.cos(theta) * Math.sin(phi);
                 targets[i3+1] = s * Math.sin(theta) * Math.sin(phi);
