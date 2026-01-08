@@ -90,6 +90,24 @@
             line-height: 1.6; text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,0.5); min-height: 50px; color: #eee;
         }
 
+        /* --- STAR HOLOGRAPHIC POPUP --- */
+        .system-popup {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0);
+            background: rgba(0, 15, 30, 0.95); border: 1px solid var(--primary-blue); padding: 20px;
+            z-index: 3000; font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--primary-blue);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.3); border-radius: 10px;
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none; max-width: 250px;
+        }
+        .system-popup.active { transform: translate(-50%, -50%) scale(1); pointer-events: all; }
+        .popup-header { font-weight: bold; border-bottom: 1px solid rgba(0,212,255,0.3); margin-bottom: 10px; padding-bottom: 5px; font-size: 0.5rem; color: var(--neon-pink); }
+
+        #goldenStar {
+            position: fixed; top: 25%; right: 10%; width: 40px; height: 40px; 
+            cursor: pointer; z-index: 500; display: none; align-items: center; justify-content: center;
+        }
+        .star-dot { width: 4px; height: 4px; background: var(--gold); border-radius: 50%; box-shadow: 0 0 10px var(--gold); animation: starPulse 1.5s infinite; }
+        @keyframes starPulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: 0.5; } 100% { transform: scale(1); opacity: 1; } }
+
         /* --- FINALE --- */
         #finale-section { display: none; padding-top: 100px; padding-bottom: 200px; width: 100%; }
         .cake-box { height: 350px; position: relative; margin: 50px auto; width: 250px; }
@@ -105,36 +123,37 @@
         .neon-footer { margin-bottom: 80px; text-align: center; }
         .line-1, .line-2 { font-weight: bold; color: var(--neon-pink); text-transform: uppercase; display: block; animation: neonFlicker 4s infinite; }
         
-        /* --- SCRATCH --- */
         .scratch-wrap { display: none; margin: 50px 0 100px 0; position: relative; opacity: 0; transition: 1s opacity; }
         #scratchCanvas { position: absolute; top: 0; left: 50%; transform: translateX(-50%); border-radius: 15px; touch-action: none; cursor: crosshair; z-index: 100; }
         .scratch-content { width: 300px; height: 160px; margin: 0 auto; display: flex; align-items: center; justify-content: center; background: #0a0a0a; color: var(--gold); border: 1px solid var(--gold); border-radius: 15px; padding: 25px; box-sizing: border-box; font-size: 1rem; font-weight: bold; text-align: center; }
-
-        #override-msg { display: none; font-family: 'Fira Code'; font-size: 0.6rem; color: var(--neon-pink); margin-top: 10px; text-transform: uppercase; letter-spacing: 2px; }
     </style>
 </head>
 <body>
 
 <div id="overlay">
     <div id="secret-trigger" onclick="checkPass()">[ CHAPTER 18 ]</div>
-    
     <div class="journey-header">
         <h1>Kashvi's Journey</h1>
         <div class="journey-line"></div>
         <p class="journey-sub">Synchronizing 18 Years of Memories</p>
-        
         <div class="system-logs" id="logContainer"></div>
     </div>
-
     <div id="countdown">
         <div class="timer-unit"><span class="timer-num" id="days">00</span><span class="timer-label">Days</span></div>
         <div class="timer-unit"><span class="timer-num" id="hours">00</span><span class="timer-label">Hours</span></div>
         <div class="timer-unit"><span class="timer-num" id="mins">00</span><span class="timer-label">Mins</span></div>
         <div class="timer-unit"><span class="timer-num" id="secs">00</span><span class="timer-label">Secs</span></div>
     </div>
-
     <button class="entry-btn" id="entryBtn">FINAL CHAPTER LOCKED 🔒</button>
 </div>
+
+<div id="starPopup" class="system-popup">
+    <div class="popup-header">SYSTEM_LOG // DATA_RECOVERED</div>
+    <div id="popupBody">Secret found!</div>
+    <button onclick="closePopup()" style="margin-top:15px; background:transparent; border:1px solid var(--primary-blue); color:white; font-size:0.5rem; cursor:pointer; width:100%; font-family:'Fira Code';">CLOSE_TERMINAL</button>
+</div>
+
+<div id="goldenStar" onclick="revealStarMsg()"><div class="star-dot"></div></div>
 
 <div id="canvas-container"></div>
 
@@ -142,7 +161,7 @@
     <div class="container">
         <p style="letter-spacing: 12px; color: var(--primary-blue); font-weight: bold; margin-bottom: 20px; font-size: 0.8rem;">THE 18th CHAPTER</p>
         <h1 id="k-title" onclick="kEasterEgg()" style="font-size: 3.5rem; margin-bottom: 20px; font-family: 'Playfair Display'; font-style: italic; cursor: pointer;">Kashvi</h1>
-        <div id="override-msg">System Override: Legacy Partner Mode Active 🧿</div>
+        <div id="override-msg" style="display:none; color:var(--neon-pink); font-family:'Fira Code'; font-size:0.6rem; letter-spacing:2px;">LEGACY PARTNER MODE ACTIVE 🧿</div>
         
         <div class="collage" id="collageGrid" style="margin-top: 100px;"></div>
 
@@ -182,6 +201,12 @@
         { img: "6.jpeg", text: "Genuinely glad for this bond. Looking forward to more wins and successful projects ahead. 💙" }
     ];
 
+    const starMessages = [
+        "LOG: You're officially the most stable build in my life. No bugs found. 🧿",
+        "DATA: Remember that lab fail? We've come a long way since then. 📈",
+        "ENCRYPTION: 18 years of excellence. System status: Perfect. 💙"
+    ];
+
     const grid = document.getElementById('collageGrid');
     data.forEach((item, idx) => {
         const card = document.createElement('div');
@@ -190,7 +215,6 @@
         grid.appendChild(card);
     });
 
-    // --- SYSTEM LOGS ANIMATION ---
     const logs = ["> Childhood_Modules... [DONE]", "> School_Days.rar... [DONE]", "> Teenage_Rebellion... [DECRYPTING]", "> Final_Chapter_18... [LOCKED]"];
     let logIdx = 0;
     function typeLogs() {
@@ -208,9 +232,7 @@
     typeLogs();
 
     const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) { activate(parseInt(entry.target.id.split('-')[1])); }
-        });
+        entries.forEach(entry => { if (entry.isIntersecting) activate(parseInt(entry.target.id.split('-')[1])); });
     }, { threshold: 0.7 });
     document.querySelectorAll('.img-card').forEach(c => observer.observe(c));
 
@@ -243,17 +265,24 @@
         }, 3800);
     }
 
-    // --- EASTER EGGS ---
     let kCount = 0;
     function kEasterEgg() {
-        kCount++;
-        if(kCount === 5) {
-            window.glowPink(); // Accessing Three.js function
+        if(++kCount === 5) {
+            window.glowPink();
             document.getElementById('override-msg').style.display = 'block';
             document.getElementById('footer-t').style.color = 'var(--neon-pink)';
             confetti({ colors: ['#ffb7c5'], particleCount: 100 });
         }
     }
+
+    function revealStarMsg() {
+        const msg = starMessages[Math.floor(Math.random() * starMessages.length)];
+        document.getElementById('popupBody').innerText = msg;
+        document.getElementById('starPopup').classList.add('active');
+        if(navigator.vibrate) navigator.vibrate(50);
+    }
+
+    function closePopup() { document.getElementById('starPopup').classList.remove('active'); }
 
     function initScratch() {
         const canvas = document.getElementById('scratchCanvas');
@@ -269,7 +298,7 @@
         ctx.fillText('SCRATCH TO DECRYPT 🧿', 150, 85);
 
         let drawing = false;
-        let scratchedAmount = 0;
+        let vibed = false;
         const scratch = (e) => {
             if(!drawing) return;
             const r = canvas.getBoundingClientRect();
@@ -277,13 +306,12 @@
             const y = (e.pageY || (e.touches && e.touches[0].pageY)) - r.top - window.scrollY;
             ctx.globalCompositeOperation = 'destination-out';
             ctx.beginPath(); ctx.arc(x, y, 25, 0, Math.PI*2); ctx.fill();
-            scratchedAmount++;
-            if(scratchedAmount === 1) { if(navigator.vibrate) navigator.vibrate([100, 50, 100]); } // Heartbeat Vibe
+            if(!vibed && navigator.vibrate) { navigator.vibrate([100, 50, 100]); vibed = true; }
         };
         canvas.addEventListener('mousedown', () => drawing = true);
         canvas.addEventListener('touchstart', (e) => { drawing = true; e.preventDefault(); scratch(e); });
         window.addEventListener('mouseup', () => drawing = false);
-        canvas.addEventListener('touchend', () => drawing = false);
+        window.addEventListener('touchend', () => drawing = false);
         canvas.addEventListener('mousemove', scratch);
         canvas.addEventListener('touchmove', (e) => { scratch(e); e.preventDefault(); });
     }
@@ -297,10 +325,10 @@
         const audio = document.getElementById('bgMusic');
         audio.volume = 0; audio.play().catch(()=>{});
         let vol = 0;
-        const fadeIn = setInterval(() => { if(vol < 0.4) { vol += 0.05; audio.volume = vol; } else clearInterval(fadeIn); }, 200);
-        
+        const fadeIn = setInterval(() => { if(vol < 0.4) audio.volume = (vol += 0.05); else clearInterval(fadeIn); }, 200);
         document.getElementById('overlay').style.opacity = '0';
         document.body.style.overflow = 'auto';
+        document.getElementById('goldenStar').style.display = 'flex';
         setTimeout(() => { document.getElementById('overlay').style.display = 'none'; document.getElementById('mainContent').style.display = 'flex'; }, 1200);
     }
 
@@ -362,7 +390,7 @@
             }
         }
     }
-    setInterval(() => { morph(Math.random() > 0.5 ? 0 : 1); }, 6000);
+    setInterval(() => morph(Math.random() > 0.5 ? 0 : 1), 6000);
     morph(0);
 
     function animate() {
