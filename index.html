@@ -1,341 +1,180 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kashvi's 18th | Journey 🧿</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The XVIII Gazette | Full Edition</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,700&family=UnifrakturMaguntia&family=EB+Garamond:ital,wght@0,400;0,600&family=Courier+Prime&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root { --paper: #fdfcf8; --ink: #1a1a1a; --wax: #a62c2c; --bg: #f7f3eb; --accent: #d4a373; }
+    body { margin: 0; background: var(--bg); overflow: hidden; font-family: 'EB Garamond', serif; color: var(--ink); }
+
+    /* Ambient Background */
+    #ambient { position: fixed; inset: 0; background: linear-gradient(135deg, #fdfcf8 0%, #f1ede3 100%); z-index: -1; }
+    .particle { position: absolute; background: var(--accent); border-radius: 50%; opacity: 0.15; pointer-events: none; animation: float 15s infinite linear; }
+    @keyframes float { from { transform: translateY(110vh); } to { transform: translateY(-10vh); } }
+
+    /* Lobby */
+    #lobby { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 2000; transition: 0.8s; }
+    .envelope { width: 400px; height: 260px; background: #e8e2d2; position: relative; box-shadow: 0 30px 60px rgba(0,0,0,0.05); perspective: 1200px; }
+    .flap { position: absolute; inset: 0; border-left: 200px solid transparent; border-right: 200px solid transparent; border-top: 140px solid #dcd4bc; transform-origin: top; transition: 1s; z-index: 5; }
+    .wax-seal { width: 80px; height: 80px; background: var(--wax); border-radius: 50%; position: absolute; top: 100px; left: 50%; transform: translateX(-50%); cursor: pointer; z-index: 10; display: grid; place-items: center; color: #ffd700; font-family: 'UnifrakturMaguntia'; font-size: 2rem; transition: 0.4s; }
+    .open .flap { transform: rotateX(180deg); }
+    .open .wax-seal { transform: translate(-50%, 180px); opacity: 0; }
+
+    /* Newspaper Engine */
+    #newspaper-root { display: none; width: 95vw; max-width: 900px; height: 88vh; margin: 2vh auto; position: relative; perspective: 2500px; opacity: 0; transition: 1s; }
+    .page { position: absolute; inset: 0; padding: 45px; background: var(--paper); border: 1px solid rgba(0,0,0,0.08); transform-origin: left; transition: 0.8s cubic-bezier(.645,.045,.355,1); backface-visibility: hidden; overflow-y: auto; box-shadow: 20px 20px 60px rgba(0,0,0,0.05); }
+    .page.flipped { transform: rotateY(-180deg); }
+
+    /* Type & Grid */
+    .masthead { border-bottom: 4px solid var(--ink); text-align: center; margin-bottom: 5px; }
+    .masthead h1 { font-family: 'UnifrakturMaguntia'; font-size: 3.5rem; margin: 0; }
+    .dateline { border-bottom: 1px solid var(--ink); display: flex; justify-content: space-between; font-family: 'Courier Prime'; font-size: 0.7rem; padding: 4px 0; margin-bottom: 20px; font-weight: bold; }
+    .headline { font-family: 'Playfair Display'; font-weight: 900; font-size: 2.2rem; text-align: center; text-transform: uppercase; margin-bottom: 15px; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;800&family=Playfair+Display:ital,wght@0,400;1,700&family=Fira+Code:wght@300;500&display=swap" rel="stylesheet">
-    
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script async src="https://unpkg.com/es-module-shims@1.8.0/dist/es-module-shims.js"></script>
-    <script type="importmap">
-    {
-        "imports": {
-            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-        }
-    }
-    </script>
-    
-    <style>
-        :root { --primary-blue: #00d4ff; --neon-pink: #ffb7c5; --deep-space: #010103; --gold: #ffd700; --cyber-alert: #ff0055; }
-        body { margin: 0; padding: 0; background: var(--deep-space); font-family: 'Inter', sans-serif; color: white; overflow: hidden; scroll-behavior: smooth; user-select: none; -webkit-tap-highlight-color: transparent; }
+    .article-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 25px; }
+    .columns { column-count: 2; column-gap: 20px; text-align: justify; line-height: 1.4; }
+    .columns p::first-letter { float: left; font-size: 3.5rem; font-family: 'UnifrakturMaguntia'; line-height: 0.7; padding-right: 8px; }
 
-        /* --- LOCK SCREEN --- */
-        #overlay { position: fixed; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 2000; background: radial-gradient(circle at center, rgba(0, 29, 61, 0.9) 0%, #000000 100%); transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
-        #secret-trigger { letter-spacing: 8px; color: var(--primary-blue); font-weight: bold; margin-bottom: 30px; cursor: pointer; font-size: 0.9rem; text-shadow: 0 0 10px var(--primary-blue); font-family: 'Fira Code'; }
-        
-        .system-logs { font-family: 'Fira Code', monospace; font-size: 0.7rem; color: var(--primary-blue); line-height: 1.8; text-align: left; display: inline-block; min-height: 140px; max-width: 90%; }
-        .log-hint { color: var(--cyber-alert); font-weight: bold; text-shadow: 0 0 8px var(--cyber-alert); animation: flicker 2s infinite; }
-        @keyframes flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } 80% { color: var(--primary-blue); } }
+    .img-frame { border: 1px solid #000; padding: 4px; background: #fff; margin-bottom: 12px; break-inside: avoid; }
+    .img-frame img { width: 100%; display: block; filter: grayscale(0.1) contrast(1.05); }
+    .caption { font-family: 'Courier Prime'; font-size: 0.6rem; text-align: center; padding: 4px; font-style: italic; }
 
-        #countdown { display: flex; margin-bottom: 30px; gap: 10px; justify-content: center; }
-        .timer-unit { text-align: center; min-width: 65px; background: rgba(255,255,255,0.25); padding: 10px; border-radius: 10px; border: 1px solid rgba(0, 212, 255, 0.2); }
-        .timer-num { font-size: 1.8rem; font-weight: 800; color: var(--primary-blue); display: block; font-family: 'Fira Code'; }
-        .timer-label { font-size: 0.55rem; letter-spacing: 2px; opacity: 0.7; }
+    .classifieds { border: 1px dashed #999; padding: 10px; font-size: 0.75rem; margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .ad-item { border-bottom: 1px solid #eee; padding-bottom: 5px; }
 
-        .entry-btn { padding: 15px 40px; border-radius: 50px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.1); font-size: 0.7rem; letter-spacing: 2px; font-family: 'Fira Code'; cursor: not-allowed; transition: 0.5s; pointer-events: none; }
-        .entry-btn.ready { background: rgba(0, 212, 255, 0.1); border: 1px solid var(--primary-blue); color: white; cursor: pointer; pointer-events: auto; box-shadow: 0 0 20px rgba(0, 212, 255, 0.3); }
-
-        /* --- CONTENT --- */
-        #canvas-container { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
-        .content-scroll { position: relative; z-index: 10; width: 100%; display: none; flex-direction: column; align-items: center; height: 100vh; overflow-y: scroll; }
-        .container { text-align: center; padding: 85vh 20px 0 20px; width: 100%; max-width: 700px; box-sizing: border-box; }
-        
-        .img-card { position: relative; opacity: 0; filter: grayscale(1) blur(10px); transition: 1.5s all cubic-bezier(0.16, 1, 0.3, 1); transform: translateY(50px); margin-bottom: 120px; }
-        .img-card.active { opacity: 1; filter: grayscale(0) blur(0); transform: translateY(0); }
-        .img-card img { width: 100%; max-width: 380px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); display: block; margin: 0 auto; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-        .typewriter-box { margin: 20px auto 0 auto; max-width: 380px; background: rgba(10, 10, 10, 0.85); backdrop-filter: blur(20px); padding: 25px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); font-size: 0.95rem; text-align: left; line-height: 1.6; }
-
-        /* --- FINALE --- */
-        #finale-section { display: none; width: 100%; padding-bottom: 150px; }
-        .cake-box { height: 350px; position: relative; margin: 50px auto; width: 250px; }
-        .layer { position: absolute; left: 50%; transform: translate(-50%, -1000px); border-radius: 50% / 25px; transition: 1.2s cubic-bezier(0.17, 0.67, 0.25, 1); }
-        .l1 { bottom: 0; width: 220px; height: 90px; background: #5d4037; border-top: 5px solid #795548; }
-        .l2 { bottom: 75px; width: 170px; height: 80px; background: #ff4d6d; border-top: 5px solid #ff758f; }
-        .l3 { bottom: 140px; width: 120px; height: 65px; background: #fff9c4; border-top: 5px solid #ffffff; }
-        .candle-stick { bottom: 195px; width: 12px; height: 50px; background: repeating-linear-gradient(45deg, var(--primary-blue), var(--primary-blue) 6px, #fff 6px, #fff 12px); left: 50%; transform: translate(-50%, -1000px); border-radius: 5px; }
-        .flame { position: absolute; top: -28px; left: 50%; transform: translateX(-50%); width: 20px; height: 35px; background: radial-gradient(circle at center, #ffd700, #ff8c00, transparent); border-radius: 50% 50% 20% 20%; filter: blur(1px); animation: burn 0.2s infinite alternate; }
-
-        /* --- SCRATCH --- */
-        .scratch-wrap { display: none; margin: 50px 0; opacity: 0; transition: 1s; }
-        #scratchCanvas { position: absolute; top: 0; left: 50%; transform: translateX(-50%); border-radius: 15px; touch-action: none; cursor: crosshair; z-index: 100; }
-        .scratch-content { width: 320px; height: 180px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #050505; color: var(--gold); border: 1px solid var(--gold); border-radius: 15px; font-family: 'Playfair Display'; font-style: italic; text-align: center; padding: 25px; box-sizing: border-box; }
-        .scratch-content span { font-family: 'Inter'; font-style: normal; font-size: 0.75rem; letter-spacing: 2px; margin-top: 15px; color: var(--neon-pink); opacity: 0.8; }
-
-        .system-popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); background: rgba(0, 15, 30, 0.98); border: 1px solid var(--primary-blue); padding: 25px; z-index: 3000; font-family: 'Fira Code', monospace; border-radius: 15px; transition: 0.3s; }
-        .system-popup.active { transform: translate(-50%, -50%) scale(1); }
-        #goldenStar { position: fixed; top: 25%; right: 10%; width: 40px; height: 40px; cursor: pointer; z-index: 500; display: none; align-items: center; justify-content: center; }
-        .star-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; box-shadow: 0 0 15px var(--gold); animation: starPulse 1.5s infinite; }
-        @keyframes starPulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(2.2); opacity: 0.4; } }
-    </style>
+    /* Controls */
+    .nav-box { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); display: none; gap: 40px; z-index: 3000; }
+    .nav-btn { background: #fff; border: 1px solid #000; padding: 8px 20px; font-family: 'Courier Prime'; cursor: pointer; font-weight: bold; }
+  </style>
 </head>
 <body>
 
-<div id="overlay">
-    <div id="secret-trigger" onclick="checkPass()">[ CHAPTER 18 ]</div>
-    <div class="system-logs" id="logContainer"></div>
-    <div id="countdown">
-        <div class="timer-unit"><span class="timer-num" id="days">00</span><span class="timer-label">DAYS</span></div>
-        <div class="timer-unit"><span class="timer-num" id="hours">00</span><span class="timer-label">HRS</span></div>
-        <div class="timer-unit"><span class="timer-num" id="mins">00</span><span class="timer-label">MINS</span></div>
-        <div class="timer-unit"><span class="timer-num" id="secs">00</span><span class="timer-label">SECS</span></div>
-    </div>
-    <button id="entryBtn" class="entry-btn">SECURE_LINE_LOCKED 🔒</button>
-</div>
+<div id="ambient"></div>
 
-<div id="starPopup" class="system-popup">
-    <div style="font-size: 0.55rem; color: var(--neon-pink); margin-bottom: 12px;">> DATA_RECOVERY_SUCCESS</div>
-    <div id="popupBody" style="color: var(--primary-blue); font-size: 0.85rem;"></div>
-    <button onclick="closePopup()" style="margin-top:20px; background:none; border:1px solid var(--primary-blue); color:white; width:100%; padding:5px; font-family:'Fira Code';">EXIT</button>
-</div>
+<section id="lobby">
+  <div class="envelope" id="env">
+    <div class="flap"></div>
+    <div class="wax-seal" onclick="openPaper()">K</div>
+  </div>
+  <p style="font-family:'Courier Prime'; color:#999; margin-top:20px; font-size:0.8rem;">OPEN THE GAZETTE</p>
+</section>
 
-<div id="goldenStar" onclick="revealStarMsg()"><div class="star-dot" id="starInner"></div></div>
-<div id="canvas-container"></div>
-
-<div class="content-scroll" id="mainContent">
-    <div class="container">
-        <h1 id="k-title" onclick="kEasterEgg()" style="font-size: 4rem; font-family: 'Playfair Display'; font-style: italic; margin-bottom: 10px; cursor: pointer;">Kashvi</h1>
-        <div id="override-msg" style="display:none; color:var(--neon-pink); font-family:'Fira Code'; font-size:0.65rem; margin-bottom: 80px;">OVERRIDE: PARTNER_STABILITY_100% 🧿</div>
-        
-        <div id="collageGrid"></div>
-
-        <div id="finale-section">
-            <div class="cake-box">
-                <div class="layer l1" id="layer1"></div>
-                <div class="layer l2" id="layer2"></div>
-                <div class="layer l3" id="layer3"></div>
-                <div class="layer candle-stick" id="candle"><div class="flame" id="flame"></div></div>
-            </div>
-            
-            <h2 style="font-family: 'Playfair Display'; font-size: 3rem; color: var(--primary-blue); margin-bottom: 30px;">Happy 18th! 🧿</h2>
-            
-            <div class="neon-footer" style="margin-bottom: 40px;">
-                <span style="font-family: 'Inter'; font-weight: 800; color: var(--neon-pink); text-transform: uppercase; letter-spacing: 4px; display: block; font-size: 0.9rem; margin-bottom: 10px;">FOR THE WINS & THE LAUGHS. 💙</span>
-                <span style="font-family: 'Inter'; font-weight: 800; color: var(--neon-pink); text-transform: uppercase; letter-spacing: 2px; display: block; font-size: 1.6rem;">THE BEST IS YET TO COME. 🧿</span>
-            </div>
-
-            <p style="color: white; font-family: 'Playfair Display'; font-style: italic; font-size: 1.2rem; margin-bottom: 60px; line-height: 1.6;">
-                "May your 18th year be your most powerful build yet."<br>
-                <span style="font-family: 'Fira Code'; font-style: normal; font-size: 0.75rem; color: var(--primary-blue); letter-spacing: 2px; opacity: 0.9;">STABILITY CHECK: PERFECT 🧿💙</span>
-            </p>
-            
-            <div class="scratch-wrap" id="scratchWrap">
-                <div style="position: relative; width: 320px; height: 180px; margin: 0 auto;">
-                    <div class="scratch-content">
-                        "May your 18th year be your most powerful build yet."
-                        <span>STABILITY_CHECK: PERFECT 🧿💙</span>
-                    </div>
-                    <canvas id="scratchCanvas" width="320" height="180"></canvas>
-                </div>
-            </div>
+<main id="newspaper-root">
+  <article class="page" id="p1" style="z-index: 5;">
+    <div class="masthead"><h1>The Birthday Times</h1></div>
+    <div class="dateline"><span>VOL. XVIII</span><span>JANUARY 20, 2026</span><span>PRICE: PRICELESS</span></div>
+    <div class="headline">Kashvi Reaches 18: A Milestone for the Ages</div>
+    <div class="article-grid">
+      <div class="columns">
+        <p>In a historic transition of academic and personal growth, Miss Kashvi has officially reached her eighteenth milestone. Observers note that this 'Stability Update' has been flawlessly executed, marking her as one of the most reliable figures of the year.</p>
+        <p>Her contributions to the build environment and her sharp-witted presence in the lab have set a new standard for colleagues everywhere. Today, the world celebrates the formal debut of a legend in the making.</p>
+      </div>
+      <aside>
+        <div class="img-frame"><img src="1.jpeg"><div class="caption">Fig A: The eighteenth circuit portrait.</div></div>
+        <div class="classifieds">
+          <div class="ad-item"><strong>LOST:</strong> 17 years of childhood. <strong>FOUND:</strong> Absolute brilliance.</div>
+          <div class="ad-item"><strong>WANTED:</strong> More shared earphones and lab partners like K.</div>
         </div>
+      </aside>
     </div>
-</div>
+  </article>
 
-<audio id="bgMusic" loop><source src="birthday-song.mp3" type="audio/mpeg"></audio>
+  <article class="page" id="p2" style="z-index: 4;">
+    <div class="headline">Editorial: The Anchor in the Storm</div>
+    <div class="article-grid">
+      <div class="columns">
+        <p>Reliability is a rare currency. In the laboratory of life, it is the person who shares the earphones and the heavy lifting without hesitation. Kashvi has redefined reliability, acting as the stabilizing force for everyone in her orbit.</p>
+        <p>The "Kashvi Protocol" is built on drive and friction—the competitive spirit that pushes boundaries and demands excellence from every task she touches.</p>
+      </div>
+      <div>
+        <div class="img-frame"><img src="2.jpeg"><div class="caption">Archived session: Stability at its peak.</div></div>
+      </div>
+    </div>
+  </article>
+
+  <article class="page" id="p3" style="z-index: 3;">
+    <div class="headline">Special Feature: A Year in Review</div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+      <div class="img-frame"><img src="7.jpeg"><div class="caption">Plate 1.0: Competitive drive.</div></div>
+      <div class="img-frame"><img src="8.jpeg"><div class="caption">Plate 1.1: The lighter side of genius.</div></div>
+    </div>
+    <p style="font-style: italic; margin-top: 15px; text-align: center; font-size: 0.9rem;">"Innovation is often just the result of a stable mind working through unstable problems." — Editorial Board</p>
+  </article>
+
+  <article class="page" id="p4" style="z-index: 2;">
+    <div class="headline">Wit & Laughter: The Secret Ingredient</div>
+    <div class="columns">
+      <p>Beyond the lab reports and the drive lies a surgical wit. Laughter is the background process that keeps the system running. Kashvi's ability to lighten the heaviest rooms has been noted by associates as her "most potent weapon."</p>
+      <p>As she enters adulthood, the society forecast suggests she will remain the most sought-after guest for both intellectual debates and late-night humor.</p>
+      <div class="img-box" style="column-span: all; margin: 10px 0;">
+        <div class="img-frame" style="width: 60%; margin: 0 auto;"><img src="4.jpeg"></div>
+      </div>
+    </div>
+  </article>
+
+  <article class="page" id="p5" style="z-index: 1;">
+    <div class="masthead"><h1>The Final Word</h1></div>
+    <div style="margin-top: 40px; display: flex; flex-direction: column; gap: 20px;">
+      <div class="img-frame" style="max-width: 300px; margin: 0 auto;"><img src="6.jpeg"></div>
+      
+      <div style="border: 2px solid #000; padding: 25px; background: #fffdf7;">
+        <p style="font-size: 1.1rem; border-bottom: 1px dashed #ccc; padding-bottom: 15px;">
+          <strong>MESSAGE I:</strong> To the one who keeps me on my toes, shares the earphones, and celebrates 18 years of brilliance—Happy Birthday. You are a legend.
+        </p>
+        <p style="font-size: 1.1rem; font-style: italic; padding-top: 10px;">
+          <strong>MESSAGE II:</strong> For the wins, the laughs, and the quiet stability. May your 18th year be your most powerful iteration yet. 🧿💙
+        </p>
+      </div>
+      <div style="text-align: right; font-family: 'UnifrakturMaguntia'; font-size: 2rem; margin-top: 20px;">The Curator</div>
+    </div>
+  </article>
+</main>
+
+<div class="nav-box" id="nav">
+  <button class="nav-btn" onclick="turn(-1)">PREVIOUS</button>
+  <button class="nav-btn" onclick="turn(1)">NEXT PAGE</button>
+</div>
 
 <script>
-    const data = [
-        { img: "1.jpeg", text: "Happy Birthday! It’s been great having someone so reliable to navigate the daily grind with. 🤝" },
-        { img: "2.jpeg", text: "From lab sessions to sharing earphones, thanks for making the long hours much more manageable. 🧪" },
-        { img: "7.jpeg", text: "I really value the healthy competition we have. You definitely keep me on my toes. 📈" },
-        { img: "8.jpeg", text: "Grateful for the times you've had my back quietly. It hasn't gone unnoticed. 🫂" },
-        { img: "9.jpeg", text: "Here's to all the random laughs that helped us get through the stressful days. 😂" },
-        { img: "10.jpeg", text: "I admire your strength when things get tough. Glad to be on this journey with you. ✨" },
-        { img: "5.jpeg", text: "Enjoy your 18th! It's a big milestone, and I know you're going to achieve great things. 🧿" },
-        { img: "6.jpeg", text: "Genuinely glad for this bond. Looking forward to more wins and successful projects ahead. 💙" }
-    ];
+  for(let i=0; i<15; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random()*25+5;
+    p.style.width = size+'px'; p.style.height = size+'px';
+    p.style.left = Math.random()*100+'vw';
+    p.style.animationDuration = (Math.random()*10+10)+'s';
+    document.getElementById('ambient').appendChild(p);
+  }
 
-    const starMessages = ["LOG: Most stable build in my life. 🧿", "DATA: From lab failures to major wins. 📈", "ENCRYPTION: System status: Perfect. 💙"];
-    const grid = document.getElementById('collageGrid');
-    data.forEach((item, idx) => {
-        grid.innerHTML += `<div class="img-card" id="card-${idx}"><img src="${item.img}"><div class="typewriter-box" id="msg-${idx}"></div></div>`;
-    });
-
-    const logs = [
-        "> Booting Life_Modules...", 
-        "> Compiling School_Memories...", 
-        "> [!] HINT: Click title 5x to unlock stability.", 
-        "> [!] SCANNING: Look for the golden coordinates..."
-    ];
-    let logIdx = 0;
-    let logsFinished = false;
-
-    function typeLogs() {
-        if (logIdx < logs.length) {
-            let div = document.createElement('div');
-            if(logIdx === 2) div.className = "log-hint"; 
-            document.getElementById('logContainer').appendChild(div);
-            let i = 0;
-            let t = setInterval(() => {
-                if(i < logs[logIdx].length) div.innerHTML += logs[logIdx][i++];
-                else { 
-                    clearInterval(t); 
-                    logIdx++; 
-                    if(logIdx < logs.length) setTimeout(typeLogs, 600);
-                    else {
-                        logsFinished = true;
-                        checkSystemReady();
-                    }
-                }
-            }, 30);
-        }
-    }
-    typeLogs();
-
-    const target = new Date("January 20, 2026 00:00:00").getTime();
-    
-    function checkSystemReady() {
-        const diff = target - Date.now();
-        if (diff <= 0 && logsFinished) {
-            const btn = document.getElementById('entryBtn');
-            btn.innerHTML = "ENTER THE GALAXY 🧿";
-            btn.classList.add('ready');
-            btn.onclick = unlock;
-        }
-    }
-
-    setInterval(() => {
-        const diff = target - Date.now();
-        document.getElementById('days').innerText = String(Math.max(0, Math.floor(diff/86400000))).padStart(2,'0');
-        document.getElementById('hours').innerText = String(Math.max(0, Math.floor((diff%86400000)/3600000))).padStart(2,'0');
-        document.getElementById('mins').innerText = String(Math.max(0, Math.floor((diff%3600000)/60000))).padStart(2,'0');
-        document.getElementById('secs').innerText = String(Math.max(0, Math.floor((diff%60000)/1000))).padStart(2,'0');
-        checkSystemReady();
+  function openPaper() {
+    document.getElementById('env').classList.add('open');
+    setTimeout(() => {
+      confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+      document.getElementById('lobby').style.opacity = '0';
+      setTimeout(() => {
+        document.getElementById('lobby').style.display = 'none';
+        document.getElementById('newspaper-root').style.display = 'block';
+        document.getElementById('nav').style.display = 'flex';
+        setTimeout(() => document.getElementById('newspaper-root').style.opacity = '1', 100);
+      }, 800);
     }, 1000);
+  }
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => { 
-            if(entry.isIntersecting) activate(entry.target.id.split('-')[1]); 
-        });
-    }, { threshold: 0.05 });
-
-    document.querySelectorAll('.img-card').forEach(c => observer.observe(c));
-
-    const activated = new Set();
-    function activate(idx) {
-        if(activated.has(idx)) return;
-        activated.add(idx);
-        document.getElementById(`card-${idx}`).classList.add('active');
-        let i = 0, box = document.getElementById(`msg-${idx}`), text = data[idx].text;
-        let t = setInterval(() => {
-            if(i < text.length) box.innerHTML += text[i++];
-            else { 
-                clearInterval(t); 
-                if(idx == data.length-1) setTimeout(() => { 
-                    document.getElementById('finale-section').style.display='block'; 
-                    triggerCakeDrop(); 
-                }, 1000);
-            }
-        }, 35);
-        confetti({ particleCount: 15, origin: { y: 0.8 }, colors: ['#00d4ff'] });
+  let curr = 1;
+  function turn(dir) {
+    if(dir === 1 && curr < 5) {
+      document.getElementById('p'+curr).classList.add('flipped');
+      curr++;
+    } else if (dir === -1 && curr > 1) {
+      curr--;
+      document.getElementById('p'+curr).classList.remove('flipped');
     }
-
-    function triggerCakeDrop() {
-        ['layer1', 'layer2', 'layer3', 'candle'].forEach((id, i) => {
-            setTimeout(() => {
-                document.getElementById(id).style.transform = 'translate(-50%, 0)';
-                if(navigator.vibrate) navigator.vibrate(20);
-                confetti({ particleCount: 20, origin: { y: 0.7 } });
-            }, i * 800);
-        });
-        setTimeout(() => { 
-            document.getElementById('scratchWrap').style.display = 'block';
-            setTimeout(() => { document.getElementById('scratchWrap').style.opacity = '1'; initScratch(); }, 100);
-        }, 4000);
-    }
-
-    function initScratch() {
-        const canvas = document.getElementById('scratchCanvas'), ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#1a1a1a'; ctx.fillRect(0,0,320,180);
-        ctx.fillStyle = '#888'; ctx.font = "12px Fira Code"; ctx.textAlign = 'center'; ctx.fillText('DECRYPT FINAL MODULE 🧿', 160, 95);
-        let drawing = false;
-        const scratch = (e) => {
-            if(!drawing) return;
-            const r = canvas.getBoundingClientRect();
-            const x = (e.pageX || e.touches[0].pageX) - r.left - window.scrollX;
-            const y = (e.pageY || e.touches[0].pageY) - r.top - window.scrollY;
-            ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath(); ctx.arc(x, y, 28, 0, 6.28); ctx.fill();
-        };
-        canvas.addEventListener('mousedown', () => drawing = true);
-        canvas.addEventListener('touchstart', (e) => { drawing = true; e.preventDefault(); });
-        window.addEventListener('mouseup', () => drawing = false);
-        canvas.addEventListener('mousemove', scratch);
-        canvas.addEventListener('touchmove', scratch);
-    }
-
-    let kCount = 0;
-    function kEasterEgg() { if(++kCount === 5) { window.glowPink(); document.getElementById('override-msg').style.display = 'block'; } }
-    function revealStarMsg() { document.getElementById('popupBody').innerText = starMessages[Math.floor(Math.random()*starMessages.length)]; document.getElementById('starPopup').classList.add('active'); }
-    function closePopup() { document.getElementById('starPopup').classList.remove('active'); }
-    function checkPass() { if(prompt("ENTER ACCESS KEY:").toUpperCase() === "KASHVI18") unlock(); }
-
-    function unlock() {
-        const audio = document.getElementById('bgMusic'); audio.volume = 0.4; audio.play().catch(()=>{});
-        document.getElementById('overlay').style.opacity = '0';
-        document.body.style.overflow = 'auto';
-        document.getElementById('goldenStar').style.display = 'flex';
-        setTimeout(() => { document.getElementById('overlay').style.display = 'none'; document.getElementById('mainContent').style.display = 'flex'; }, 1200);
-    }
-</script>
-
-<script type="module">
-    import * as THREE from 'three';
-    import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
-    import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-    import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-    camera.position.z = 30;
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.getElementById('canvas-container').appendChild(renderer.domElement);
-
-    const composer = new EffectComposer(renderer);
-    composer.addPass(new RenderPass(scene, camera));
-    const bloom = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
-    composer.addPass(bloom);
-
-    const count = 10000, geo = new THREE.BufferGeometry(), pos = new Float32Array(count * 3), targets = new Float32Array(count * 3);
-    for(let i=0; i<count*3; i++) pos[i] = (Math.random()-0.5)*120;
-    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    const mat = new THREE.PointsMaterial({ size: 0.12, color: 0x00d4ff, blending: THREE.AdditiveBlending });
-    const points = new THREE.Points(geo, mat); scene.add(points);
-
-    window.glowPink = () => { mat.color.set(0xffb7c5); bloom.strength = 2.5; };
-
-    function morph(shape) {
-        for(let i=0; i<count; i++) {
-            let t = (i/count) * Math.PI * 2, i3 = i*3, s = 15;
-            if(shape === 0) {
-                targets[i3] = (s * Math.cos(t)) / (1 + Math.sin(t)**2);
-                targets[i3+1] = (s * Math.sin(t) * Math.cos(t)) / (1 + Math.sin(t)**2);
-                targets[i3+2] = 0;
-            } else {
-                let phi = Math.acos(-1 + (2 * i) / count), theta = Math.sqrt(count * Math.PI) * phi;
-                targets[i3] = s * Math.cos(theta) * Math.sin(phi);
-                targets[i3+1] = s * Math.sin(theta) * Math.sin(phi);
-                targets[i3+2] = s * Math.cos(phi);
-            }
-        }
-    }
-    setInterval(() => morph(Math.random()>0.5?0:1), 6000); morph(0);
-
-    function animate() {
-        requestAnimationFrame(animate);
-        let p = geo.attributes.position.array;
-        for(let i=0; i<count*3; i++) p[i] += (targets[i] - p[i]) * 0.03;
-        points.rotation.y += 0.002;
-        geo.attributes.position.needsUpdate = true;
-        composer.render();
-    }
-    animate();
+  }
 </script>
 </body>
 </html>
-
