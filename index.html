@@ -47,7 +47,7 @@
             text-shadow: 0 0 10px var(--primary-blue); font-family: 'Fira Code';
         }
 
-        .system-logs { font-family: 'Fira Code', monospace; font-size: 0.6rem; color: var(--primary-blue); opacity: 0.5; line-height: 2; text-align: left; display: inline-block; min-height: 80px; }
+        .system-logs { font-family: 'Fira Code', monospace; font-size: 0.6rem; color: var(--primary-blue); opacity: 0.5; line-height: 2; text-align: left; display: inline-block; min-height: 80px; transition: 0.3s; }
 
         #countdown { display: flex; margin-bottom: 30px; gap: 10px; justify-content: center; }
         .timer-unit { text-align: center; min-width: 65px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; border: 1px solid rgba(0, 212, 255, 0.2); }
@@ -128,7 +128,7 @@
     <button onclick="closePopup()" style="margin-top:20px; background:none; border:1px solid var(--primary-blue); color:white; width:100%; padding:5px; font-family:'Fira Code'; font-size: 0.6rem;">EXIT_SESSION</button>
 </div>
 
-<div id="goldenStar" onclick="revealStarMsg()"><div class="star-dot"></div></div>
+<div id="goldenStar" onclick="revealStarMsg()"><div class="star-dot" id="starInner"></div></div>
 <div id="canvas-container"></div>
 
 <div class="content-scroll" id="mainContent">
@@ -183,7 +183,14 @@
         grid.innerHTML += `<div class="img-card" id="card-${idx}"><img src="${item.img}"><div class="typewriter-box" id="msg-${idx}"></div></div>`;
     });
 
-    const logs = ["> Booting Life_Modules...", "> Compiling School_Memories...", "> Teenage_Phase... [100%]", "> Final_Chapter... [LOCKED]"];
+    /* --- EDIT 1: HINT LOGS --- */
+    const logs = [
+        "> Booting Life_Modules...", 
+        "> Compiling School_Memories...", 
+        "> [!] DIAGNOSTIC: Title_Integrity (Click_5x)...", 
+        "> [!] SCANNING: Hidden_Golden_Coordinates...", 
+        "> Final_Chapter... [LOCKED]"
+    ];
     let logIdx = 0;
     function typeLogs() {
         if (logIdx < logs.length) {
@@ -256,6 +263,29 @@
         canvas.addEventListener('mousemove', scratch);
         canvas.addEventListener('touchmove', scratch);
     }
+
+    /* --- EDIT 2: STAR PROXIMITY BEACON --- */
+    document.addEventListener('mousemove', (e) => {
+        const star = document.getElementById('goldenStar');
+        const starRect = star.getBoundingClientRect();
+        const logContainer = document.getElementById('logContainer');
+        
+        // Calculate distance from cursor to center of star
+        const dx = e.clientX - (starRect.left + 20);
+        const dy = e.clientY - (starRect.top + 20);
+        const dist = Math.sqrt(dx*dx + dy*dy);
+
+        if (dist < 200 && star.style.display === 'flex') {
+            const speed = (dist / 200) * 1.5; // Faster pulse as you get closer
+            document.getElementById('starInner').style.animationDuration = speed + 's';
+            logContainer.style.opacity = "1";
+            logContainer.style.color = "var(--gold)";
+            logContainer.innerText = "> WARNING: CLASSIFIED_STAR_DETECTED_NEARBY";
+        } else {
+            document.getElementById('starInner').style.animationDuration = '1.5s';
+            logContainer.style.color = "var(--primary-blue)";
+        }
+    });
 
     let kCount = 0;
     function kEasterEgg() { if(++kCount === 5) { window.glowPink(); document.getElementById('override-msg').style.display = 'block'; } }
