@@ -25,12 +25,13 @@
         /* --- LOCK SCREEN --- */
         #overlay { position: fixed; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 2000; background: radial-gradient(circle at center, rgba(0, 29, 61, 0.9) 0%, #000000 100%); transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
         #secret-trigger { letter-spacing: 8px; color: var(--primary-blue); font-weight: bold; margin-bottom: 30px; cursor: pointer; font-size: 0.9rem; text-shadow: 0 0 10px var(--primary-blue); font-family: 'Fira Code'; }
+        
         .system-logs { font-family: 'Fira Code', monospace; font-size: 0.7rem; color: var(--primary-blue); line-height: 1.8; text-align: left; display: inline-block; min-height: 140px; max-width: 90%; }
         .log-hint { color: var(--cyber-alert); font-weight: bold; text-shadow: 0 0 8px var(--cyber-alert); animation: flicker 2s infinite; }
-        @keyframes flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        @keyframes flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } 80% { color: var(--primary-blue); } }
 
         #countdown { display: flex; margin-bottom: 30px; gap: 10px; justify-content: center; }
-        .timer-unit { text-align: center; min-width: 65px; background: rgba(255,255,255,0.20); padding: 10px; border-radius: 10px; border: 1px solid rgba(0, 212, 255, 0.2); }
+        .timer-unit { text-align: center; min-width: 65px; background: rgba(255,255,255,0.25); padding: 10px; border-radius: 10px; border: 1px solid rgba(0, 212, 255, 0.2); }
         .timer-num { font-size: 1.8rem; font-weight: 800; color: var(--primary-blue); display: block; font-family: 'Fira Code'; }
         .timer-label { font-size: 0.55rem; letter-spacing: 2px; opacity: 0.7; }
 
@@ -40,8 +41,6 @@
         /* --- CONTENT --- */
         #canvas-container { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
         .content-scroll { position: relative; z-index: 10; width: 100%; display: none; flex-direction: column; align-items: center; height: 100vh; overflow-y: scroll; }
-        
-        /* RESTORED GAP FOR THE "LONG JOURNEY" FEEL */
         .container { text-align: center; padding: 85vh 20px 0 20px; width: 100%; max-width: 700px; box-sizing: border-box; }
         
         .img-card { position: relative; opacity: 0; filter: grayscale(1) blur(10px); transition: 1.5s all cubic-bezier(0.16, 1, 0.3, 1); transform: translateY(50px); margin-bottom: 120px; }
@@ -83,7 +82,7 @@
         <div class="timer-unit"><span class="timer-num" id="mins">00</span><span class="timer-label">MINS</span></div>
         <div class="timer-unit"><span class="timer-num" id="secs">00</span><span class="timer-label">SECS</span></div>
     </div>
-    <button id="entryBtn" class="entry-btn">SYSTEM_CHECKING...</button>
+    <button id="entryBtn" class="entry-btn">SECURE_LINE_LOCKED 🔒</button>
 </div>
 
 <div id="starPopup" class="system-popup">
@@ -155,7 +154,6 @@
         grid.innerHTML += `<div class="img-card" id="card-${idx}"><img src="${item.img}"><div class="typewriter-box" id="msg-${idx}"></div></div>`;
     });
 
-    /* --- LOGIC: ENABLE BUTTON ONLY AFTER LOGS --- */
     const logs = [
         "> Booting Life_Modules...", 
         "> Compiling School_Memories...", 
@@ -163,6 +161,8 @@
         "> [!] SCANNING: Look for the golden coordinates..."
     ];
     let logIdx = 0;
+    let logsFinished = false;
+
     function typeLogs() {
         if (logIdx < logs.length) {
             let div = document.createElement('div');
@@ -175,26 +175,42 @@
                     clearInterval(t); 
                     logIdx++; 
                     if(logIdx < logs.length) setTimeout(typeLogs, 600);
-                    else enableButton();
+                    else {
+                        logsFinished = true;
+                        checkSystemReady();
+                    }
                 }
             }, 30);
         }
     }
-    
-    function enableButton() {
-        const btn = document.getElementById('entryBtn');
-        btn.innerHTML = "ENTER THE GALAXY 🧿";
-        btn.classList.add('ready');
-        btn.onclick = unlock;
-    }
     typeLogs();
 
-    /* --- CRITICAL CHANGE: THRESHOLD AT 0.05 (5%) --- */
+    const target = new Date("January 20, 2026 00:00:00").getTime();
+    
+    function checkSystemReady() {
+        const diff = target - Date.now();
+        if (diff <= 0 && logsFinished) {
+            const btn = document.getElementById('entryBtn');
+            btn.innerHTML = "ENTER THE GALAXY 🧿";
+            btn.classList.add('ready');
+            btn.onclick = unlock;
+        }
+    }
+
+    setInterval(() => {
+        const diff = target - Date.now();
+        document.getElementById('days').innerText = String(Math.max(0, Math.floor(diff/86400000))).padStart(2,'0');
+        document.getElementById('hours').innerText = String(Math.max(0, Math.floor((diff%86400000)/3600000))).padStart(2,'0');
+        document.getElementById('mins').innerText = String(Math.max(0, Math.floor((diff%3600000)/60000))).padStart(2,'0');
+        document.getElementById('secs').innerText = String(Math.max(0, Math.floor((diff%60000)/1000))).padStart(2,'0');
+        checkSystemReady();
+    }, 1000);
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => { 
             if(entry.isIntersecting) activate(entry.target.id.split('-')[1]); 
         });
-    }, { threshold: 0.05 }); // Triggers as soon as 5% of the card is on screen
+    }, { threshold: 0.05 });
 
     document.querySelectorAll('.img-card').forEach(c => observer.observe(c));
 
@@ -264,15 +280,6 @@
         document.getElementById('goldenStar').style.display = 'flex';
         setTimeout(() => { document.getElementById('overlay').style.display = 'none'; document.getElementById('mainContent').style.display = 'flex'; }, 1200);
     }
-
-    const target = new Date("January 20, 2026 00:00:00").getTime();
-    setInterval(() => {
-        const diff = target - Date.now();
-        document.getElementById('days').innerText = String(Math.max(0, Math.floor(diff/86400000))).padStart(2,'0');
-        document.getElementById('hours').innerText = String(Math.max(0, Math.floor((diff%86400000)/3600000))).padStart(2,'0');
-        document.getElementById('mins').innerText = String(Math.max(0, Math.floor((diff%3600000)/60000))).padStart(2,'0');
-        document.getElementById('secs').innerText = String(Math.max(0, Math.floor((diff%60000)/1000))).padStart(2,'0');
-    }, 1000);
 </script>
 
 <script type="module">
