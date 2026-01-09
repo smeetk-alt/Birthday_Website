@@ -3,286 +3,226 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>The Birthday Times | BroadSheet XVIII</title>
+  <title>The XVIII Gazette | Limited Edition</title>
 
-  <!-- Typography -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,400&family=UnifrakturMaguntia&family=EB+Garamond:wght@400;700&family=Courier+Prime&display=swap" rel="stylesheet">
-
-  <!-- Effects -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,700&family=UnifrakturMaguntia&family=EB+Garamond:ital,wght@0,400;0,600&family=Courier+Prime&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
 
   <style>
-    /* =========================
-       DESIGN SYSTEM
-    ========================== */
     :root {
-      --paper: #f1ede3;
+      --paper: #f4f1ea;
       --ink: #1a1a1a;
-      --wax-red: #8b0000;
-      --cream: #e5dfcf;
+      --wax: #8b0000;
+      --cream: #eee9da;
     }
 
-    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--cream); overflow: hidden; font-family: 'EB Garamond', serif; }
 
-    html, body {
-      margin: 0;
-      height: 100%;
-      font-family: 'EB Garamond', serif;
-      background: var(--cream);
-      overflow: hidden;
-      color: var(--ink);
-    }
+    /* --- AMBIENT PETALS --- */
+    #flower-field { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
+    .petal { position: absolute; top: -5vh; animation: fall linear infinite; opacity: 0.4; }
+    @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
 
-    /* =========================
-       AMBIENT BACKGROUND
-    ========================== */
-    .petal {
-      position: fixed;
-      top: -10%;
-      opacity: 0.3;
-      font-size: 1.2rem;
-      pointer-events: none;
-      animation: fall linear infinite;
-      z-index: 0;
-    }
-
-    @keyframes fall {
-      to { transform: translateY(115vh) rotate(720deg); }
-    }
-
-    /* =========================
-       LOCK SCREEN
-    ========================== */
+    /* --- LOCK SCREEN --- */
     #overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(10,10,10,0.98);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 3000;
-      transition: opacity 0.8s ease;
+      position: fixed; inset: 0; background: radial-gradient(circle, #222, #000);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 3000;
     }
+    #countdown { font-family: 'Courier Prime'; color: var(--paper); font-size: 2rem; margin-bottom: 2rem; letter-spacing: 5px; }
 
-    #countdown {
-      display: flex;
-      gap: 20px;
-      color: var(--paper);
-      font-family: 'Courier Prime';
-      margin-bottom: 40px;
+    .envelope-wrapper { width: 400px; height: 260px; background: #dccfb2; position: relative; box-shadow: 0 50px 100px rgba(0,0,0,0.8); perspective: 1000px; }
+    .flap { position: absolute; inset: 0; border-left: 200px solid transparent; border-right: 200px solid transparent; border-top: 140px solid #c9bc9c; transform-origin: top; transition: 0.8s; z-index: 5; }
+    .wax-seal { 
+      width: 80px; height: 80px; background: var(--wax); border-radius: 50%; position: absolute; 
+      top: 105px; left: 50%; transform: translateX(-50%); cursor: pointer; z-index: 10;
+      display: grid; place-items: center; color: gold; font-family: 'UnifrakturMaguntia'; font-size: 2rem;
+      box-shadow: inset 0 0 10px #000; transition: 0.5s;
     }
+    .open .flap { transform: rotateX(180deg); }
+    .open .wax-seal { transform: translate(-50%, 150px); opacity: 0; }
 
-    .unit {
-      text-align: center;
-      min-width: 60px;
-      border-bottom: 1px solid #444;
+    /* --- NEWSPAPER LAYOUT --- */
+    #newspaper { 
+      display: none; width: 90vw; max-width: 850px; height: 85vh; margin: 4vh auto; 
+      position: relative; perspective: 2000px; z-index: 10;
     }
-
-    /* =========================
-       ENVELOPE
-    ========================== */
-    .envelope-wrapper {
-      position: relative;
-      width: 420px;
-      height: 280px;
-      background: #e0d8c3;
-      box-shadow: 0 50px 100px rgba(0,0,0,1);
-      perspective: 2000px;
-    }
-
-    .flap {
-      position: absolute;
-      width: 0;
-      height: 0;
-      border-left: 210px solid transparent;
-      border-right: 210px solid transparent;
-      border-top: 150px solid #cfc6ad;
-      transform-origin: top;
-      transition: transform 0.8s ease;
-      z-index: 5;
-    }
-
-    .wax-seal {
-      width: 85px;
-      height: 85px;
-      background: var(--wax-red);
-      border-radius: 50%;
-      position: absolute;
-      top: 110px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: grid;
-      place-items: center;
-      font-family: 'UnifrakturMaguntia';
-      font-size: 2rem;
-      color: gold;
-      cursor: pointer;
-      box-shadow: inset 0 0 15px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.4);
-      transition: 0.7s;
-      z-index: 10;
-    }
-
-    .envelope-wrapper.open .flap {
-      transform: rotateX(180deg);
-    }
-
-    .envelope-wrapper.open .wax-seal {
-      transform: translate(-50%, 200px);
-      opacity: 0;
-    }
-
-    /* =========================
-       NEWSPAPER
-    ========================== */
-    #newspaper {
-      display: none;
-      width: 95%;
-      max-width: 650px;
-      height: 85vh;
-      margin: 4vh auto;
-      opacity: 0;
-      transition: opacity 1s ease;
-      position: relative;
-    }
-
     .page {
-      position: absolute;
-      inset: 0;
-      padding: 30px;
-      background: var(--paper);
-      border: 1px solid #c0b7a2;
-      box-shadow: inset 0 0 60px rgba(0,0,0,0.1),
-                  10px 10px 40px rgba(0,0,0,0.3);
-      transform-origin: left;
-      transition: transform 0.8s cubic-bezier(.645,.045,.355,1);
-      backface-visibility: hidden;
-      overflow-y: auto;
+      position: absolute; inset: 0; padding: 40px; background: var(--paper);
+      background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png');
+      border: 1px solid rgba(0,0,0,0.1); box-shadow: 5px 5px 30px rgba(0,0,0,0.2);
+      transform-origin: left; transition: 0.8s cubic-bezier(.645,.045,.355,1);
+      backface-visibility: hidden; overflow-y: auto;
     }
-
     .page.flipped { transform: rotateY(-180deg); }
 
-    /* =========================
-       NAVIGATION
-    ========================== */
-    .controls {
-      position: fixed;
-      bottom: 15px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: none;
-      gap: 30px;
-      z-index: 200;
-    }
+    /* --- TYPOGRAPHY ENGINE --- */
+    .masthead { text-align: center; border-bottom: 5px double var(--ink); margin-bottom: 1rem; }
+    .masthead h1 { font-family: 'UnifrakturMaguntia'; font-size: 4.5rem; margin: 0; }
+    .headline { font-family: 'Playfair Display'; font-weight: 900; font-size: 2.2rem; text-align: center; text-transform: uppercase; margin: 1rem 0; line-height: 1; }
+    
+    .news-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+    .columns { column-count: 2; column-gap: 20px; text-align: justify; line-height: 1.4; }
+    .columns p::first-letter { float: left; font-size: 3.5rem; font-family: 'UnifrakturMaguntia'; padding-right: 8px; line-height: 0.7; }
 
-    .btn {
-      border: 1px solid #000;
-      background: none;
-      padding: 6px 18px;
-      font-family: 'Courier Prime';
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.3s;
-    }
+    .img-frame { border: 1px solid #000; padding: 5px; background: #fff; margin-bottom: 10px; }
+    .img-frame img { width: 100%; filter: sepia(0.4) contrast(1.1); display: block; }
 
-    .btn:hover {
-      background: #000;
-      color: #fff;
-    }
+    .message-box { border: 2px solid var(--ink); padding: 20px; margin-top: 20px; background: rgba(0,0,0,0.03); }
+
+    .controls { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); display: none; gap: 40px; z-index: 1000; }
+    .btn { border: 2px solid var(--ink); background: none; padding: 8px 24px; font-family: 'Courier Prime'; cursor: pointer; font-weight: bold; }
+    .btn:hover { background: var(--ink); color: #fff; }
   </style>
 </head>
-
 <body>
 
 <div id="flower-field"></div>
 
-<!-- LOCK -->
 <section id="overlay">
-  <div id="countdown"></div>
-
+  <div id="countdown">00:00:00</div>
   <div class="envelope-wrapper" id="envelope">
     <div class="flap"></div>
     <div class="wax-seal" id="seal">K</div>
+    <div style="position:absolute; bottom:30px; width:100%; text-align:center; font-weight:bold; cursor:pointer;" ondblclick="backdoor()">FOR MISS KASHVI</div>
   </div>
 </section>
 
-<!-- CONTENT -->
 <main id="newspaper"></main>
 
 <div class="controls" id="controls">
-  <button class="btn" data-dir="-1">← PREV</button>
-  <button class="btn" data-dir="1">NEXT →</button>
+  <button class="btn" onclick="nav(-1)">← PREV</button>
+  <button class="btn" onclick="nav(1)">NEXT →</button>
 </div>
 
 <script>
-/* ======================================================
-   CONFIGURATION
-====================================================== */
-const CONFIG = {
-  targetDate: new Date("January 20, 2026 00:00:00"),
-  petals: ['🌸','🌼','🌿','🍃','💮'],
-  totalPages: 5,
-  backdoorCode: "KASHVI18"
-};
+const DATA = [
+  {
+    title: "A New Legend Emerges",
+    content: "Today marks the eighteenth year of a legacy built on intellect and reliability. Experts suggest this 'Stability Update' is the most successful build yet. The world watches as the celebrant enters adulthood with unprecedented grace.",
+    img: "1.jpeg",
+    sidebar: "Weather: 100% chance of brilliance. High stability expected across all sectors."
+  },
+  {
+    title: "The Anchor in the Lab",
+    content: "Reliability isn't just a trait; it's a standard. From shared earphones to grueling lab sessions, Kashvi has remained the constant stability in a sea of academic chaos. Her presence acts as a performance buff to everyone in her orbit.",
+    img: "2.jpeg",
+    sidebar: "Editorial: Why being an 'Anchor' is the highest honor in the modern era."
+  },
+  {
+    title: "The Spirit of Drive",
+    content: "One cannot ignore the fire that fuels this journey. Competition isn't just about winning—it's about refinement. Kashvi sets the pace, proving that deadlines are merely suggestions for those with enough drive.",
+    img: "7.jpeg",
+    sidebar: "Top News: Record-breaking efficiency reported in late-night sessions."
+  },
+  {
+    title: "Wit Amidst the Grind",
+    content: "Laughter is the background process that keeps the system running. With wit deployed like a surgical instrument, she manages to lighten the heaviest rooms while maintaining absolute focus.",
+    img: "8.jpeg",
+    sidebar: "Quote of the Day: 'A sharp mind is the best defense against a boring day.'"
+  },
+  {
+    title: "The Official Gazette",
+    isFinal: true,
+    msg1: "To the one who keeps me on my toes and shares the earphones—Happy 18th Birthday. You are a legend in the making.",
+    msg2: "For the wins, the laughs, and the quiet stability. May this year be your most powerful iteration yet. 🧿💙",
+    img: "6.jpeg"
+  }
+];
 
-/* ======================================================
-   STATE
-====================================================== */
-let currentPage = 1;
-let isUnlocked = false;
+let curr = 0;
 
-/* ======================================================
-   INIT
-====================================================== */
-document.addEventListener("DOMContentLoaded", () => {
-  spawnPetals();
-  initCountdown();
-  bindEvents();
-});
-
-/* ======================================================
-   FUNCTIONS
-====================================================== */
 function spawnPetals() {
-  const field = document.getElementById('flower-field');
-  CONFIG.petals.forEach(() => {
-    const petal = document.createElement('div');
-    petal.className = 'petal';
-    petal.textContent = CONFIG.petals[Math.floor(Math.random()*CONFIG.petals.length)];
-    petal.style.left = Math.random()*100 + 'vw';
-    petal.style.animationDuration = 6 + Math.random()*6 + 's';
-    field.appendChild(petal);
+  const container = document.getElementById('flower-field');
+  for(let i=0; i<25; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.textContent = ['🌸','🌼','🌿','🍃'][Math.floor(Math.random()*4)];
+    p.style.left = Math.random()*100 + 'vw';
+    p.style.animationDuration = (5 + Math.random()*5) + 's';
+    p.style.animationDelay = Math.random()*5 + 's';
+    container.appendChild(p);
+  }
+}
+
+function renderNewspaper() {
+  const container = document.getElementById('newspaper');
+  DATA.forEach((page, i) => {
+    const el = document.createElement('div');
+    el.className = 'page';
+    el.id = `page-${i}`;
+    el.style.zIndex = DATA.length - i;
+    
+    if(page.isFinal) {
+      el.innerHTML = `
+        <div class="masthead"><h1>Gazette</h1></div>
+        <div class="headline">${page.title}</div>
+        <div class="img-frame"><img src="${page.img}"></div>
+        <div class="message-box">
+          <p><strong>MESSAGE I:</strong> ${page.msg1}</p>
+          <hr style="border:0; border-top:1px dashed #000; margin:20px 0;">
+          <p><strong>MESSAGE II:</strong> ${page.msg2}</p>
+        </div>
+      `;
+    } else {
+      el.innerHTML = `
+        <div class="masthead"><h1>The Birthday Times</h1></div>
+        <div class="headline">${page.title}</div>
+        <div class="news-grid">
+          <div class="columns"><p>${page.content}</p></div>
+          <div class="sidebar">
+            <div class="img-frame"><img src="${page.img}"></div>
+            <p style="font-size:0.8rem; font-style:italic; border-top:1px solid #000; padding-top:10px;">${page.sidebar}</p>
+          </div>
+        </div>
+      `;
+    }
+    container.appendChild(el);
   });
 }
 
-function initCountdown() {
-  const el = document.getElementById('countdown');
-  setInterval(() => {
-    const diff = CONFIG.targetDate - Date.now();
-    if (diff <= 0) isUnlocked = true;
-    el.textContent = new Date(Math.max(diff,0)).toISOString().substr(11,8);
-  }, 1000);
+function nav(dir) {
+  if(dir === 1 && curr < DATA.length - 1) {
+    document.getElementById(`page-${curr}`).classList.add('flipped');
+    curr++;
+  } else if(dir === -1 && curr > 0) {
+    curr--;
+    document.getElementById(`page-${curr}`).classList.remove('flipped');
+  }
 }
 
-function bindEvents() {
-  document.getElementById('seal').addEventListener('click', unlock);
-  document.querySelector('.controls').addEventListener('click', navigate);
+function backdoor() {
+  if(prompt("DEV ACCESS:") === "KASHVI18") {
+    isUnlocked = true;
+    unlock();
+  }
 }
+
+let isUnlocked = false;
+const target = new Date("January 20, 2026 00:00:00").getTime();
+setInterval(() => {
+  const diff = target - Date.now();
+  if(diff <= 0) isUnlocked = true;
+  document.getElementById('countdown').textContent = new Date(Math.max(diff,0)).toISOString().substr(11,8);
+}, 1000);
 
 function unlock() {
-  if (!isUnlocked) return;
+  if(!isUnlocked) return;
   document.getElementById('envelope').classList.add('open');
-  confetti({ particleCount: 160, spread: 70, origin:{y:0.6} });
-  setTimeout(showPaper, 1200);
+  confetti({ particleCount: 150, spread: 70, origin: {y: 0.6} });
+  setTimeout(() => {
+    document.getElementById('overlay').style.opacity = 0;
+    setTimeout(() => {
+      document.getElementById('overlay').remove();
+      document.getElementById('newspaper').style.display = 'block';
+      document.getElementById('controls').style.display = 'flex';
+      setTimeout(() => document.getElementById('newspaper').style.opacity = 1, 100);
+    }, 800);
+  }, 1200);
 }
 
-function showPaper() {
-  const overlay = document.getElementById('overlay');
-  overlay.style.opacity = 0;
-  setTimeout(() => overlay.remove(), 800);
-  document.getElementById('newspaper').style.display = 'block';
-  document.getElementById('controls').style.display = 'flex';
-}
+document.getElementById('seal').onclick = unlock;
+spawnPetals();
+renderNewspaper();
 </script>
 
 </body>
