@@ -19,19 +19,27 @@
     </script>
     
     <style>
-        :root { --primary-blue: #00d4ff; --neon-pink: #ffb7c5; --deep-space: #010103; --gold: #ffd700; }
+        :root { --primary-blue: #00d4ff; --neon-pink: #ffb7c5; --deep-space: #010103; --gold: #ffd700; --cyber-alert: #ff0055; }
         body { margin: 0; padding: 0; background: var(--deep-space); font-family: 'Inter', sans-serif; color: white; overflow: hidden; scroll-behavior: smooth; user-select: none; -webkit-tap-highlight-color: transparent; }
 
         /* --- LOCK SCREEN --- */
         #overlay { position: fixed; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 2000; background: radial-gradient(circle at center, rgba(0, 29, 61, 0.9) 0%, #000000 100%); transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
         #secret-trigger { letter-spacing: 8px; color: var(--primary-blue); font-weight: bold; margin-bottom: 30px; cursor: pointer; font-size: 0.9rem; text-shadow: 0 0 10px var(--primary-blue); font-family: 'Fira Code'; }
-        .system-logs { font-family: 'Fira Code', monospace; font-size: 0.65rem; color: var(--primary-blue); opacity: 0.7; line-height: 1.8; text-align: left; display: inline-block; min-height: 120px; }
+        
+        .system-logs { font-family: 'Fira Code', monospace; font-size: 0.7rem; color: var(--primary-blue); line-height: 1.8; text-align: left; display: inline-block; min-height: 140px; max-width: 90%; }
+        
+        /* Cyberpunk Hint Styling */
+        .log-hint { color: var(--cyber-alert); font-weight: bold; text-shadow: 0 0 8px var(--cyber-alert); animation: flicker 2s infinite; }
+        @keyframes flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } 80% { color: var(--primary-blue); } }
 
         #countdown { display: flex; margin-bottom: 30px; gap: 10px; justify-content: center; }
         .timer-unit { text-align: center; min-width: 65px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; border: 1px solid rgba(0, 212, 255, 0.2); }
         .timer-num { font-size: 1.8rem; font-weight: 800; color: var(--primary-blue); display: block; font-family: 'Fira Code'; }
         .timer-label { font-size: 0.55rem; letter-spacing: 2px; opacity: 0.7; }
-        .entry-btn { padding: 15px 40px; border-radius: 50px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.3); font-size: 0.7rem; letter-spacing: 2px; font-family: 'Fira Code'; cursor: pointer; }
+
+        /* Button States */
+        .entry-btn { padding: 15px 40px; border-radius: 50px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.1); font-size: 0.7rem; letter-spacing: 2px; font-family: 'Fira Code'; cursor: not-allowed; transition: 0.5s; pointer-events: none; }
+        .entry-btn.ready { background: rgba(0, 212, 255, 0.1); border: 1px solid var(--primary-blue); color: white; cursor: pointer; pointer-events: auto; box-shadow: 0 0 20px rgba(0, 212, 255, 0.3); }
 
         /* --- CONTENT --- */
         #canvas-container { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
@@ -62,7 +70,6 @@
         .system-popup.active { transform: translate(-50%, -50%) scale(1); }
         #goldenStar { position: fixed; top: 25%; right: 10%; width: 40px; height: 40px; cursor: pointer; z-index: 500; display: none; align-items: center; justify-content: center; }
         .star-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; box-shadow: 0 0 15px var(--gold); animation: starPulse 1.5s infinite; }
-        @keyframes starPulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(2.2); opacity: 0.4; } }
     </style>
 </head>
 <body>
@@ -76,7 +83,7 @@
         <div class="timer-unit"><span class="timer-num" id="mins">00</span><span class="timer-label">MINS</span></div>
         <div class="timer-unit"><span class="timer-num" id="secs">00</span><span class="timer-label">SECS</span></div>
     </div>
-    <button id="entryBtn" class="entry-btn">SECURE_LINE_OFFLINE 🔒</button>
+    <button id="entryBtn" class="entry-btn">SYSTEM_CHECKING...</button>
 </div>
 
 <div id="starPopup" class="system-popup">
@@ -148,7 +155,7 @@
         grid.innerHTML += `<div class="img-card" id="card-${idx}"><img src="${item.img}"><div class="typewriter-box" id="msg-${idx}"></div></div>`;
     });
 
-    /* --- THE HINT LOGS --- */
+    /* --- ENHANCED LOGS & BUTTON LOGIC --- */
     const logs = [
         "> Booting Life_Modules...", 
         "> Compiling School_Memories...", 
@@ -159,14 +166,30 @@
     function typeLogs() {
         if (logIdx < logs.length) {
             let div = document.createElement('div');
+            // Apply Cyberpunk color to hint line
+            if(logIdx === 2) div.className = "log-hint"; 
+            
             document.getElementById('logContainer').appendChild(div);
             let i = 0;
             let t = setInterval(() => {
                 if(i < logs[logIdx].length) div.innerHTML += logs[logIdx][i++];
-                else { clearInterval(t); logIdx++; setTimeout(typeLogs, 600); }
+                else { 
+                    clearInterval(t); 
+                    logIdx++; 
+                    if(logIdx < logs.length) setTimeout(typeLogs, 600);
+                    else enableButton(); // Unlock button only when logs are finished
+                }
             }, 40);
         }
     }
+    
+    function enableButton() {
+        const btn = document.getElementById('entryBtn');
+        btn.innerHTML = "ENTER THE GALAXY 🧿";
+        btn.classList.add('ready');
+        btn.onclick = unlock;
+    }
+    
     typeLogs();
 
     const observer = new IntersectionObserver((entries) => {
@@ -244,9 +267,6 @@
     const target = new Date("January 20, 2026 00:00:00").getTime();
     setInterval(() => {
         const diff = target - Date.now();
-        if(diff <= 0) { 
-            let b = document.getElementById('entryBtn'); b.innerText = "ACCESS GRANTED 🧿"; b.style.color = "white"; b.onclick = unlock;
-        }
         document.getElementById('days').innerText = String(Math.max(0, Math.floor(diff/86400000))).padStart(2,'0');
         document.getElementById('hours').innerText = String(Math.max(0, Math.floor((diff%86400000)/3600000))).padStart(2,'0');
         document.getElementById('mins').innerText = String(Math.max(0, Math.floor((diff%3600000)/60000))).padStart(2,'0');
