@@ -1,228 +1,238 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>The XVIII Gazette | Limited Edition</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The XVIII Gazette | Immersive Edition</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,700&family=UnifrakturMaguntia&family=EB+Garamond:ital,wght@0,400;0,600&family=Courier+Prime&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
     :root {
       --paper: #f4f1ea;
       --ink: #1a1a1a;
       --wax: #8b0000;
-      --cream: #eee9da;
+      --cream: #fdfaf0;
     }
 
     body { margin: 0; background: var(--cream); overflow: hidden; font-family: 'EB Garamond', serif; }
 
-    /* --- AMBIENT PETALS --- */
-    #flower-field { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
-    .petal { position: absolute; top: -5vh; animation: fall linear infinite; opacity: 0.4; }
-    @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+    /* --- ANIMATED LIGHTER BACKGROUND --- */
+    #ambient-canvas {
+      position: fixed; inset: 0;
+      background: radial-gradient(circle at center, #fff9e6 0%, #e5dfcf 100%);
+      z-index: -1;
+    }
+
+    .particle {
+      position: absolute; border-radius: 50%; background: rgba(212, 163, 115, 0.2);
+      pointer-events: none; animation: float 20s infinite linear;
+    }
+    @keyframes float {
+      from { transform: translateY(100vh) translateX(0); }
+      to { transform: translateY(-10vh) translateX(50px); }
+    }
 
     /* --- LOCK SCREEN --- */
     #overlay {
-      position: fixed; inset: 0; background: radial-gradient(circle, #222, #000);
+      position: fixed; inset: 0; background: rgba(0,0,0,0.92);
       display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 3000;
+      transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    #countdown { font-family: 'Courier Prime'; color: var(--paper); font-size: 2rem; margin-bottom: 2rem; letter-spacing: 5px; }
+    #countdown { font-family: 'Courier Prime'; color: var(--paper); font-size: 1.5rem; margin-bottom: 2rem; }
 
-    .envelope-wrapper { width: 400px; height: 260px; background: #dccfb2; position: relative; box-shadow: 0 50px 100px rgba(0,0,0,0.8); perspective: 1000px; }
-    .flap { position: absolute; inset: 0; border-left: 200px solid transparent; border-right: 200px solid transparent; border-top: 140px solid #c9bc9c; transform-origin: top; transition: 0.8s; z-index: 5; }
+    .envelope-wrapper { width: 420px; height: 280px; background: #e0d8c3; position: relative; box-shadow: 0 50px 100px rgba(0,0,0,0.8); perspective: 1200px; }
+    .flap { position: absolute; inset: 0; border-left: 210px solid transparent; border-right: 210px solid transparent; border-top: 160px solid #cfc6ad; transform-origin: top; transition: 1s cubic-bezier(0.4, 0, 0.2, 1); z-index: 5; }
     .wax-seal { 
-      width: 80px; height: 80px; background: var(--wax); border-radius: 50%; position: absolute; 
-      top: 105px; left: 50%; transform: translateX(-50%); cursor: pointer; z-index: 10;
-      display: grid; place-items: center; color: gold; font-family: 'UnifrakturMaguntia'; font-size: 2rem;
-      box-shadow: inset 0 0 10px #000; transition: 0.5s;
+      width: 85px; height: 85px; background: var(--wax); border-radius: 50%; position: absolute; 
+      top: 110px; left: 50%; transform: translateX(-50%); cursor: pointer; z-index: 10;
+      display: grid; place-items: center; color: gold; font-family: 'UnifrakturMaguntia'; font-size: 2.2rem;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5); transition: 0.6s;
     }
     .open .flap { transform: rotateX(180deg); }
-    .open .wax-seal { transform: translate(-50%, 150px); opacity: 0; }
+    .open .wax-seal { transform: translate(-50%, 220px); opacity: 0; }
 
-    /* --- NEWSPAPER LAYOUT --- */
-    #newspaper { 
-      display: none; width: 90vw; max-width: 850px; height: 85vh; margin: 4vh auto; 
-      position: relative; perspective: 2000px; z-index: 10;
+    /* --- NEWSPAPER ENGINE --- */
+    #newspaper-container { 
+      display: none; width: 95vw; max-width: 900px; height: 85vh; margin: 4vh auto; 
+      position: relative; perspective: 2500px; z-index: 100;
     }
     .page {
       position: absolute; inset: 0; padding: 40px; background: var(--paper);
       background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png');
-      border: 1px solid rgba(0,0,0,0.1); box-shadow: 5px 5px 30px rgba(0,0,0,0.2);
-      transform-origin: left; transition: 0.8s cubic-bezier(.645,.045,.355,1);
+      border: 1px solid rgba(0,0,0,0.1); box-shadow: 10px 10px 50px rgba(0,0,0,0.2);
+      transform-origin: left; transition: 0.9s cubic-bezier(.645,.045,.355,1);
       backface-visibility: hidden; overflow-y: auto;
     }
     .page.flipped { transform: rotateY(-180deg); }
 
-    /* --- TYPOGRAPHY ENGINE --- */
-    .masthead { text-align: center; border-bottom: 5px double var(--ink); margin-bottom: 1rem; }
-    .masthead h1 { font-family: 'UnifrakturMaguntia'; font-size: 4.5rem; margin: 0; }
-    .headline { font-family: 'Playfair Display'; font-weight: 900; font-size: 2.2rem; text-align: center; text-transform: uppercase; margin: 1rem 0; line-height: 1; }
+    /* BROADSHEET LAYOUT */
+    .masthead { text-align: center; border-bottom: 6px double var(--ink); margin-bottom: 5px; }
+    .masthead h1 { font-family: 'UnifrakturMaguntia'; font-size: 4.5rem; margin: 0; letter-spacing: -2px; }
+    .sub-bar { border-bottom: 2px solid var(--ink); display: flex; justify-content: space-between; font-family: 'Courier Prime'; font-size: 0.75rem; padding: 4px; margin-bottom: 20px; }
+
+    .headline-main { font-family: 'Playfair Display'; font-weight: 900; font-size: 2.8rem; text-align: center; text-transform: uppercase; line-height: 0.95; margin: 15px 0; border-bottom: 1px solid #ccc; padding-bottom: 15px; }
     
-    .news-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
-    .columns { column-count: 2; column-gap: 20px; text-align: justify; line-height: 1.4; }
-    .columns p::first-letter { float: left; font-size: 3.5rem; font-family: 'UnifrakturMaguntia'; padding-right: 8px; line-height: 0.7; }
+    .news-columns { column-count: 3; column-gap: 25px; text-align: justify; line-height: 1.4; }
+    .news-columns p::first-letter { float: left; font-size: 4.5rem; font-family: 'UnifrakturMaguntia'; line-height: 0.7; padding-right: 12px; }
 
-    .img-frame { border: 1px solid #000; padding: 5px; background: #fff; margin-bottom: 10px; }
-    .img-frame img { width: 100%; filter: sepia(0.4) contrast(1.1); display: block; }
+    .img-frame { break-inside: avoid; border: 1px solid #000; padding: 4px; background: #fff; margin-bottom: 15px; }
+    .img-frame img { width: 100%; filter: grayscale(1) sepia(0.3) contrast(1.1); display: block; }
+    
+    .sidebar-ad { border: 1px dashed #666; padding: 10px; margin-top: 20px; font-size: 0.8rem; text-align: center; break-inside: avoid; }
 
-    .message-box { border: 2px solid var(--ink); padding: 20px; margin-top: 20px; background: rgba(0,0,0,0.03); }
+    /* FINAL PAGE MESSAGES */
+    .msg-box { border: 3px double var(--ink); padding: 30px; background: rgba(0,0,0,0.02); text-align: center; margin-top: 20px; }
 
-    .controls { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); display: none; gap: 40px; z-index: 1000; }
-    .btn { border: 2px solid var(--ink); background: none; padding: 8px 24px; font-family: 'Courier Prime'; cursor: pointer; font-weight: bold; }
-    .btn:hover { background: var(--ink); color: #fff; }
+    .nav-controls { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); display: none; gap: 40px; z-index: 1000; }
+    .nav-btn { background: none; border: 1.5px solid var(--ink); padding: 8px 25px; font-family: 'Courier Prime'; cursor: pointer; font-weight: bold; transition: 0.3s; }
+    .nav-btn:hover { background: var(--ink); color: #fff; }
   </style>
 </head>
 <body>
 
-<div id="flower-field"></div>
+<div id="ambient-canvas"></div>
+
+<audio id="flip-sound" src="https://www.soundjay.com/misc/sounds/paper-flip-1.mp3" preload="auto"></audio>
+<audio id="open-sound" src="https://www.soundjay.com/misc/sounds/envelope-opening-1.mp3" preload="auto"></audio>
 
 <section id="overlay">
-  <div id="countdown">00:00:00</div>
+  <div id="countdown">ACCESS GRANTED IN: --:--:--</div>
   <div class="envelope-wrapper" id="envelope">
     <div class="flap"></div>
     <div class="wax-seal" id="seal">K</div>
-    <div style="position:absolute; bottom:30px; width:100%; text-align:center; font-weight:bold; cursor:pointer;" ondblclick="backdoor()">FOR MISS KASHVI</div>
+    <div id="backdoor-trigger" style="position:absolute; bottom:30px; width:100%; text-align:center; font-weight:bold; color:#555; cursor:pointer;" ondblclick="triggerBackdoor()">FOR MISS KASHVI</div>
   </div>
 </section>
 
-<main id="newspaper"></main>
+<div id="newspaper-container">
+  <article class="page" id="p0" style="z-index: 5;">
+    <div class="masthead"><h1>The Birthday Times</h1></div>
+    <div class="sub-bar"><span>VOL XVIII ... NO. 01</span><span>JANUARY 20, 2026</span><span>PRICE: PRICELESS</span></div>
+    <div class="headline-main">A Monumental Milestone: Kashvi Reaches 18</div>
+    <div class="news-columns">
+      <div class="img-frame"><img src="1.jpeg"></div>
+      <p>Today marks the commencement of a new era. Kashvi, long recognized for her sharp intellect and unwavering reliability, has officially completed her eighteenth circuit around the sun. This anniversary is not merely a birthday but a "Stability Update" of epic proportions.</p>
+      <p>The transition into adulthood is expected to be her most powerful iteration yet. Colleagues in the field describe her as a "tactical brilliance" in any lab environment. In a world of chaos, her stability remains the gold standard.</p>
+      <div class="sidebar-ad"><strong>CLASSIFIEDS:</strong> Seeking 18 more years of brilliance. Reward: Success and global recognition.</div>
+    </div>
+  </article>
 
-<div class="controls" id="controls">
-  <button class="btn" onclick="nav(-1)">← PREV</button>
-  <button class="btn" onclick="nav(1)">NEXT →</button>
+  <article class="page" id="p1" style="z-index: 4;">
+    <div class="sub-bar"><span>EDITORIAL</span><span>SECTION B</span></div>
+    <div class="headline-main">The Anchor: A Case Study in Reliability</div>
+    <div class="news-columns">
+      <p>What defines a partner in the grueling environment of the modern lab? It isn't just the data—it's the person standing beside you when the system crashes. Kashvi has redefined the standards of academic partnership through shared earphones and late-night grit.</p>
+      <div class="img-frame"><img src="2.jpeg"></div>
+      <p>Her ability to remain composed under pressure has earned her the title of "The Anchor." Whether it's a complex build or a simple challenge, her presence provides a measurable performance boost to the entire team.</p>
+      <div class="sidebar-ad"><strong>WEATHER:</strong> 100% chance of achievement. High pressure brings out the best in the celebrant.</div>
+    </div>
+  </article>
+
+  <article class="page" id="p2" style="z-index: 3;">
+    <div class="sub-bar"><span>SPORTS & DRIVE</span><span>SECTION C</span></div>
+    <div class="headline-main">Refined by Friction: The Competitive Spirit</div>
+    <div class="news-columns">
+      <div class="img-frame"><img src="7.jpeg"></div>
+      <p>One cannot discuss the rise of Kashvi without acknowledging the fire that drives her. Competition is not just about winning; for her, it is a method of refinement. This healthy friction has acted as a catalyst for growth.</p>
+      <p>No challenge is too steep for the protocol she has built over the last 17 years. As she enters Chapter 18, her competitive forecast is at an all-time high, with success predicted in every major sector of her life.</p>
+    </div>
+  </article>
+
+  <article class="page" id="p3" style="z-index: 2;">
+    <div class="sub-bar"><span>LIFESTYLE & SOCIETY</span><span>SECTION D</span></div>
+    <div class="headline-main">Wit as a Weapon: Laughter Amidst the Grind</div>
+    <div class="news-columns">
+      <p>Amidst the intensity of her drive, there is a lighter side that maintains the balance. Her lethal wit is her most consistent asset, often deployed with surgical precision to lighten a heavy room or celebrate a minor win.</p>
+      <div class="img-frame"><img src="8.jpeg"></div>
+      <p>It is the human element in a world of logic—the warmth that makes the reliability so much more valuable. Looking back, the laughter is the common thread that binds these 18 years together.</p>
+    </div>
+  </article>
+
+  <article class="page" id="p4" style="z-index: 1;">
+    <div class="sub-bar"><span>OFFICIAL GAZETTE</span><span>FINAL EDITION</span></div>
+    <div class="headline-main">STABILITY CHECK: PERFECT 🧿</div>
+    <div class="img-frame"><img src="6.jpeg"></div>
+    <div class="msg-box">
+      <p style="font-size: 1.1rem;"><strong>MESSAGE I:</strong><br>To the one who keeps me on my toes, shares the earphones, and celebrates 18 years of brilliance—Happy Birthday. You are a legend in the making.</p>
+      <hr style="border:0; border-top:1px dashed #000; margin: 20px 0;">
+      <p style="font-size: 1.1rem;"><strong>MESSAGE II:</strong><br>For the wins, the laughs, and the quiet stability that makes everything possible. May your 18th year be your most powerful iteration yet. 🧿💙</p>
+    </div>
+  </article>
+</div>
+
+<div class="nav-controls" id="controls">
+  <button class="nav-btn" onclick="flip(-1)">← PREVIOUS</button>
+  <button class="nav-btn" onclick="flip(1)">NEXT PAGE →</button>
 </div>
 
 <script>
-const DATA = [
-  {
-    title: "A New Legend Emerges",
-    content: "Today marks the eighteenth year of a legacy built on intellect and reliability. Experts suggest this 'Stability Update' is the most successful build yet. The world watches as the celebrant enters adulthood with unprecedented grace.",
-    img: "1.jpeg",
-    sidebar: "Weather: 100% chance of brilliance. High stability expected across all sectors."
-  },
-  {
-    title: "The Anchor in the Lab",
-    content: "Reliability isn't just a trait; it's a standard. From shared earphones to grueling lab sessions, Kashvi has remained the constant stability in a sea of academic chaos. Her presence acts as a performance buff to everyone in her orbit.",
-    img: "2.jpeg",
-    sidebar: "Editorial: Why being an 'Anchor' is the highest honor in the modern era."
-  },
-  {
-    title: "The Spirit of Drive",
-    content: "One cannot ignore the fire that fuels this journey. Competition isn't just about winning—it's about refinement. Kashvi sets the pace, proving that deadlines are merely suggestions for those with enough drive.",
-    img: "7.jpeg",
-    sidebar: "Top News: Record-breaking efficiency reported in late-night sessions."
-  },
-  {
-    title: "Wit Amidst the Grind",
-    content: "Laughter is the background process that keeps the system running. With wit deployed like a surgical instrument, she manages to lighten the heaviest rooms while maintaining absolute focus.",
-    img: "8.jpeg",
-    sidebar: "Quote of the Day: 'A sharp mind is the best defense against a boring day.'"
-  },
-  {
-    title: "The Official Gazette",
-    isFinal: true,
-    msg1: "To the one who keeps me on my toes and shares the earphones—Happy 18th Birthday. You are a legend in the making.",
-    msg2: "For the wins, the laughs, and the quiet stability. May this year be your most powerful iteration yet. 🧿💙",
-    img: "6.jpeg"
-  }
-];
-
-let curr = 0;
-
-function spawnPetals() {
-  const container = document.getElementById('flower-field');
-  for(let i=0; i<25; i++) {
+  // 1. Particle Background Engine
+  const canvas = document.getElementById('ambient-canvas');
+  for (let i = 0; i < 15; i++) {
     const p = document.createElement('div');
-    p.className = 'petal';
-    p.textContent = ['🌸','🌼','🌿','🍃'][Math.floor(Math.random()*4)];
-    p.style.left = Math.random()*100 + 'vw';
-    p.style.animationDuration = (5 + Math.random()*5) + 's';
-    p.style.animationDelay = Math.random()*5 + 's';
-    container.appendChild(p);
+    p.className = 'particle';
+    const size = Math.random() * 40 + 10;
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.animationDuration = (Math.random() * 10 + 10) + 's';
+    p.style.animationDelay = Math.random() * 5 + 's';
+    canvas.appendChild(p);
   }
-}
 
-function renderNewspaper() {
-  const container = document.getElementById('newspaper');
-  DATA.forEach((page, i) => {
-    const el = document.createElement('div');
-    el.className = 'page';
-    el.id = `page-${i}`;
-    el.style.zIndex = DATA.length - i;
+  // 2. State & Timing
+  let currentPage = 0;
+  let unlocked = false;
+  const target = new Date("January 20, 2026 00:00:00").getTime();
+
+  setInterval(() => {
+    const diff = target - Date.now();
+    if (diff <= 0) unlocked = true;
+    const time = new Date(Math.max(0, diff)).toISOString().substr(11, 8);
+    document.getElementById('countdown').textContent = unlocked ? "READY TO OPEN" : `ACCESS IN: ${time}`;
+  }, 1000);
+
+  // 3. Immersive Reveal
+  function reveal() {
+    if (!unlocked) return;
+    document.getElementById('open-sound').play();
+    document.getElementById('envelope').classList.add('open');
     
-    if(page.isFinal) {
-      el.innerHTML = `
-        <div class="masthead"><h1>Gazette</h1></div>
-        <div class="headline">${page.title}</div>
-        <div class="img-frame"><img src="${page.img}"></div>
-        <div class="message-box">
-          <p><strong>MESSAGE I:</strong> ${page.msg1}</p>
-          <hr style="border:0; border-top:1px dashed #000; margin:20px 0;">
-          <p><strong>MESSAGE II:</strong> ${page.msg2}</p>
-        </div>
-      `;
-    } else {
-      el.innerHTML = `
-        <div class="masthead"><h1>The Birthday Times</h1></div>
-        <div class="headline">${page.title}</div>
-        <div class="news-grid">
-          <div class="columns"><p>${page.content}</p></div>
-          <div class="sidebar">
-            <div class="img-frame"><img src="${page.img}"></div>
-            <p style="font-size:0.8rem; font-style:italic; border-top:1px solid #000; padding-top:10px;">${page.sidebar}</p>
-          </div>
-        </div>
-      `;
-    }
-    container.appendChild(el);
-  });
-}
-
-function nav(dir) {
-  if(dir === 1 && curr < DATA.length - 1) {
-    document.getElementById(`page-${curr}`).classList.add('flipped');
-    curr++;
-  } else if(dir === -1 && curr > 0) {
-    curr--;
-    document.getElementById(`page-${curr}`).classList.remove('flipped');
-  }
-}
-
-function backdoor() {
-  if(prompt("DEV ACCESS:") === "KASHVI18") {
-    isUnlocked = true;
-    unlock();
-  }
-}
-
-let isUnlocked = false;
-const target = new Date("January 20, 2026 00:00:00").getTime();
-setInterval(() => {
-  const diff = target - Date.now();
-  if(diff <= 0) isUnlocked = true;
-  document.getElementById('countdown').textContent = new Date(Math.max(diff,0)).toISOString().substr(11,8);
-}, 1000);
-
-function unlock() {
-  if(!isUnlocked) return;
-  document.getElementById('envelope').classList.add('open');
-  confetti({ particleCount: 150, spread: 70, origin: {y: 0.6} });
-  setTimeout(() => {
-    document.getElementById('overlay').style.opacity = 0;
     setTimeout(() => {
-      document.getElementById('overlay').remove();
-      document.getElementById('newspaper').style.display = 'block';
-      document.getElementById('controls').style.display = 'flex';
-      setTimeout(() => document.getElementById('newspaper').style.opacity = 1, 100);
-    }, 800);
-  }, 1200);
-}
+      confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+      document.getElementById('overlay').style.opacity = '0';
+      setTimeout(() => {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('newspaper-container').style.display = 'block';
+        document.getElementById('controls').style.display = 'flex';
+      }, 1000);
+    }, 1200);
+  }
 
-document.getElementById('seal').onclick = unlock;
-spawnPetals();
-renderNewspaper();
+  // 4. Navigation & Audio
+  function flip(dir) {
+    if (dir === 1 && currentPage < 4) {
+      document.getElementById('flip-sound').play();
+      document.getElementById(`p${currentPage}`).classList.add('flipped');
+      currentPage++;
+    } else if (dir === -1 && currentPage > 0) {
+      document.getElementById('flip-sound').play();
+      currentPage--;
+      document.getElementById(`p${currentPage}`).classList.remove('flipped');
+    }
+  }
+
+  // 5. Backdoor
+  function triggerBackdoor() {
+    if (prompt("DEV KEY:") === "KASHVI18") {
+      unlocked = true;
+      reveal();
+    }
+  }
+
+  document.getElementById('seal').onclick = reveal;
 </script>
 
 </body>
