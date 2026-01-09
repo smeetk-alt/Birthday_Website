@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The XVIII Gazette | Fail-Safe Edition</title>
+  <title>The XVIII Gazette | Master Edition</title>
+  
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,700&family=UnifrakturMaguntia&family=EB+Garamond:ital,wght@0,400;0,600&family=Courier+Prime&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
@@ -11,42 +12,62 @@
     :root { --paper: #f4f1ea; --ink: #1a1a1a; --wax: #8b0000; --cream: #fdfaf0; }
     body { margin: 0; background: var(--cream); overflow: hidden; font-family: 'EB Garamond', serif; }
 
-    /* Animated Background */
-    #bg-canvas { position: fixed; inset: 0; background: radial-gradient(circle, #fff9e6, #e5dfcf); z-index: -1; }
-    .petal { position: absolute; top: -5vh; animation: fall linear infinite; opacity: 0.3; pointer-events: none; }
+    /* --- ENHANCED AMBIENT BACKGROUND --- */
+    #bg-canvas { position: fixed; inset: 0; background: radial-gradient(circle, #fffdf7, #e8e2d2); z-index: -1; }
+    .petal { position: absolute; top: -5vh; animation: fall linear infinite; opacity: 0.4; pointer-events: none; }
     @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
 
-    /* Lock Screen */
-    #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 3000; transition: opacity 0.8s; }
-    #countdown { font-family: 'Courier Prime'; color: #fff; font-size: 1.2rem; margin-bottom: 2rem; }
+    /* --- THE CINEMATIC LOADING SCREEN --- */
+    #overlay { position: fixed; inset: 0; background: #0a0a0a; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 3000; transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
+    
+    .loading-hint { font-family: 'Courier Prime'; color: #888; font-size: 0.8rem; margin-top: 20px; letter-spacing: 2px; text-transform: uppercase; }
+    #countdown { font-family: 'Courier Prime'; color: var(--paper); font-size: 1.5rem; margin-bottom: 2rem; border: 1px solid #333; padding: 10px 20px; }
 
-    .envelope { width: 380px; height: 250px; background: #e0d8c3; position: relative; box-shadow: 0 30px 60px rgba(0,0,0,0.5); perspective: 1000px; }
-    .flap { position: absolute; inset: 0; border-left: 190px solid transparent; border-right: 190px solid transparent; border-top: 130px solid #cfc6ad; transform-origin: top; transition: 0.8s; z-index: 5; }
+    .envelope { width: 420px; height: 280px; background: #dccfb2; position: relative; box-shadow: 0 50px 100px rgba(0,0,0,0.8); perspective: 1500px; transform: scale(0.9); }
+    .flap { position: absolute; inset: 0; border-left: 210px solid transparent; border-right: 210px solid transparent; border-top: 150px solid #c9bc9c; transform-origin: top; transition: 1.2s cubic-bezier(0.4, 0, 0.2, 1); z-index: 5; }
+    
+    /* Wax Seal with "Pulse" Animation */
     .wax-seal { 
-      width: 70px; height: 70px; background: var(--wax); border-radius: 50%; position: absolute; 
-      top: 95px; left: 50%; transform: translateX(-50%); cursor: pointer; z-index: 10;
-      display: grid; place-items: center; color: gold; font-family: 'UnifrakturMaguntia'; font-size: 1.8rem;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: 0.5s;
+      width: 90px; height: 90px; background: var(--wax); border-radius: 50%; position: absolute; 
+      top: 110px; left: 50%; transform: translateX(-50%); cursor: pointer; z-index: 10;
+      display: grid; place-items: center; color: gold; font-family: 'UnifrakturMaguntia'; font-size: 2.2rem;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.6); transition: 0.5s;
     }
-    .open .flap { transform: rotateX(180deg); }
-    .open .wax-seal { transform: translate(-50%, 150px); opacity: 0; }
+    .wax-seal:active { transform: translateX(-50%) scale(0.9); box-shadow: 0 0 30px var(--wax); }
 
-    /* Newspaper */
-    #newspaper-wrap { display: none; width: 95vw; max-width: 800px; height: 85vh; margin: 4vh auto; position: relative; perspective: 2000px; opacity: 0; transition: opacity 1s; }
-    .page { position: absolute; inset: 0; padding: 30px; background: var(--paper); border: 1px solid #ddd; transform-origin: left; transition: 0.8s; backface-visibility: hidden; overflow-y: auto; box-shadow: 10px 10px 40px rgba(0,0,0,0.2); }
+    .open .flap { transform: rotateX(180deg); }
+    .open .wax-seal { transform: translate(-50%, 200px); opacity: 0; pointer-events: none; }
+
+    /* --- THE NEWSPAPER (BETTER CONTENT DENSITY) --- */
+    #newspaper-container { display: none; width: 95vw; max-width: 850px; height: 85vh; margin: 4vh auto; position: relative; perspective: 2500px; opacity: 0; transition: 1.5s; }
+    .page { position: absolute; inset: 0; padding: 40px; background: var(--paper); border: 1px solid rgba(0,0,0,0.1); transform-origin: left; transition: 0.9s cubic-bezier(.645,.045,.355,1); backface-visibility: hidden; overflow-y: auto; box-shadow: 15px 15px 50px rgba(0,0,0,0.3); }
     .page.flipped { transform: rotateY(-180deg); }
 
-    /* Layout */
-    .masthead { text-align: center; border-bottom: 4px double #000; margin-bottom: 10px; }
-    .masthead h1 { font-family: 'UnifrakturMaguntia'; font-size: 3.5rem; margin: 0; }
-    .headline { font-family: 'Playfair Display'; font-weight: 900; font-size: 2rem; text-align: center; text-transform: uppercase; margin: 15px 0; border-bottom: 1px solid #aaa; }
-    .cols { column-count: 2; column-gap: 20px; text-align: justify; }
-    .img-box { border: 1px solid #000; padding: 3px; background: #fff; margin-bottom: 10px; break-inside: avoid; }
-    .img-box img { width: 100%; filter: sepia(0.3); display: block; }
+    /* Masthead & News Headers */
+    .masthead { border-bottom: 6px double var(--ink); text-align: center; padding-bottom: 5px; }
+    .masthead h1 { font-family: 'UnifrakturMaguntia'; font-size: 4.5rem; margin: 0; line-height: 1; }
+    .sub-bar { border-bottom: 2px solid var(--ink); display: flex; justify-content: space-between; font-family: 'Courier Prime'; font-size: 0.75rem; padding: 4px; margin-bottom: 20px; font-weight: bold; }
 
-    /* Controls */
-    .controls { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); display: none; gap: 20px; z-index: 4000; }
-    .btn { border: 1px solid #000; background: #fff; padding: 8px 20px; font-family: 'Courier Prime'; cursor: pointer; }
+    .headline-main { font-family: 'Playfair Display'; font-weight: 900; font-size: 2.5rem; text-align: center; text-transform: uppercase; line-height: 1; margin: 20px 0; border-bottom: 1px solid #ccc; padding-bottom: 15px; }
+    .columns { column-count: 2; column-gap: 30px; text-align: justify; }
+    .columns p::first-letter { float: left; font-size: 4rem; font-family: 'UnifrakturMaguntia'; line-height: 0.7; padding-right: 10px; }
+
+    .img-box { break-inside: avoid; border: 1px solid #000; padding: 5px; background: #fff; margin-bottom: 15px; box-shadow: 5px 5px 15px rgba(0,0,0,0.1); }
+    .img-box img { width: 100%; filter: sepia(0.3) contrast(1.1); display: block; }
+
+    /* --- THE LAST PAGE (OFFICIAL SUPPLEMENT) --- */
+    .final-page-wrap { display: flex; flex-direction: column; height: 100%; }
+    .supplement-header { background: var(--ink); color: var(--paper); font-family: 'Courier Prime'; padding: 5px; text-align: center; font-size: 0.8rem; letter-spacing: 3px; margin-bottom: 20px; }
+    
+    .msg-box { border: 2px solid var(--ink); padding: 25px; margin: 15px 0; position: relative; background: #fffdf7; }
+    .msg-box::before { content: "§"; position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: var(--paper); padding: 0 10px; font-size: 1.5rem; }
+    
+    .signature { text-align: right; font-family: 'UnifrakturMaguntia'; font-size: 1.8rem; margin-top: 20px; border-top: 1px solid #000; display: inline-block; float: right; padding-top: 10px; }
+
+    /* Navigation */
+    .nav-ctrl { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); display: none; gap: 40px; z-index: 4000; }
+    .nav-btn { background: none; border: 2.5px solid var(--ink); padding: 10px 30px; font-family: 'Courier Prime'; cursor: pointer; font-weight: bold; transition: 0.3s; text-transform: uppercase; }
+    .nav-btn:hover { background: var(--ink); color: #fff; }
   </style>
 </head>
 <body>
@@ -57,100 +78,121 @@
   <div id="countdown">--:--:--</div>
   <div class="envelope" id="env">
     <div class="flap"></div>
-    <div class="wax-seal" onclick="handleSealClick()">K</div>
-    <div style="position:absolute; bottom:20px; width:100%; text-align:center; font-size: 0.8rem; color:#777;">CLICK SEAL 3 TIMES TO BYPASS</div>
+    <div class="wax-seal" id="seal" onmousedown="startHold()" onmouseup="endHold()" ontouchstart="startHold()" ontouchend="endHold()">K</div>
+    <div style="position:absolute; bottom:30px; width:100%; text-align:center; cursor:pointer;" ondblclick="triggerBackdoor()">FOR MISS KASHVI</div>
   </div>
+  <div class="loading-hint" id="hint-text">Hold Seal to Verify Identity</div>
 </section>
 
-<main id="newspaper-wrap">
+<main id="newspaper-container">
   <article class="page" id="p1" style="z-index: 5;">
     <div class="masthead"><h1>The Birthday Times</h1></div>
-    <div class="headline">Kashvi Reaches 18: A Global Event</div>
-    <div class="cols">
+    <div class="sub-bar"><span>VOL XVIII ... NO. 113</span><span>JANUARY 20, 2026</span><span>PRICELESS EDITION</span></div>
+    <div class="headline-main">A Monumental Milestone: Kashvi Reaches 18</div>
+    <div class="columns">
       <div class="img-box"><img src="1.jpeg"></div>
-      <p>Today marks the transition into a new chapter. Kashvi, known for her sharp intellect, officially enters adulthood. Experts suggest this is the most successful "Build" of the year.</p>
-      <p>In the world of labs and logic, her stability remains unmatched. Friends describe her as the primary anchor in any high-pressure situation.</p>
+      <p>Today marks the transition into a new chapter of sheer brilliance. Known for her razor-sharp wit and unwavering reliability, Kashvi's eighteenth year is hailed as the 'Perfect Build'.</p>
+      <p>Authorities confirm that her presence in the lab and academia has provided a consistent performance boost to all associates. The forecast for the coming year predicts record-breaking success and stability.</p>
     </div>
   </article>
 
   <article class="page" id="p2" style="z-index: 4;">
-    <div class="headline">Editorial: The Power of Reliability</div>
-    <div class="cols">
-      <p>Reliability is rare. In the laboratory of life, having someone who shares the earphones and the workload is essential. Kashvi has redefined these standards.</p>
+    <div class="headline-main">Editorial: The Power of the Anchor</div>
+    <div class="columns">
+      <p>Reliability is a rare currency. In a sea of academic chaos, Kashvi has remained the constant—sharing earphones, late-night grit, and the occasional burst of much-needed laughter.</p>
       <div class="img-box"><img src="2.jpeg"></div>
-      <p>This edition explores how her wit and presence have influenced those around her over the past 17 chapters.</p>
+      <p>This edition explores the 'Kashvi Protocol': a system of excellence and drive that has redefined the standards of partnership. To know her is to understand the true meaning of a stable anchor.</p>
     </div>
   </article>
 
-  <article class="page" id="p5" style="z-index: 1;">
-    <div class="headline">OFFICIAL GAZETTE</div>
-    <div class="img-box"><img src="6.jpeg"></div>
-    <div style="border: 2px solid #000; padding: 20px; text-align: center; background: rgba(0,0,0,0.02);">
-      <p><strong>MESSAGE I:</strong> To the one who keeps me on my toes—Happy Birthday. You are a legend in the making.</p>
-      <hr>
-      <p><strong>MESSAGE II:</strong> For the wins, the laughs, and the quiet stability. May this year be your best iteration. 🧿💙</p>
+  <article class="page" id="p3" style="z-index: 1;">
+    <div class="final-page-wrap">
+      <div class="supplement-header">OFFICIAL GAZETTE SPECIAL SUPPLEMENT</div>
+      
+      <div class="img-box" style="max-width: 70%; margin: 0 auto 20px;"><img src="6.jpeg"></div>
+      
+      <div class="msg-box">
+        <p style="font-size: 1.2rem; line-height: 1.6;"><strong>MESSAGE I:</strong><br>To the one who keeps me on my toes, the one who shares the earphones, and the one who celebrates 18 years of sheer brilliance—Happy Birthday. You are, and always will be, a legend in the making.</p>
+      </div>
+
+      <div class="msg-box" style="border-style: double; border-width: 4px;">
+        <p style="font-size: 1.2rem; line-height: 1.6; font-style: italic;"><strong>MESSAGE II:</strong><br>For the wins, the laughs, and the quiet stability that makes everything else possible. May your 18th year be your most powerful iteration yet. The best is yet to come. 🧿💙</p>
+      </div>
+
+      <div class="signature">The Curator</div>
     </div>
   </article>
 </main>
 
-<div class="controls" id="ui-btns">
-  <button class="btn" onclick="turn(-1)">PREV</button>
-  <button class="btn" onclick="turn(1)">NEXT</button>
+<div class="nav-ctrl" id="nav-btns">
+  <button class="nav-btn" onclick="turn(-1)">← Prev</button>
+  <button class="nav-btn" onclick="turn(1)">Next →</button>
 </div>
 
 <script>
   // Petal System
-  for(let i=0; i<20; i++) {
+  for(let i=0; i<25; i++) {
     const p = document.createElement('div');
     p.className = 'petal';
-    p.textContent = ['🌸','🌼','🌿'][Math.floor(Math.random()*3)];
+    p.textContent = ['🌸','🌼','🌿','🍃'][Math.floor(Math.random()*4)];
     p.style.left = Math.random()*100+'vw';
-    p.style.animationDuration = (5+Math.random()*5)+'s';
+    p.style.animationDuration = (6+Math.random()*6)+'s';
     document.getElementById('bg-canvas').appendChild(p);
   }
 
-  let clickCount = 0;
+  // Timer & State
+  let holdTimer;
   let isUnlocked = false;
   const target = new Date("January 20, 2026 00:00:00").getTime();
 
-  // Timer
   setInterval(() => {
     const diff = target - Date.now();
     if(diff <= 0) isUnlocked = true;
     document.getElementById('countdown').textContent = new Date(Math.max(0, diff)).toISOString().substr(11,8);
   }, 1000);
 
-  // FAIL-SAFE UNLOCK
-  function handleSealClick() {
-    clickCount++;
-    if(clickCount >= 3) {
-      let pass = prompt("ENTER ACCESS KEY:");
-      if(pass === "KASHVI18") {
-        isUnlocked = true;
-        startReveal();
-      }
-    } else if (isUnlocked) {
-      startReveal();
+  // Press & Hold Logic
+  function startHold() {
+    if(!isUnlocked) {
+      document.getElementById('hint-text').textContent = "Identity Locked. Wait for Jan 20.";
+      return;
+    }
+    document.getElementById('hint-text').textContent = "Verifying...";
+    holdTimer = setTimeout(openGazette, 1500); // Must hold for 1.5 seconds
+  }
+
+  function endHold() {
+    clearTimeout(holdTimer);
+    if(!document.getElementById('env').classList.contains('open')) {
+      document.getElementById('hint-text').textContent = "Hold Seal to Verify Identity";
     }
   }
 
-  function startReveal() {
+  function triggerBackdoor() {
+    if(prompt("ACCESS CODE:") === "KASHVI18") {
+      isUnlocked = true;
+      openGazette();
+    }
+  }
+
+  function openGazette() {
     document.getElementById('env').classList.add('open');
+    document.getElementById('hint-text').textContent = "Identity Confirmed.";
     setTimeout(() => {
-      confetti({ particleCount: 150, spread: 70 });
+      confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
       document.getElementById('overlay').style.opacity = '0';
       setTimeout(() => {
         document.getElementById('overlay').style.display = 'none';
-        document.getElementById('newspaper-wrap').style.display = 'block';
-        document.getElementById('ui-btns').style.display = 'flex';
-        setTimeout(() => document.getElementById('newspaper-wrap').style.opacity = '1', 100);
-      }, 800);
-    }, 1000);
+        document.getElementById('newspaper-container').style.display = 'block';
+        document.getElementById('nav-btns').style.display = 'flex';
+        setTimeout(() => document.getElementById('newspaper-container').style.opacity = '1', 100);
+      }, 1000);
+    }, 1200);
   }
 
   let currPage = 1;
   function turn(dir) {
-    if(dir === 1 && currPage < 5) {
+    if(dir === 1 && currPage < 3) {
       document.getElementById('p'+currPage).classList.add('flipped');
       currPage++;
     } else if (dir === -1 && currPage > 1) {
