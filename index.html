@@ -10,36 +10,125 @@
     
     <style>
         :root { --paper: #f1ede3; --ink: #1a1a1a; --wax-red: #9e1b1b; }
-        body, html { margin: 0; padding: 0; background-color: #111; color: var(--ink); font-family: 'EB Garamond', serif; overflow: hidden; }
+        
+        /* Reset and prevent body scroll during lock */
+        body, html { 
+            margin: 0; padding: 0; 
+            background-color: #111; 
+            color: var(--ink); 
+            font-family: 'EB Garamond', serif; 
+            height: 100%;
+            width: 100%;
+            overflow: hidden; 
+        }
 
         /* --- LOCK SCREEN --- */
-        #overlay { position: fixed; inset: 0; background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 3000; transition: 1.2s cubic-bezier(0.7, 0, 0.3, 1); }
-        #countdown { display: flex; gap: 15px; margin-bottom: 30px; color: #f1ede3; font-family: 'Courier Prime'; }
-        .unit { text-align: center; min-width: 45px; }
-        .num { display: block; font-size: 1.1rem; border-bottom: 1px solid #444; }
-        .lab { font-size: 0.5rem; text-transform: uppercase; opacity: 0.6; }
+        #overlay { 
+            position: fixed; inset: 0; 
+            background: #000; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            z-index: 3000; 
+            transition: 1.2s cubic-bezier(0.7, 0, 0.3, 1); 
+        }
 
-        .envelope { width: 320px; height: 220px; background: #e8e2d2; position: relative; box-shadow: 0 30px 60px rgba(0,0,0,1); display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .envelope::before { content: ''; position: absolute; top: 0; border-left: 160px solid transparent; border-right: 160px solid transparent; border-top: 110px solid #ddd6c5; z-index: 1; }
-        .wax-seal { width: 70px; height: 70px; background: var(--wax-red); border-radius: 50%; position: absolute; bottom: -35px; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; color: #ffd700; font-family: 'UnifrakturMaguntia'; font-size: 1.8rem; box-shadow: inset 0 0 10px rgba(0,0,0,0.5), 0 5px 15px rgba(0,0,0,0.4); }
+        #countdown { display: flex; gap: 10px; margin-bottom: 20px; color: #f1ede3; font-family: 'Courier Prime'; }
+        .unit { text-align: center; min-width: 40px; }
+        .num { display: block; font-size: 1rem; border-bottom: 1px solid #444; }
+        .lab { font-size: 0.45rem; text-transform: uppercase; opacity: 0.6; }
+
+        .envelope { 
+            width: 300px; height: 200px; 
+            background: #e8e2d2; 
+            position: relative; 
+            box-shadow: 0 30px 60px rgba(0,0,0,1); 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+        }
+        .envelope::before { 
+            content: ''; position: absolute; top: 0; 
+            border-left: 150px solid transparent; border-right: 150px solid transparent; 
+            border-top: 100px solid #ddd6c5; z-index: 1; 
+        }
+        .wax-seal { 
+            width: 65px; height: 65px; 
+            background: var(--wax-red); border-radius: 50%; 
+            position: absolute; bottom: -32.5px; 
+            cursor: pointer; z-index: 10; 
+            display: flex; align-items: center; justify-content: center; 
+            color: #ffd700; font-family: 'UnifrakturMaguntia'; font-size: 1.6rem; 
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5), 0 5px 15px rgba(0,0,0,0.4); 
+        }
         .wax-seal.locked { filter: grayscale(1) opacity(0.5); cursor: default; }
 
         /* --- HORIZONTAL NEWSPAPER --- */
-        .newspaper-container { display: none; height: 100vh; width: 100vw; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; white-space: nowrap; background: #000; }
-        .page { display: inline-block; vertical-align: top; width: 100vw; height: 100vh; scroll-snap-align: start; background: var(--paper); white-space: normal; overflow-y: auto; box-sizing: border-box; padding: 30px 20px; background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png'); border-right: 2px solid rgba(0,0,0,0.1); }
+        .newspaper-container { 
+            display: none; 
+            height: 100vh; 
+            width: 100vw; 
+            overflow-x: auto; 
+            overflow-y: hidden; 
+            scroll-snap-type: x mandatory; 
+            white-space: nowrap; 
+            background: #000; 
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Each page is a full-width container that allows vertical scrolling */
+        .page { 
+            display: inline-block; 
+            vertical-align: top; 
+            width: 100vw; 
+            height: 100vh; 
+            scroll-snap-align: start; 
+            background: var(--paper); 
+            white-space: normal; 
+            overflow-y: auto; /* THIS ALLOWS READING DOWN WITHOUT CUTTING OFF */
+            box-sizing: border-box; 
+            padding: 40px 20px; 
+            background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png'); 
+            border-right: 2px solid rgba(0,0,0,0.1); 
+        }
         
-        .page-inner { max-width: 800px; margin: 0 auto; padding-bottom: 50px; }
+        .page-inner { 
+            max-width: 600px; 
+            margin: 0 auto; 
+            padding-bottom: 80px; /* Space so last line isn't at the very bottom */
+        }
+
         .masthead { text-align: center; border-bottom: 5px double var(--ink); margin-bottom: 10px; }
-        .masthead h1 { font-family: 'UnifrakturMaguntia', serif; font-size: 4rem; margin: 0; }
-        .page-info { display: flex; justify-content: space-between; border-bottom: 2px solid var(--ink); font-family: 'Courier Prime'; font-size: 0.75rem; padding: 5px; margin-bottom: 30px; font-weight: bold; }
+        .masthead h1 { font-family: 'UnifrakturMaguntia', serif; font-size: 3.5rem; margin: 0; line-height: 1.1; }
+        
+        .page-info { 
+            display: flex; justify-content: space-between; 
+            border-bottom: 2px solid var(--ink); 
+            font-family: 'Courier Prime'; font-size: 0.7rem; 
+            padding: 5px; margin-bottom: 30px; 
+        }
 
-        .headline { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 2.5rem; line-height: 1; margin-bottom: 25px; text-transform: uppercase; border-bottom: 1px solid #ccc; padding-bottom: 10px; }
-        .content { font-size: 1.1rem; text-align: justify; line-height: 1.6; color: #222; margin-bottom: 30px; }
-        .content::first-letter { float: left; font-size: 4.5rem; line-height: 0.8; padding-right: 12px; font-family: 'UnifrakturMaguntia'; }
+        .headline { 
+            font-family: 'Playfair Display', serif; 
+            font-weight: 900; font-size: 2.2rem; 
+            line-height: 1.1; margin-bottom: 25px; 
+            text-transform: uppercase; 
+            border-bottom: 1px solid #ccc; 
+            padding-bottom: 10px; 
+        }
 
-        .img-frame { border: 1px solid var(--ink); padding: 8px; background: #fff; box-shadow: 10px 10px 20px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .content { font-size: 1.15rem; text-align: justify; line-height: 1.6; color: #222; margin-bottom: 30px; }
+        .content::first-letter { 
+            float: left; font-size: 4rem; line-height: 0.8; 
+            padding-right: 12px; font-family: 'UnifrakturMaguntia'; 
+        }
+
+        .img-frame { border: 1px solid var(--ink); padding: 6px; background: #fff; box-shadow: 10px 10px 20px rgba(0,0,0,0.1); margin-bottom: 25px; }
         .img-frame img { width: 100%; height: auto; filter: grayscale(1) sepia(0.2); display: block; }
-        .scroll-hint { position: fixed; bottom: 15px; right: 20px; font-family: 'Courier Prime'; font-size: 0.7rem; color: #777; pointer-events: none; }
+        
+        .scroll-hint { 
+            position: fixed; bottom: 15px; right: 20px; 
+            font-family: 'Courier Prime'; font-size: 0.7rem; 
+            color: #777; pointer-events: none; 
+            background: rgba(241, 237, 227, 0.8);
+            padding: 2px 8px; border-radius: 4px;
+        }
     </style>
 </head>
 <body>
@@ -53,7 +142,7 @@
     </div>
     <div class="envelope">
         <div id="backdoor" ondblclick="backdoorEntry()" style="font-family:'EB Garamond'; font-weight: bold; letter-spacing: 2px; cursor: pointer;">FOR MISS KASHVI</div>
-        <div style="font-size: 0.8rem; font-style: italic; margin-top: 5px;">Anniversary Edition XVIII</div>
+        <div style="font-size: 0.75rem; font-style: italic; margin-top: 5px;">Anniversary Edition XVIII</div>
         <div class="wax-seal locked" id="seal" onclick="attemptUnlock()">K</div>
     </div>
 </div>
@@ -62,47 +151,50 @@
     <div class="page">
         <div class="page-inner">
             <div class="masthead"><h1>The Birthday Times</h1></div>
-            <div class="page-info"><span>VOL. XVIII ... NO. 01</span><span>JANUARY 20, 2026</span><span>PAGE 1</span></div>
-            <div class="headline">A LEGEND IS BORN: THE WORLD WATCHES</div>
+            <div class="page-info"><span>VOL. XVIII</span><span>JAN 20, 2026</span><span>PAGE 1</span></div>
+            <div class="headline">A NEW ERA: KASHVI ENTERS ADULTHOOD</div>
             <div class="img-frame"><img src="1.jpeg"></div>
             <div class="content">
-                Today marks the beginning of a new epoch. Kashvi, a figure whose reputation for reliability precedes her, has officially reached the eighteenth milestone. Experts suggest her trajectory is unlike anything seen in the modern era. Her first 18 chapters have been characterized by an unwavering commitment to excellence and a stable build that has defied all expectations.
+                Today marks a historic transition. Kashvi, a figure whose reputation for brilliance and reliability precedes her, has officially reached the eighteenth milestone. Observers note that her first 18 years have been characterized by a stable build that has defied expectations. 
+            </div>
+            <div class="content">
+                Her entrance into adulthood is expected to be her most powerful iteration yet, with a forecast of clear skies and global success.
             </div>
         </div>
-        <div class="scroll-hint">Swipe for Next Page &rarr;</div>
+        <div class="scroll-hint">Swipe Right &rarr;</div>
     </div>
 
     <div class="page">
         <div class="page-inner">
-            <div class="page-info"><span>EDITORIAL</span><span>JANUARY 20, 2026</span><span>PAGE 2</span></div>
-            <div class="headline">THE ART OF THE DAILY GRIND</div>
+            <div class="page-info"><span>EDITORIAL</span><span>PAGE 2</span></div>
+            <div class="headline">THE ANCHOR IN THE LAB</div>
             <div class="img-frame"><img src="2.jpeg"></div>
             <div class="content">
-                Behind every great success lies a partnership built on shared earphones and lab sessions. Kashvi’s ability to remain composed under the pressures of academia has earned her the title of 'The Anchor.' It isn't just the results—it's the process. Having her by one's side makes the impossible feel like a routine task. Truly, the most reliable partner in the system.
+                Behind every major success lies the daily grind. Kashvi’s ability to remain composed under the pressures of academia has earned her the title of 'The Anchor.' Split earphones, long study sessions, and the quiet support she offers have been the backbone of the year.
             </div>
         </div>
     </div>
 
     <div class="page">
         <div class="page-inner">
-            <div class="page-info"><span>SPORTS & DRIVE</span><span>JANUARY 20, 2026</span><span>PAGE 3</span></div>
-            <div class="headline">THE SPIRIT OF COMPETITION</div>
+            <div class="page-info"><span>LOCAL NEWS</span><span>PAGE 3</span></div>
+            <div class="headline">COMPETITION & DRIVE</div>
             <div class="img-frame"><img src="7.jpeg"></div>
             <div class="content">
-                One cannot speak of Kashvi without mentioning the competitive fire that fuels her. She doesn't just meet standards; she sets them. This healthy friction has been the catalyst for growth for everyone in her orbit. Today, as she enters adulthood, the competitive forecast predicts a clean sweep of every goal she sets her sights on.
+                The fire that drives Kashvi is unlike any other. She doesn't just meet standards; she sets them. This healthy friction has been the catalyst for growth for everyone around her. Today, her competitive forecast predicts a clean sweep of every goal she pursues.
             </div>
         </div>
     </div>
 
     <div class="page">
         <div class="page-inner">
-            <div class="page-info"><span>OFFICIAL GAZETTE</span><span>JANUARY 20, 2026</span><span>PAGE 4</span></div>
+            <div class="page-info"><span>FINAL WORD</span><span>PAGE 4</span></div>
             <div class="headline">STABILITY CHECK: PERFECT 🧿</div>
             <div class="img-frame"><img src="6.jpeg"></div>
             <div class="content">
-                We conclude this anniversary edition with a simple message: The best is yet to come. To the one who keeps me on my toes, to the one who shares the earphones, and to the one who is celebrating 18 years of brilliance—Happy Birthday. Your journey is just beginning, and the world is lucky to have a partner like you.
+                To the one who keeps me on my toes and shares the laughter—Happy 18th Birthday. Your journey is just beginning, and the world is lucky to have a partner like you in it. 
             </div>
-            <div style="margin-top: 30px; border: 2px solid #000; padding: 20px; font-family:'Courier Prime'; text-align: center;">
+            <div style="margin-top: 40px; border: 2px solid #000; padding: 20px; font-family:'Courier Prime'; text-align: center; font-weight: bold;">
                 FOR THE WINS & THE LAUGHS. 🧿💙
             </div>
         </div>
@@ -140,6 +232,8 @@
         setTimeout(() => {
             document.getElementById('overlay').style.display = "none";
             document.getElementById('newspaper').style.display = "block";
+            // Important for mobile to allow internal page scrolling
+            document.body.style.overflow = "hidden"; 
         }, 1000);
     }
 </script>
