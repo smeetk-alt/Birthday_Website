@@ -47,11 +47,12 @@
             text-shadow: 0 0 10px var(--primary-blue); font-family: 'Fira Code';
         }
 
-        .system-logs { font-family: 'Fira Code', monospace; font-size: 0.6rem; color: var(--primary-blue); opacity: 0.5; line-height: 2; text-align: left; display: inline-block; min-height: 80px; }
+        .system-logs { font-family: 'Fira Code', monospace; font-size: 0.65rem; color: var(--primary-blue); opacity: 0.6; line-height: 1.8; text-align: left; display: inline-block; min-height: 100px; }
 
         #countdown { display: flex; margin-bottom: 30px; gap: 10px; justify-content: center; }
         .timer-unit { text-align: center; min-width: 65px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; border: 1px solid rgba(0, 212, 255, 0.2); }
-        .timer-num { font-size: 1.8rem; font-weight: 800; color: var(--primary-blue); display: block; }
+        .timer-num { font-size: 1.8rem; font-weight: 800; color: var(--primary-blue); display: block; font-family: 'Fira Code'; }
+        .timer-label { font-size: 0.55rem; letter-spacing: 2px; opacity: 0.7; }
 
         /* --- CONTENT --- */
         #canvas-container { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
@@ -60,14 +61,14 @@
 
         .img-card { position: relative; opacity: 0.1; filter: grayscale(1) blur(5px); transition: 1.5s all ease; transform: scale(0.9); margin-bottom: 120px; }
         .img-card.active { opacity: 1; filter: grayscale(0) blur(0); transform: scale(1); }
-        .img-card img { width: 100%; max-width: 380px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); display: block; margin: 0 auto; }
+        .img-card img { width: 100%; max-width: 380px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); display: block; margin: 0 auto; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
         
         .typewriter-box {
             margin: 20px auto 0 auto; max-width: 380px; background: rgba(10, 10, 10, 0.85); backdrop-filter: blur(20px); padding: 25px;
-            border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); font-size: 0.95rem; text-align: left;
+            border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); font-size: 0.95rem; text-align: left; line-height: 1.6;
         }
 
-        /* --- SOLID FILLED CAKE --- */
+        /* --- CAKE --- */
         #finale-section { display: none; width: 100%; padding-bottom: 150px; }
         .cake-box { height: 350px; position: relative; margin: 50px auto; width: 250px; }
         .layer { 
@@ -96,16 +97,22 @@
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0);
             background: rgba(0, 15, 30, 0.98); border: 1px solid var(--primary-blue); padding: 25px;
             z-index: 3000; font-family: 'Fira Code', monospace; border-radius: 15px; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 50px rgba(0, 212, 255, 0.3);
         }
-        .system-popup.active { transform: translate(-50%, -50%) scale(1); pointer-events: all; }
+        .system-popup.active { transform: translate(-50%, -50%) scale(1); }
         #goldenStar { position: fixed; top: 25%; right: 10%; width: 40px; height: 40px; cursor: pointer; z-index: 500; display: none; align-items: center; justify-content: center; }
-        .star-dot { width: 5px; height: 5px; background: var(--gold); border-radius: 50%; box-shadow: 0 0 15px var(--gold); animation: starPulse 1.5s infinite; }
-        @keyframes starPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.8); opacity: 0.5; } }
+        .star-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; box-shadow: 0 0 15px var(--gold); animation: starPulse 1.5s infinite; }
+        @keyframes starPulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(2.2); opacity: 0.4; } }
 
         /* --- SCRATCH --- */
         .scratch-wrap { display: none; margin: 50px 0; opacity: 0; transition: 1s; }
         #scratchCanvas { position: absolute; top: 0; left: 50%; transform: translateX(-50%); border-radius: 15px; touch-action: none; cursor: crosshair; z-index: 100; }
-        .scratch-content { width: 300px; height: 160px; margin: 0 auto; display: flex; align-items: center; justify-content: center; background: #000; color: var(--gold); border: 1px solid var(--gold); border-radius: 15px; font-weight: bold; text-align: center; padding: 20px; box-sizing: border-box;}
+        .scratch-content { 
+            width: 320px; height: 180px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            background: #050505; color: var(--gold); border: 1px solid var(--gold); border-radius: 15px; 
+            font-family: 'Playfair Display'; font-style: italic; text-align: center; padding: 25px; box-sizing: border-box;
+        }
+        .scratch-content span { font-family: 'Inter'; font-style: normal; font-size: 0.75rem; letter-spacing: 2px; margin-top: 15px; color: var(--neon-pink); opacity: 0.8; }
     </style>
 </head>
 <body>
@@ -119,22 +126,22 @@
         <div class="timer-unit"><span class="timer-num" id="mins">00</span><span class="timer-label">MINS</span></div>
         <div class="timer-unit"><span class="timer-num" id="secs">00</span><span class="timer-label">SECS</span></div>
     </div>
-    <button id="entryBtn" class="entry-btn" style="padding: 15px 40px; border-radius: 50px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.3); font-size: 0.7rem; letter-spacing: 2px;">SECURE_LINE_OFFLINE 🔒</button>
+    <button id="entryBtn" class="entry-btn" style="padding: 15px 40px; border-radius: 50px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.3); font-size: 0.7rem; letter-spacing: 2px; font-family: 'Fira Code';">SECURE_LINE_OFFLINE 🔒</button>
 </div>
 
 <div id="starPopup" class="system-popup">
-    <div style="font-size: 0.5rem; color: var(--neon-pink); margin-bottom: 10px;">> DATA_RECOVERY_SUCCESS</div>
-    <div id="popupBody" style="color: var(--primary-blue); font-size: 0.8rem;">Secret found!</div>
-    <button onclick="closePopup()" style="margin-top:20px; background:none; border:1px solid var(--primary-blue); color:white; width:100%; padding:5px; font-family:'Fira Code'; font-size: 0.6rem;">EXIT_SESSION</button>
+    <div style="font-size: 0.55rem; color: var(--neon-pink); margin-bottom: 12px; letter-spacing: 1px;">> DATA_RECOVERY_SUCCESS</div>
+    <div id="popupBody" style="color: var(--primary-blue); font-size: 0.85rem; line-height: 1.5;">Secret found!</div>
+    <button onclick="closePopup()" style="margin-top:25px; background:none; border:1px solid var(--primary-blue); color:white; width:100%; padding:8px; font-family:'Fira Code'; font-size: 0.65rem; cursor: pointer;">EXIT_SESSION</button>
 </div>
 
-<div id="goldenStar" onclick="revealStarMsg()"><div class="star-dot"></div></div>
+<div id="goldenStar" onclick="revealStarMsg()"><div class="star-dot" id="starInner"></div></div>
 <div id="canvas-container"></div>
 
 <div class="content-scroll" id="mainContent">
     <div class="container">
-        <h1 id="k-title" onclick="kEasterEgg()" style="font-size: 3.5rem; font-family: 'Playfair Display'; font-style: italic; margin-bottom: 10px; cursor: pointer;">Kashvi</h1>
-        <div id="override-msg" style="display:none; color:var(--neon-pink); font-family:'Fira Code'; font-size:0.6rem; margin-bottom: 80px;">OVERRIDE: PARTNER_STABILITY_100% 🧿</div>
+        <h1 id="k-title" onclick="kEasterEgg()" style="font-size: 4rem; font-family: 'Playfair Display'; font-style: italic; margin-bottom: 10px; cursor: pointer; text-shadow: 0 10px 30px rgba(0,0,0,0.5);">Kashvi</h1>
+        <div id="override-msg" style="display:none; color:var(--neon-pink); font-family:'Fira Code'; font-size:0.65rem; margin-bottom: 80px; letter-spacing: 2px;">OVERRIDE: PARTNER_STABILITY_100% 🧿</div>
         
         <div id="collageGrid"></div>
 
@@ -145,13 +152,16 @@
                 <div class="layer l3" id="layer3"></div>
                 <div class="layer candle-stick" id="candle"><div class="flame" id="flame"></div></div>
             </div>
-            <h2 style="font-family: 'Playfair Display'; font-size: 2.5rem; color: var(--primary-blue);">Happy 18th! 🧿</h2>
-            <p style="color: var(--neon-pink); letter-spacing: 4px; font-size: 0.7rem; margin-bottom: 50px;">FOR THE WINS & THE LAUGHS</p>
+            <h2 style="font-family: 'Playfair Display'; font-size: 3rem; color: var(--primary-blue); margin-bottom: 5px;">Happy 18th! 🧿</h2>
+            <p style="color: var(--neon-pink); letter-spacing: 5px; font-size: 0.75rem; margin-bottom: 60px; font-weight: 300;">FOR THE WINS & THE LAUGHS</p>
             
             <div class="scratch-wrap" id="scratchWrap">
-                <div style="position: relative; width: 300px; height: 160px; margin: 0 auto;">
-                    <div class="scratch-content">May your 18th year be your most powerful build yet. 🧿💙</div>
-                    <canvas id="scratchCanvas" width="300" height="160"></canvas>
+                <div style="position: relative; width: 320px; height: 180px; margin: 0 auto;">
+                    <div class="scratch-content">
+                        "May your 18th year be your most powerful build yet."
+                        <span>STABILITY_CHECK: PERFECT 🧿💙</span>
+                    </div>
+                    <canvas id="scratchCanvas" width="320" height="180"></canvas>
                 </div>
             </div>
         </div>
@@ -183,7 +193,14 @@
         grid.innerHTML += `<div class="img-card" id="card-${idx}"><img src="${item.img}"><div class="typewriter-box" id="msg-${idx}"></div></div>`;
     });
 
-    const logs = ["> Booting Life_Modules...", "> Compiling School_Memories...", "> Teenage_Phase... [100%]", "> Final_Chapter... [LOCKED]"];
+    /* --- HINT LOGS (Informational clues) --- */
+    const logs = [
+        "> Booting Life_Modules...", 
+        "> Compiling School_Memories...", 
+        "> [!] DIAGNOSTIC: Title_Integrity (Click_5x)...", 
+        "> [!] SCANNING: Hidden_Golden_Coordinates...", 
+        "> Final_Chapter... [LOCKED]"
+    ];
     let logIdx = 0;
     function typeLogs() {
         if (logIdx < logs.length) {
@@ -238,17 +255,16 @@
 
     function initScratch() {
         const canvas = document.getElementById('scratchCanvas'), ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#111'; ctx.fillRect(0,0,300,160);
-        ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.fillText('SCRATCH TO DECRYPT FINAL MODULE 🧿', 150, 85);
-        let drawing = false, vibed = false;
+        ctx.fillStyle = '#1a1a1a'; ctx.fillRect(0,0,320,180);
+        ctx.fillStyle = '#888'; ctx.font = "12px Fira Code"; ctx.textAlign = 'center'; ctx.fillText('DECRYPT FINAL MODULE 🧿', 160, 95);
+        let drawing = false;
         const scratch = (e) => {
             if(!drawing) return;
             const r = canvas.getBoundingClientRect();
             const x = (e.pageX || e.touches[0].pageX) - r.left - window.scrollX;
             const y = (e.pageY || e.touches[0].pageY) - r.top - window.scrollY;
             ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath(); ctx.arc(x, y, 25, 0, 6.28); ctx.fill();
-            if(!vibed && navigator.vibrate) { navigator.vibrate([50, 30, 50]); vibed = true; }
+            ctx.beginPath(); ctx.arc(x, y, 28, 0, 6.28); ctx.fill();
         };
         canvas.addEventListener('mousedown', () => drawing = true);
         canvas.addEventListener('touchstart', (e) => { drawing = true; e.preventDefault(); });
@@ -256,6 +272,22 @@
         canvas.addEventListener('mousemove', scratch);
         canvas.addEventListener('touchmove', scratch);
     }
+
+    /* --- STAR PROXIMITY BEACON --- */
+    document.addEventListener('mousemove', (e) => {
+        const star = document.getElementById('goldenStar');
+        if(star.style.display !== 'flex') return;
+        const starRect = star.getBoundingClientRect();
+        const dx = e.clientX - (starRect.left + 20);
+        const dy = e.clientY - (starRect.top + 20);
+        const dist = Math.sqrt(dx*dx + dy*dy);
+
+        if (dist < 200) {
+            document.getElementById('starInner').style.animationDuration = (dist/200) + 's';
+        } else {
+            document.getElementById('starInner').style.animationDuration = '1.5s';
+        }
+    });
 
     let kCount = 0;
     function kEasterEgg() { if(++kCount === 5) { window.glowPink(); document.getElementById('override-msg').style.display = 'block'; } }
