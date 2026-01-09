@@ -3,131 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Birthday Times | 18th Edition</title>
+    <title>The Birthday Times | XVIII Edition</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=UnifrakturMaguntia&family=EB+Garamond:ital,wght@0,400;0,700;1,400&family=Courier+Prime&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
-        :root { --paper: #f1ede3; --ink: #1a1a1a; --wax-red: #9e1b1b; }
+        :root { --paper: #f4f1ea; --ink: #2b2b2b; --wax-red: #8b0000; --beige: #dcd7c9; }
         
         body, html { 
             margin: 0; padding: 0; 
-            background-color: #0c0c0c; 
+            background-color: #eee9da; /* Cream Beige Background */
             color: var(--ink); 
             font-family: 'EB Garamond', serif; 
-            height: 100%; width: 100%;
-            overflow: hidden; 
+            height: 100%; width: 100%; overflow: hidden; 
         }
 
-        /* --- ENVELOPE STYLING & ANIMATION --- */
+        /* --- FLOWER ANIMATION --- */
+        .flower {
+            position: fixed; top: -10%; color: #d4a373; opacity: 0.3;
+            font-size: 2rem; pointer-events: none; z-index: 0;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+
+        /* --- LOCK SCREEN --- */
         #overlay { 
-            position: fixed; inset: 0; 
-            background: #000; 
+            position: fixed; inset: 0; background: rgba(0,0,0,0.9); 
             display: flex; flex-direction: column; justify-content: center; align-items: center; 
-            z-index: 3000; 
-            perspective: 1000px;
-            transition: opacity 1s ease-in-out;
+            z-index: 3000; perspective: 1200px;
         }
-
-        #countdown { display: flex; gap: 15px; margin-bottom: 40px; color: #f1ede3; font-family: 'Courier Prime'; }
-        .unit { text-align: center; min-width: 45px; }
-        .num { display: block; font-size: 1.2rem; border-bottom: 1px solid #444; }
-        .lab { font-size: 0.5rem; text-transform: uppercase; opacity: 0.6; }
+        #countdown { display: flex; gap: 15px; margin-bottom: 40px; color: #f4f1ea; font-family: 'Courier Prime'; z-index: 10; }
+        .unit { text-align: center; border-bottom: 1px solid #444; }
+        .num { display: block; font-size: 1.2rem; }
 
         .envelope-wrapper {
-            position: relative;
-            width: 380px; height: 260px;
-            background: #e8e2d2;
-            box-shadow: 0 40px 80px rgba(0,0,0,0.8);
-            transform-style: preserve-3d;
-            transition: transform 1.5s ease-in-out;
+            position: relative; width: 380px; height: 260px; background: #e8e2d2;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.8); transform-style: preserve-3d;
         }
-
-        /* Top Flap */
         .flap {
-            position: absolute; top: 0; left: 0;
-            width: 0; height: 0;
-            border-left: 190px solid transparent;
-            border-right: 190px solid transparent;
-            border-top: 140px solid #ddd6c5;
-            z-index: 5;
-            transform-origin: top;
-            transition: transform 0.8s ease-in-out;
+            position: absolute; top: 0; left: 0; width: 0; height: 0;
+            border-left: 190px solid transparent; border-right: 190px solid transparent;
+            border-top: 140px solid #ddd6c5; z-index: 5;
+            transform-origin: top; transition: transform 0.8s ease-in-out;
         }
-
         .wax-seal { 
-            width: 75px; height: 75px; 
-            background: var(--wax-red); border-radius: 50%; 
-            position: absolute; top: 105px; left: 50%;
-            transform: translateX(-50%);
-            cursor: pointer; z-index: 10; 
-            display: flex; align-items: center; justify-content: center; 
+            width: 75px; height: 75px; background: var(--wax-red); border-radius: 50%; 
+            position: absolute; top: 105px; left: 50%; transform: translateX(-50%);
+            cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; 
             color: #ffd700; font-family: 'UnifrakturMaguntia'; font-size: 1.8rem; 
             box-shadow: inset 0 0 10px rgba(0,0,0,0.5), 0 5px 15px rgba(0,0,0,0.4);
-            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transition: all 0.6s ease;
         }
+        .envelope-wrapper.open .flap { transform: rotateX(180deg); }
+        .envelope-wrapper.open .wax-seal { transform: translateX(-50%) translateY(160px); opacity: 0; }
 
-        .envelope-wrapper.open .flap { transform: rotateX(180deg); z-index: 0; }
-        .envelope-wrapper.open .wax-seal { transform: translateX(-50%) translateY(150px); opacity: 0; }
-
-        /* Text on Envelope */
-        .env-text {
-            position: absolute; bottom: 40px; width: 100%; text-align: center;
-            font-family: 'EB Garamond'; font-weight: bold; letter-spacing: 2px;
-            z-index: 2; color: #555;
-        }
-
-        /* --- NEWSPAPER CONTAINER --- */
+        /* --- NEWSPAPER SLIDER --- */
         .newspaper-container { 
             display: none; height: 100vh; width: 100vw; 
             overflow-x: auto; overflow-y: hidden; 
             scroll-snap-type: x mandatory; white-space: nowrap; 
-            background: #000; opacity: 0;
-            transition: opacity 1s ease-in;
+            background: transparent; z-index: 1;
         }
-
         .page { 
-            display: inline-block; vertical-align: top; 
-            width: 100vw; height: 100vh; 
-            scroll-snap-align: start; background: var(--paper); 
-            white-space: normal; overflow-y: auto; 
-            box-sizing: border-box; padding: 40px 20px; 
+            display: inline-block; vertical-align: top; width: 100vw; height: 100vh; 
+            scroll-snap-align: start; background: var(--paper); white-space: normal; 
+            overflow-y: auto; box-sizing: border-box; padding: 50px 20px;
             background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png'); 
-            border-right: 2px solid rgba(0,0,0,0.1); 
+            border: 15px solid transparent; border-image: url('https://www.transparenttextures.com/patterns/black-linen.png') 30 stretch;
+            transition: transform 0.8s ease-in-out;
         }
+        .page-inner { max-width: 700px; margin: 0 auto; padding-bottom: 100px; }
         
-        .page-inner { max-width: 600px; margin: 0 auto; padding-bottom: 80px; }
-        .masthead h1 { font-family: 'UnifrakturMaguntia', serif; font-size: 3.5rem; margin: 0; text-align: center; border-bottom: 5px double #000; }
-        .page-info { display: flex; justify-content: space-between; border-bottom: 2px solid #000; font-family: 'Courier Prime'; font-size: 0.7rem; padding: 5px; margin-bottom: 30px; }
-        .headline { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 2.2rem; text-transform: uppercase; border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 20px;}
-        .img-frame { border: 1px solid #000; padding: 6px; background: #fff; margin-bottom: 25px; }
-        .img-frame img { width: 100%; height: auto; filter: grayscale(1) sepia(0.2); display: block; }
-        .content { font-size: 1.1rem; text-align: justify; line-height: 1.6; }
+        .masthead h1 { font-family: 'UnifrakturMaguntia', serif; font-size: 4rem; text-align: center; border-bottom: 5px double #000; margin: 0; }
+        .headline { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 2.5rem; text-align: center; border-bottom: 1px solid #ccc; padding: 20px 0; margin-bottom: 20px; line-height: 1; }
+        .img-frame { border: 1px solid #000; padding: 8px; background: #fff; margin-bottom: 25px; box-shadow: 10px 10px 20px rgba(0,0,0,0.1); }
+        .img-frame img { width: 100%; filter: sepia(0.3); }
+        .content { font-size: 1.2rem; text-align: justify; line-height: 1.6; }
+        .content::first-letter { float: left; font-size: 5rem; font-family: 'UnifrakturMaguntia'; padding-right: 10px; line-height: 0.8; }
 
-        @media (max-width: 400px) {
-            .envelope-wrapper { width: 300px; height: 210px; }
-            .flap { border-left: 150px solid transparent; border-right: 150px solid transparent; border-top: 110px solid #ddd6c5; }
-        }
+        .scroll-hint { position: fixed; bottom: 20px; right: 20px; font-family: 'Courier Prime'; font-size: 0.8rem; color: #555; background: rgba(255,255,255,0.7); padding: 5px 10px; border-radius: 20px; z-index: 100; }
     </style>
 </head>
 <body>
 
+<div id="flower-container"></div>
+
 <div id="overlay">
     <div id="countdown">
-        <div class="unit"><span class="num" id="days">00</span><span class="lab">Days</span></div>
-        <div class="unit"><span class="num" id="hours">00</span><span class="lab">Hrs</span></div>
-        <div class="unit"><span class="num" id="mins">00</span><span class="lab">Mins</span></div>
-        <div class="unit"><span class="num" id="secs">00</span><span class="lab">Secs</span></div>
+        <div class="unit"><span class="num" id="days">00</span><span class="lab">DAYS</span></div>
+        <div class="unit"><span class="num" id="hours">00</span><span class="lab">HRS</span></div>
+        <div class="unit"><span class="num" id="mins">00</span><span class="lab">MINS</span></div>
+        <div class="unit"><span class="num" id="secs">00</span><span class="lab">SECS</span></div>
     </div>
-
     <div class="envelope-wrapper" id="envWrap">
         <div class="flap"></div>
-        <div class="env-text" id="backdoor" ondblclick="backdoorEntry()">
-            FOR MISS KASHVI <br>
-            <span style="font-size: 0.7rem; font-style: italic; letter-spacing: 0;">PRIVATE & CONFIDENTIAL</span>
-        </div>
-        <div class="wax-seal" id="seal" onclick="attemptUnlock()">K</div>
+        <div style="position: absolute; bottom: 40px; width: 100%; text-align: center; font-weight: bold; cursor: pointer;" ondblclick="backdoor()">FOR MISS KASHVI</div>
+        <div class="wax-seal" id="seal" onclick="unlock()">K</div>
     </div>
 </div>
 
@@ -135,68 +109,91 @@
     <div class="page">
         <div class="page-inner">
             <div class="masthead"><h1>The Birthday Times</h1></div>
-            <div class="page-info"><span>VOL. XVIII</span><span>JAN 20, 2026</span><span>PAGE 1</span></div>
-            <div class="headline">A NEW ERA: KASHVI ENTERS ADULTHOOD</div>
+            <div class="headline">A NEW LEGEND EMERGES: KASHVI AT 18</div>
             <div class="img-frame"><img src="1.jpeg"></div>
-            <div class="content">
-                Today marks a historic transition. Kashvi, a figure whose reputation for brilliance and reliability precedes her, has officially reached the eighteenth milestone.
-            </div>
+            <div class="content">Today marks a historic transition. Kashvi, known for her brilliance and unwavering reliability, has reached her eighteenth year. This milestone is hailed as the 'Perfect Build' by close associates. Her journey has been a masterclass in stability and growth.</div>
         </div>
+        <div class="scroll-hint">Swipe for next story &rarr;</div>
     </div>
+
     <div class="page">
         <div class="page-inner">
-            <div class="page-info"><span>EDITORIAL</span><span>PAGE 2</span></div>
-            <div class="headline">THE ANCHOR IN THE LAB</div>
+            <div class="headline">EDITORIAL: THE ANCHOR IN THE LAB</div>
             <div class="img-frame"><img src="2.jpeg"></div>
-            <div class="content">
-                Behind every major success lies the daily grind. Kashvi’s ability to remain composed under the pressures of academia has earned her the title of 'The Anchor.'
-            </div>
+            <div class="content">Behind every great achievement lies the daily grind. Kashvi’s ability to remain composed under the pressures of academia has earned her the title of 'The Anchor.' Shared earphones and long sessions are the foundation of this legend.</div>
+        </div>
+    </div>
+
+    <div class="page">
+        <div class="page-inner">
+            <div class="headline">THE SPIRIT OF THE COMPETITOR</div>
+            <div class="img-frame"><img src="7.jpeg"></div>
+            <div class="content">One cannot speak of Kashvi without mentioning the competitive fire that fuels her. She doesn't just meet standards; she sets them. This healthy friction has been the catalyst for growth for everyone in her orbit.</div>
+        </div>
+    </div>
+
+    <div class="page">
+        <div class="page-inner">
+            <div class="headline">LIFESTYLE: LAUGHTER AMIDST CHAOS</div>
+            <div class="img-frame"><img src="8.jpeg"></div>
+            <div class="content">Life isn't only about the labs. It’s about the random bursts of laughter that made the stressful days bearable. Kashvi’s wit remains her most lethal asset, cutting through the noise of daily life effortlessly.</div>
+        </div>
+    </div>
+
+    <div class="page">
+        <div class="page-inner">
+            <div class="headline">STABILITY CHECK: PERFECT 🧿</div>
+            <div class="img-frame"><img src="6.jpeg"></div>
+            <div class="content">As we close this anniversary edition, the message is clear: the best is yet to come. To the one who keeps me on my toes—Happy Birthday. Your journey is just beginning.</div>
+            <div style="margin-top: 50px; border: 3px double #000; padding: 20px; text-align: center; font-family: 'Courier Prime'; font-weight: bold;">FOR THE WINS & THE LAUGHS. 🧿💙</div>
         </div>
     </div>
 </div>
 
 <script>
-    const targetDate = new Date("January 20, 2026 00:00:00").getTime();
-    let timerDone = false;
+    // Create Falling Flowers
+    const flowerChars = ['🌸', '🌼', '🌿', '🍃', '💮'];
+    for (let i = 0; i < 20; i++) {
+        let f = document.createElement('div');
+        f.className = 'flower';
+        f.innerHTML = flowerChars[Math.floor(Math.random()*flowerChars.length)];
+        f.style.left = Math.random() * 100 + 'vw';
+        f.style.animationDuration = (Math.random() * 5 + 5) + 's';
+        f.style.animationDelay = Math.random() * 5 + 's';
+        document.getElementById('flower-container').appendChild(f);
+    }
 
-    function updateTimer() {
+    const target = new Date("January 20, 2026 00:00:00").getTime();
+    let isDone = false;
+
+    function update() {
         const now = Date.now();
-        const diff = targetDate - now;
-        document.getElementById('days').innerText = String(Math.max(0, Math.floor(diff/86400000))).padStart(2,'0');
-        document.getElementById('hours').innerText = String(Math.max(0, Math.floor((diff%86400000)/3600000))).padStart(2,'0');
-        document.getElementById('mins').innerText = String(Math.max(0, Math.floor((diff%3600000)/60000))).padStart(2,'0');
-        document.getElementById('secs').innerText = String(Math.max(0, Math.floor((diff%60000)/1000))).padStart(2,'0');
-        if(diff <= 0) {
-            timerDone = true;
-            document.getElementById('seal').style.boxShadow = "0 0 20px rgba(158, 27, 27, 0.8)";
-        }
+        const diff = target - now;
+        document.getElementById('days').innerText = String(Math.max(0,Math.floor(diff/86400000))).padStart(2,'0');
+        document.getElementById('hours').innerText = String(Math.max(0,Math.floor((diff%86400000)/3600000))).padStart(2,'0');
+        document.getElementById('mins').innerText = String(Math.max(0,Math.floor((diff%3600000)/60000))).padStart(2,'0');
+        document.getElementById('secs').innerText = String(Math.max(0,Math.floor((diff%60000)/1000))).padStart(2,'0');
+        if(diff <= 0) isDone = true;
     }
-    setInterval(updateTimer, 1000);
+    setInterval(update, 1000);
 
-    function attemptUnlock() { if(timerDone) startAnimation(); }
+    function unlock() { if(isDone) start(); }
+    function backdoor() { if(prompt("ACCESS:") === "KASHVI18") start(); }
 
-    function backdoorEntry() {
-        const pass = prompt("SECRET KEY:");
-        if(pass?.toUpperCase() === "KASHVI18") startAnimation();
-    }
-
-    function startAnimation() {
-        const wrap = document.getElementById('envWrap');
-        wrap.classList.add('open'); // Flap opens, seal peels
-        
+    function start() {
+        document.getElementById('envWrap').classList.add('open');
         setTimeout(() => {
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#9e1b1b', '#ffd700'] });
-            
-            // Newspaper rises and envelope fades
-            document.getElementById('overlay').style.opacity = "0";
-            document.getElementById('newspaper').style.display = "block";
-            
-            setTimeout(() => {
-                document.getElementById('overlay').style.display = "none";
-                document.getElementById('newspaper').style.opacity = "1";
-            }, 500);
-        }, 800);
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            document.getElementById('overlay').style.opacity = '0';
+            document.getElementById('newspaper').style.display = 'block';
+            setTimeout(() => { 
+                document.getElementById('overlay').style.display = 'none';
+                document.getElementById('newspaper').style.opacity = '1';
+            }, 1000);
+        }, 1000);
     }
 </script>
 </body>
 </html>
+
+
