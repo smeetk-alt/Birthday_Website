@@ -25,26 +25,26 @@
         /* --- LOCK SCREEN --- */
         #overlay { position: fixed; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 2000; background: radial-gradient(circle at center, rgba(0, 29, 61, 0.9) 0%, #000000 100%); transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
         #secret-trigger { letter-spacing: 8px; color: var(--primary-blue); font-weight: bold; margin-bottom: 30px; cursor: pointer; font-size: 0.9rem; text-shadow: 0 0 10px var(--primary-blue); font-family: 'Fira Code'; }
-        
         .system-logs { font-family: 'Fira Code', monospace; font-size: 0.7rem; color: var(--primary-blue); line-height: 1.8; text-align: left; display: inline-block; min-height: 140px; max-width: 90%; }
-        .log-hint { color: var(--cyber-alert); font-weight: bold; text-shadow: 0 0 8px var(--cyber-alert); animation: flicker 2s infinite; }
-        @keyframes flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } 80% { color: var(--primary-blue); } }
 
         #countdown { display: flex; margin-bottom: 30px; gap: 10px; justify-content: center; }
-        .timer-unit { text-align: center; min-width: 65px; background: rgba(255,255,255,0.25); padding: 10px; border-radius: 10px; border: 1px solid rgba(0, 212, 255, 0.2); }
+        .timer-unit { text-align: center; min-width: 65px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; border: 1px solid rgba(0, 212, 255, 0.2); }
         .timer-num { font-size: 1.8rem; font-weight: 800; color: var(--primary-blue); display: block; font-family: 'Fira Code'; }
         .timer-label { font-size: 0.55rem; letter-spacing: 2px; opacity: 0.7; }
 
         .entry-btn { padding: 15px 40px; border-radius: 50px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.1); font-size: 0.7rem; letter-spacing: 2px; font-family: 'Fira Code'; cursor: not-allowed; transition: 0.5s; pointer-events: none; }
         .entry-btn.ready { background: rgba(0, 212, 255, 0.1); border: 1px solid var(--primary-blue); color: white; cursor: pointer; pointer-events: auto; box-shadow: 0 0 20px rgba(0, 212, 255, 0.3); }
 
+        /* --- GAME MODULE CSS --- */
+        #game-module { margin: 40px auto 80px; width: 90%; max-width: 400px; background: rgba(0, 212, 255, 0.05); border: 1px solid var(--primary-blue); border-radius: 20px; overflow: hidden; backdrop-filter: blur(10px); }
+        #game-container canvas { display: block; width: 100%; touch-action: none; background: rgba(0,0,0,0.3); }
+
         /* --- CONTENT --- */
         #canvas-container { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
         .content-scroll { position: relative; z-index: 10; width: 100%; display: none; flex-direction: column; align-items: center; height: 100vh; overflow-y: scroll; }
         .container { text-align: center; padding: 85vh 20px 0 20px; width: 100%; max-width: 700px; box-sizing: border-box; }
         
-        .img-card { position: relative; opacity: 0; filter: grayscale(1) blur(10px); transition: 1.5s all cubic-bezier(0.16, 1, 0.3, 1); transform: translateY(50px); margin-bottom: 120px; }
-        .img-card.active { opacity: 1; filter: grayscale(0) blur(0); transform: translateY(0); }
+        .img-card { position: relative; opacity: 0; filter: grayscale(1) blur(10px); margin-bottom: 120px; }
         .img-card img { width: 100%; max-width: 380px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); display: block; margin: 0 auto; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
         .typewriter-box { margin: 20px auto 0 auto; max-width: 380px; background: rgba(10, 10, 10, 0.85); backdrop-filter: blur(20px); padding: 25px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); font-size: 0.95rem; text-align: left; line-height: 1.6; }
 
@@ -62,10 +62,7 @@
         .scratch-wrap { display: none; margin: 50px 0; opacity: 0; transition: 1s; }
         #scratchCanvas { position: absolute; top: 0; left: 50%; transform: translateX(-50%); border-radius: 15px; touch-action: none; cursor: crosshair; z-index: 100; }
         .scratch-content { width: 320px; height: 180px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #050505; color: var(--gold); border: 1px solid var(--gold); border-radius: 15px; font-family: 'Playfair Display'; font-style: italic; text-align: center; padding: 25px; box-sizing: border-box; }
-        .scratch-content span { font-family: 'Inter'; font-style: normal; font-size: 0.75rem; letter-spacing: 2px; margin-top: 15px; color: var(--neon-pink); opacity: 0.8; }
 
-        .system-popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); background: rgba(0, 15, 30, 0.98); border: 1px solid var(--primary-blue); padding: 25px; z-index: 3000; font-family: 'Fira Code', monospace; border-radius: 15px; transition: 0.3s; }
-        .system-popup.active { transform: translate(-50%, -50%) scale(1); }
         #goldenStar { position: fixed; top: 25%; right: 10%; width: 40px; height: 40px; cursor: pointer; z-index: 500; display: none; align-items: center; justify-content: center; }
         .star-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; box-shadow: 0 0 15px var(--gold); animation: starPulse 1.5s infinite; }
         @keyframes starPulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(2.2); opacity: 0.4; } }
@@ -85,20 +82,25 @@
     <button id="entryBtn" class="entry-btn">SECURE_LINE_LOCKED 🔒</button>
 </div>
 
-<div id="starPopup" class="system-popup">
-    <div style="font-size: 0.55rem; color: var(--neon-pink); margin-bottom: 12px;">> DATA_RECOVERY_SUCCESS</div>
-    <div id="popupBody" style="color: var(--primary-blue); font-size: 0.85rem;"></div>
-    <button onclick="closePopup()" style="margin-top:20px; background:none; border:1px solid var(--primary-blue); color:white; width:100%; padding:5px; font-family:'Fira Code';">EXIT</button>
-</div>
-
-<div id="goldenStar" onclick="revealStarMsg()"><div class="star-dot" id="starInner"></div></div>
+<div id="goldenStar" onclick="revealStarMsg()"><div class="star-dot"></div></div>
 <div id="canvas-container"></div>
 
 <div class="content-scroll" id="mainContent">
     <div class="container">
         <h1 id="k-title" onclick="kEasterEgg()" style="font-size: 4rem; font-family: 'Playfair Display'; font-style: italic; margin-bottom: 10px; cursor: pointer;">Kashvi</h1>
-        <div id="override-msg" style="display:none; color:var(--neon-pink); font-family:'Fira Code'; font-size:0.65rem; margin-bottom: 80px;">OVERRIDE: PARTNER_STABILITY_100% 🧿</div>
+        <div id="override-msg" style="display:none; color:var(--neon-pink); font-family:'Fira Code'; font-size:0.65rem; margin-bottom: 40px;">OVERRIDE: PARTNER_STABILITY_100% 🧿</div>
         
+        <div id="game-module">
+            <div style="padding: 15px; font-family: 'Fira Code'; font-size: 0.7rem; color: var(--primary-blue); border-bottom: 1px solid rgba(0,212,255,0.2); display: flex; justify-content: space-between;">
+                <span>MISSION: STABILITY_SYNC</span>
+                <span id="game-score">DATA: 0/18</span>
+            </div>
+            <div id="game-container"></div>
+            <button onclick="startGame()" id="start-game-btn" style="width: 100%; padding: 15px; background: rgba(0,212,255,0.1); color: white; border: none; cursor: pointer; font-family: 'Fira Code'; font-size: 0.8rem; letter-spacing: 2px;">
+                INITIALIZE_TEST [START]
+            </button>
+        </div>
+
         <div id="collageGrid"></div>
 
         <div id="finale-section">
@@ -106,26 +108,14 @@
                 <div class="layer l1" id="layer1"></div>
                 <div class="layer l2" id="layer2"></div>
                 <div class="layer l3" id="layer3"></div>
-                <div class="layer candle-stick" id="candle"><div class="flame" id="flame"></div></div>
+                <div class="layer candle-stick" id="candle"><div class="flame"></div></div>
             </div>
-            
             <h2 style="font-family: 'Playfair Display'; font-size: 3rem; color: var(--primary-blue); margin-bottom: 30px;">Happy 18th! 🧿</h2>
-            
-            <div class="neon-footer" style="margin-bottom: 40px;">
-                <span style="font-family: 'Inter'; font-weight: 800; color: var(--neon-pink); text-transform: uppercase; letter-spacing: 4px; display: block; font-size: 0.9rem; margin-bottom: 10px;">FOR THE WINS & THE LAUGHS. 💙</span>
-                <span style="font-family: 'Inter'; font-weight: 800; color: var(--neon-pink); text-transform: uppercase; letter-spacing: 2px; display: block; font-size: 1.6rem;">THE BEST IS YET TO COME. 🧿</span>
-            </div>
-
-            <p style="color: white; font-family: 'Playfair Display'; font-style: italic; font-size: 1.2rem; margin-bottom: 60px; line-height: 1.6;">
-                "May your 18th year be your most powerful build yet."<br>
-                <span style="font-family: 'Fira Code'; font-style: normal; font-size: 0.75rem; color: var(--primary-blue); letter-spacing: 2px; opacity: 0.9;">STABILITY CHECK: PERFECT 🧿💙</span>
-            </p>
-            
             <div class="scratch-wrap" id="scratchWrap">
                 <div style="position: relative; width: 320px; height: 180px; margin: 0 auto;">
                     <div class="scratch-content">
                         "May your 18th year be your most powerful build yet."
-                        <span>STABILITY_CHECK: PERFECT 🧿💙</span>
+                        <span style="display:block; font-family:'Inter'; font-size:0.75rem; color:var(--neon-pink); margin-top:10px;">STABILITY_CHECK: PERFECT 🧿💙</span>
                     </div>
                     <canvas id="scratchCanvas" width="320" height="180"></canvas>
                 </div>
@@ -137,6 +127,78 @@
 <audio id="bgMusic" loop><source src="birthday-song.mp3" type="audio/mpeg"></audio>
 
 <script>
+    /* --- GOOGLE-STANDARD OBSERVER --- */
+    class JourneyObserver {
+      constructor() {
+        this.options = { root: null, rootMargin: '0px 0px 200px 0px', threshold: 0.1 };
+        this.observer = new IntersectionObserver(this.handleIntersect.bind(this), this.options);
+      }
+      handleIntersect(entries) {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const component = entry.target;
+            component.style.willChange = 'transform, opacity'; 
+            this.reveal(component);
+            this.observer.unobserve(component);
+          }
+        });
+      }
+      reveal(el) {
+        const idx = el.id.split('-')[1];
+        el.animate([
+          { opacity: 0, transform: 'translateY(30px) scale(0.95)', filter: 'blur(10px)' },
+          { opacity: 1, transform: 'translateY(0) scale(1)', filter: 'blur(0px)' }
+        ], { duration: 1000, easing: 'cubic-bezier(0.4, 0, 0.2, 1)', fill: 'forwards' });
+        
+        // Trigger typewriter message
+        activateMessage(idx);
+      }
+    }
+
+    /* --- GAME LOGIC --- */
+    class StarGame {
+        constructor() {
+            this.score = 0; this.active = false; this.player = { x: 50, y: 100 }; this.orbs = [];
+        }
+        init(containerId) {
+            this.container = document.getElementById(containerId);
+            this.canvas = document.createElement('canvas');
+            this.ctx = this.canvas.getContext('2d');
+            this.canvas.width = this.container.offsetWidth;
+            this.canvas.height = 200;
+            this.container.appendChild(this.canvas);
+            const handleInput = (pageY) => {
+                const rect = this.canvas.getBoundingClientRect();
+                this.player.y = Math.max(10, Math.min(190, pageY - rect.top));
+            };
+            this.canvas.addEventListener('mousemove', (e) => handleInput(e.clientY));
+            this.canvas.addEventListener('touchmove', (e) => { handleInput(e.touches[0].clientY); e.preventDefault(); }, { passive: false });
+        }
+        update() {
+            if (!this.active) return;
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.ctx.fillStyle = '#fff'; this.ctx.font = "20px Inter";
+            this.ctx.fillText("🧿", this.player.x - 10, this.player.y + 7);
+            if (Math.random() < 0.03) this.orbs.push({ x: this.canvas.width, y: Math.random() * 180 + 10 });
+            this.orbs.forEach((orb, i) => {
+                orb.x -= 3;
+                this.ctx.fillStyle = '#ffd700'; this.ctx.beginPath();
+                this.ctx.arc(orb.x, orb.y, 5, 0, Math.PI*2); this.ctx.fill();
+                if (Math.hypot(this.player.x - orb.x, this.player.y - orb.y) < 25) {
+                    this.orbs.splice(i, 1); this.score++;
+                    document.getElementById('game-score').innerText = `DATA: ${this.score}/18`;
+                    if (this.score >= 18) this.win();
+                }
+            });
+            requestAnimationFrame(() => this.update());
+        }
+        win() {
+            this.active = false;
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            document.getElementById('game-score').innerText = "SYSTEM_STABLE: 100%";
+        }
+    }
+
     const data = [
         { img: "1.jpeg", text: "Happy Birthday! It’s been great having someone so reliable to navigate the daily grind with. 🤝" },
         { img: "2.jpeg", text: "From lab sessions to sharing earphones, thanks for making the long hours much more manageable. 🧪" },
@@ -148,57 +210,48 @@
         { img: "6.jpeg", text: "Genuinely glad for this bond. Looking forward to more wins and successful projects ahead. 💙" }
     ];
 
-    const starMessages = ["LOG: Most stable build in my life. 🧿", "DATA: From lab failures to major wins. 📈", "ENCRYPTION: System status: Perfect. 💙"];
     const grid = document.getElementById('collageGrid');
     data.forEach((item, idx) => {
         grid.innerHTML += `<div class="img-card" id="card-${idx}"><img src="${item.img}"><div class="typewriter-box" id="msg-${idx}"></div></div>`;
     });
 
-    const logs = [
-        "> Booting Life_Modules...", 
-        "> Compiling School_Memories...", 
-        "> [!] HINT: Click title 5x to unlock stability.", 
-        "> [!] SCANNING: Look for the golden coordinates..."
-    ];
-    let logIdx = 0;
-    let logsFinished = false;
+    // Initialize Game & Observer
+    const myGame = new StarGame();
+    const journeyLoader = new JourneyObserver();
+    function startGame() {
+        document.getElementById('start-game-btn').style.display = 'none';
+        myGame.init('game-container');
+        myGame.active = true;
+        myGame.update();
+    }
+
+    const logs = ["> Booting Life_Modules...", "> Compiling School_Memories...", "> Status: Verification Required.", "> Finalizing Stability Check..."];
+    let logIdx = 0, logsFinished = false;
 
     function typeLogs() {
         if (logIdx < logs.length) {
             let div = document.createElement('div');
-            if(logIdx === 2) div.className = "log-hint"; 
             document.getElementById('logContainer').appendChild(div);
-            let i = 0;
-            let t = setInterval(() => {
+            let i = 0, t = setInterval(() => {
                 if(i < logs[logIdx].length) div.innerHTML += logs[logIdx][i++];
-                else { 
-                    clearInterval(t); 
-                    logIdx++; 
-                    if(logIdx < logs.length) setTimeout(typeLogs, 600);
-                    else {
-                        logsFinished = true;
-                        checkSystemReady();
-                    }
-                }
+                else { clearInterval(t); logIdx++; if(logIdx < logs.length) setTimeout(typeLogs, 600); else { logsFinished = true; checkSystemReady(); } }
             }, 30);
         }
     }
     typeLogs();
 
-    const target = new Date("January 20, 2026 00:00:00").getTime();
-    
     function checkSystemReady() {
-        const diff = target - Date.now();
-        if (diff <= 0 && logsFinished) {
+        const target = new Date("January 20, 2026 00:00:00").getTime();
+        if (target - Date.now() <= 0 && logsFinished) {
             const btn = document.getElementById('entryBtn');
-            btn.innerHTML = "ENTER THE GALAXY 🧿";
+            btn.innerHTML = "OPEN GALAXY 🧿";
             btn.classList.add('ready');
             btn.onclick = unlock;
         }
     }
 
     setInterval(() => {
-        const diff = target - Date.now();
+        const diff = new Date("January 20, 2026 00:00:00").getTime() - Date.now();
         document.getElementById('days').innerText = String(Math.max(0, Math.floor(diff/86400000))).padStart(2,'0');
         document.getElementById('hours').innerText = String(Math.max(0, Math.floor((diff%86400000)/3600000))).padStart(2,'0');
         document.getElementById('mins').innerText = String(Math.max(0, Math.floor((diff%3600000)/60000))).padStart(2,'0');
@@ -206,19 +259,10 @@
         checkSystemReady();
     }, 1000);
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => { 
-            if(entry.isIntersecting) activate(entry.target.id.split('-')[1]); 
-        });
-    }, { threshold: 0.05 });
-
-    document.querySelectorAll('.img-card').forEach(c => observer.observe(c));
-
     const activated = new Set();
-    function activate(idx) {
+    function activateMessage(idx) {
         if(activated.has(idx)) return;
         activated.add(idx);
-        document.getElementById(`card-${idx}`).classList.add('active');
         let i = 0, box = document.getElementById(`msg-${idx}`), text = data[idx].text;
         let t = setInterval(() => {
             if(i < text.length) box.innerHTML += text[i++];
@@ -237,7 +281,6 @@
         ['layer1', 'layer2', 'layer3', 'candle'].forEach((id, i) => {
             setTimeout(() => {
                 document.getElementById(id).style.transform = 'translate(-50%, 0)';
-                if(navigator.vibrate) navigator.vibrate(20);
                 confetti({ particleCount: 20, origin: { y: 0.7 } });
             }, i * 800);
         });
@@ -250,15 +293,15 @@
     function initScratch() {
         const canvas = document.getElementById('scratchCanvas'), ctx = canvas.getContext('2d');
         ctx.fillStyle = '#1a1a1a'; ctx.fillRect(0,0,320,180);
-        ctx.fillStyle = '#888'; ctx.font = "12px Fira Code"; ctx.textAlign = 'center'; ctx.fillText('DECRYPT FINAL MODULE 🧿', 160, 95);
+        ctx.fillStyle = '#888'; ctx.font = "12px Fira Code"; ctx.textAlign = 'center'; ctx.fillText('SCRATCH TO DECRYPT FINAL MODULE 🧿', 160, 95);
         let drawing = false;
         const scratch = (e) => {
             if(!drawing) return;
             const r = canvas.getBoundingClientRect();
-            const x = (e.pageX || e.touches[0].pageX) - r.left - window.scrollX;
-            const y = (e.pageY || e.touches[0].pageY) - r.top - window.scrollY;
+            const x = (e.pageX || e.touches[0].pageX) - r.left;
+            const y = (e.pageY || e.touches[0].pageY) - r.top;
             ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath(); ctx.arc(x, y, 28, 0, 6.28); ctx.fill();
+            ctx.beginPath(); ctx.arc(x, y, 30, 0, 6.28); ctx.fill();
         };
         canvas.addEventListener('mousedown', () => drawing = true);
         canvas.addEventListener('touchstart', (e) => { drawing = true; e.preventDefault(); });
@@ -267,18 +310,20 @@
         canvas.addEventListener('touchmove', scratch);
     }
 
-    let kCount = 0;
     function kEasterEgg() { if(++kCount === 5) { window.glowPink(); document.getElementById('override-msg').style.display = 'block'; } }
-    function revealStarMsg() { document.getElementById('popupBody').innerText = starMessages[Math.floor(Math.random()*starMessages.length)]; document.getElementById('starPopup').classList.add('active'); }
-    function closePopup() { document.getElementById('starPopup').classList.remove('active'); }
-    function checkPass() { if(prompt("ENTER ACCESS KEY:").toUpperCase() === "KASHVI18") unlock(); }
+    function checkPass() { if(prompt("ENTER OVERRIDE CODE:").toUpperCase() === "KASHVI18") unlock(); }
 
     function unlock() {
         const audio = document.getElementById('bgMusic'); audio.volume = 0.4; audio.play().catch(()=>{});
         document.getElementById('overlay').style.opacity = '0';
         document.body.style.overflow = 'auto';
         document.getElementById('goldenStar').style.display = 'flex';
-        setTimeout(() => { document.getElementById('overlay').style.display = 'none'; document.getElementById('mainContent').style.display = 'flex'; }, 1200);
+        setTimeout(() => { 
+            document.getElementById('overlay').style.display = 'none'; 
+            document.getElementById('mainContent').style.display = 'flex'; 
+            // Start observing cards only after unlock
+            document.querySelectorAll('.img-card').forEach(c => journeyLoader.observer.observe(c));
+        }, 1200);
     }
 </script>
 
@@ -300,39 +345,14 @@
     const bloom = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
     composer.addPass(bloom);
 
-    const count = 10000, geo = new THREE.BufferGeometry(), pos = new Float32Array(count * 3), targets = new Float32Array(count * 3);
-    for(let i=0; i<count*3; i++) pos[i] = (Math.random()-0.5)*120;
+    const count = 6000, geo = new THREE.BufferGeometry(), pos = new Float32Array(count * 3);
+    for(let i=0; i<count*3; i++) pos[i] = (Math.random()-0.5)*100;
     geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    const mat = new THREE.PointsMaterial({ size: 0.12, color: 0x00d4ff, blending: THREE.AdditiveBlending });
+    const mat = new THREE.PointsMaterial({ size: 0.1, color: 0x00d4ff });
     const points = new THREE.Points(geo, mat); scene.add(points);
 
     window.glowPink = () => { mat.color.set(0xffb7c5); bloom.strength = 2.5; };
-
-    function morph(shape) {
-        for(let i=0; i<count; i++) {
-            let t = (i/count) * Math.PI * 2, i3 = i*3, s = 15;
-            if(shape === 0) {
-                targets[i3] = (s * Math.cos(t)) / (1 + Math.sin(t)**2);
-                targets[i3+1] = (s * Math.sin(t) * Math.cos(t)) / (1 + Math.sin(t)**2);
-                targets[i3+2] = 0;
-            } else {
-                let phi = Math.acos(-1 + (2 * i) / count), theta = Math.sqrt(count * Math.PI) * phi;
-                targets[i3] = s * Math.cos(theta) * Math.sin(phi);
-                targets[i3+1] = s * Math.sin(theta) * Math.sin(phi);
-                targets[i3+2] = s * Math.cos(phi);
-            }
-        }
-    }
-    setInterval(() => morph(Math.random()>0.5?0:1), 6000); morph(0);
-
-    function animate() {
-        requestAnimationFrame(animate);
-        let p = geo.attributes.position.array;
-        for(let i=0; i<count*3; i++) p[i] += (targets[i] - p[i]) * 0.03;
-        points.rotation.y += 0.002;
-        geo.attributes.position.needsUpdate = true;
-        composer.render();
-    }
+    function animate() { requestAnimationFrame(animate); points.rotation.y += 0.001; composer.render(); }
     animate();
 </script>
 </body>
