@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KashviFlix | 18th Birthday Special</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --netflix-red: #e50914;
+            --bg-black: #141414;
+            --text-white: #ffffff;
+        }
+
+        body {
+            background-color: var(--bg-black);
+            color: var(--text-white);
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* --- TUDUM INTRO --- */
+        #tudum-intro {
+            position: fixed;
+            inset: 0;
+            background: black;
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .n-logo {
+            color: var(--netflix-red);
+            font-family: 'Bebas Neue';
+            font-size: 12rem;
+            animation: zoomIn 1.6s ease-in-out forwards;
+        }
+
+        @keyframes zoomIn {
+            0% {
+                transform: scale(0.6);
+                opacity: 0;
+            }
+
+            40% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1.3);
+                opacity: 0;
+            }
+        }
+
+        /* --- PROFILE GATE --- */
+        #profile-gate {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-black);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.6s ease;
+        }
+
+        .profile-title {
+            font-size: 3.5rem;
+            font-weight: 300;
+            margin-bottom: 40px;
+        }
+
+        .profile-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .profile-avatar {
+            width: 160px;
+            height: 160px;
+            background: url('1.jpeg') center/cover;
+            border-radius: 4px;
+            border: 3px solid transparent;
+            margin-bottom: 15px;
+        }
+
+        .profile-card:hover .profile-avatar {
+            border-color: white;
+        }
+
+        .profile-card:hover {
+            transform: scale(1.05);
+        }
+
+        #pin-ui {
+            display: none;
+            text-align: center;
+        }
+
+        .pin-box {
+            background: #333;
+            border: 1px solid #555;
+            color: white;
+            font-size: 2rem;
+            width: 120px;
+            height: 50px;
+            text-align: center;
+            margin-top: 20px;
+            letter-spacing: 5px;
+        }
+
+        /* --- BROWSE UI --- */
+        #main-browse {
+            display: none;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 4%;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.9) 0%, transparent 100%);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            transition: background 0.5s;
+        }
+
+        .header-solid {
+            background: #141414 !important;
+        }
+
+        .logo {
+            color: var(--netflix-red);
+            font-family: 'Bebas Neue';
+            font-size: 2.5rem;
+            margin-right: 40px;
+        }
+
+        /* HERO */
+        .hero-banner {
+            height: 85vh;
+            position: relative;
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.8) 30%, transparent 70%),
+                url('5.jpeg') top center / cover no-repeat;
+            display: flex;
+            align-items: center;
+            padding: 0 4%;
+        }
+
+        .hero-content {
+            max-width: 650px;
+        }
+
+        .hero-title {
+            font-family: 'Bebas Neue';
+            font-size: 6rem;
+            line-height: 0.9;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background: white;
+            color: black;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.2s;
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .btn.secondary {
+            background: rgba(109, 109, 110, 0.7);
+            color: white;
+            margin-left: 10px;
+        }
+
+        /* ROWS */
+        .row {
+            margin: 20px 0 20px 4%;
+        }
+
+        .row-posters {
+            display: flex;
+            overflow-x: scroll;
+            padding: 20px 0;
+            gap: 10px;
+        }
+
+        .row-posters::-webkit-scrollbar {
+            display: none;
+        }
+
+        .poster-wrapper {
+            position: relative;
+            min-width: 160px;
+            transition: transform 0.4s;
+            cursor: pointer;
+        }
+
+        .poster-wrapper:hover {
+            transform: scale(1.1);
+            z-index: 10;
+        }
+
+        .poster-wrapper img {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 4px;
+        }
+
+        /* MODALS */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 500;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .preview-box {
+            background: #181818;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            animation: popUp 0.3s forwards;
+        }
+
+        @keyframes popUp {
+            from {
+                transform: scale(0.8);
+            }
+
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .preview-hero {
+            height: 400px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .preview-body {
+            padding: 40px;
+        }
+
+        /* CAKE DESIGN */
+        #cake-interaction {
+            text-align: center;
+            display: none;
+        }
+
+        .flame {
+            width: 15px;
+            height: 25px;
+            background: orange;
+            margin: 0 auto;
+            border-radius: 50%;
+            box-shadow: 0 0 20px orange;
+            cursor: pointer;
+            animation: flicker 0.1s infinite alternate;
+        }
+
+        @keyframes flicker {
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <audio id="bgMusic" loop>
+        <source src="birthday-song.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="tudum-intro">
+        <div class="n-logo">N</div>
+    </div>
+
+    <div id="profile-gate">
+        <div class="profile-title">Who's watching?</div>
+        <div class="profile-card" id="kashvi-profile">
+            <div class="profile-avatar"></div>
+            <div class="profile-name">Kashvi</div>
+        </div>
+
+        <div id="pin-ui">
+            <p>Enter Profile PIN</p>
+            <input type="password" maxlength="4" class="pin-box" id="pin-field" autofocus placeholder="••••">
+            <p style="color: #555; margin-top: 15px; font-size: 0.8rem;">Hint: 1818</p>
+        </div>
+    </div>
+
+    <div id="main-browse">
+        <header id="navbar">
+            <div class="logo">KASHVIFLIX</div>
+            <nav style="display:flex; gap:20px; font-size: 0.9rem; font-weight: bold;">
+                <span style="cursor:pointer">Home</span>
+                <span style="color: #b3b3b3; cursor:pointer">Series</span>
+            </nav>
+        </header>
+
+        <div class="hero-banner">
+            <div class="hero-content">
+                <div style="font-weight: bold; letter-spacing: 5px; margin-bottom: 10px;">N &nbsp; S E R I E S</div>
+                <div class="hero-title">KASHVI: CHAPTER 18</div>
+                <p style="font-size: 1.2rem; text-shadow: 2px 2px 4px black;">A Netflix Original coming-of-age story
+                    about a legend in the making. Today, the finale of childhood ends, and the premiere of adulthood
+                    begins.</p>
+                <div style="margin-top: 30px;">
+                    <button class="btn" onclick="openFinale()">▶ Play</button>
+                    <button class="btn secondary">ⓘ More Info</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <h2>Trending Now</h2>
+            <div class="row-posters" id="trend-row"></div>
+        </div>
+
+        <div class="row">
+            <h2>Top Picks for Kashvi</h2>
+            <div class="row-posters" id="picks-row"></div>
+        </div>
+    </div>
+
+    <div id="preview-modal" class="modal-overlay" onclick="closeModal()">
+        <div class="preview-box" onclick="event.stopPropagation()">
+            <div class="preview-hero" id="p-img"></div>
+            <div class="preview-body">
+                <h1 id="p-title" style="font-family: 'Bebas Neue'; font-size: 3.5rem; margin: 0;"></h1>
+                <p id="p-desc" style="font-size: 1.1rem; color: #ccc; line-height: 1.6;"></p>
+                <button class="btn" onclick="openFinale()">▶ Play Episode</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="cake-modal" class="modal-overlay">
+        <div class="preview-box" style="padding: 50px; text-align: center;">
+            <div id="cake-lock">
+                <h2>Unlock Season Finale</h2>
+                <p>Complete the word: C A _ E</p>
+                <input type="text" id="cake-input" maxlength="1" class="pin-box" style="width: 60px;">
+                <br><br>
+                <button class="btn" onclick="unlockCake()">Watch Finale</button>
+            </div>
+
+            <div id="cake-interaction">
+                <div class="flame" id="main-flame"></div>
+                <div style="width: 10px; height: 40px; background: white; margin: 0 auto;"></div>
+                <div
+                    style="width: 150px; height: 80px; background: #4e2a1e; margin: 0 auto; border-radius: 10px 10px 0 0;">
+                </div>
+                <h1 id="final-wish"
+                    style="display:none; font-family: 'Bebas Neue'; font-size: 5rem; color: var(--netflix-red); margin-top: 20px;">
+                    HAPPY 18TH BIRTHDAY!</h1>
+                <p id="wish-hint">Click the flame to make a wish</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const gallery = [
+            { img: "1.jpeg", title: "The Beginning", desc: "A heartwarming pilot episode introducing our main character." },
+            { img: "2.jpeg", title: "The Scientist", desc: "Laboratory drama and high-stakes exams. Rated 10/10 for brainpower." },
+            { img: "6.jpeg", title: "Future Gaze", desc: "A cinematic look toward the next exciting season of life." },
+            { img: "7.jpeg", title: "Duo Dynamics", desc: "Co-starring the best friends. Laughter and secrets abound." },
+            { img: "8.jpeg", title: "The Support", desc: "A story of reliability, resilience, and unconditional love." },
+            { img: "9.jpeg", title: "Pure Joy", desc: "The episode where everything goes right. A fan favorite." },
+            { img: "10.jpeg", title: "Elegance", desc: "Grace under pressure. A stunning mid-season portrait." }
+        ];
+
+        // 1. Setup Rows
+        const tr = document.getElementById('trend-row');
+        const pr = document.getElementById('picks-row');
+        gallery.forEach((item, i) => {
+            const card = `<div class="poster-wrapper" onclick="openPreview(${i})"><img src="${item.img}"></div>`;
+            tr.innerHTML += card;
+            pr.innerHTML += card;
+        });
+
+        // 2. Navbar Scroll Effect
+        window.onscroll = () => {
+            if (window.scrollY > 60) document.getElementById('navbar').classList.add('header-solid');
+            else document.getElementById('navbar').classList.remove('header-solid');
+        };
+
+        // 3. Login Logic
+        document.getElementById('kashvi-profile').onclick = () => {
+            document.getElementById('kashvi-profile').style.display = 'none';
+            document.getElementById('pin-ui').style.display = 'block';
+        };
+
+        document.getElementById('pin-field').oninput = (e) => {
+            if (e.target.value === '1818') startIntro();
+        };
+
+        function startIntro() {
+            document.getElementById('profile-gate').style.display = 'none';
+            document.getElementById('tudum-intro').style.display = 'flex';
+
+            // Play Netflix Sound
+            const tudum = new Audio('Netflix Intro Sound Effect - sound effects.mp3');
+            tudum.play();
+
+            setTimeout(() => {
+                document.getElementById('tudum-intro').style.display = 'none';
+                document.getElementById('main-browse').style.display = 'block';
+                setTimeout(() => document.getElementById('main-browse').style.opacity = 1, 50);
+
+                // Fade in Background Birthday Music
+                const bg = document.getElementById('bgMusic');
+                bg.volume = 0;
+                bg.play();
+                let v = 0;
+                const interval = setInterval(() => {
+                    if (v < 0.4) { v += 0.05; bg.volume = v; }
+                    else clearInterval(interval);
+                }, 200);
+            }, 1600);
+        }
+
+        // 4. Modal Controls
+        function openPreview(i) {
+            document.getElementById('p-img').style.backgroundImage = `url(${gallery[i].img})`;
+            document.getElementById('p-title').innerText = gallery[i].title;
+            document.getElementById('p-desc').innerText = gallery[i].desc;
+            document.getElementById('preview-modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
+        }
+
+        function openFinale() {
+            closeModal();
+            document.getElementById('cake-modal').style.display = 'flex';
+        }
+
+        function unlockCake() {
+            if (document.getElementById('cake-input').value.toUpperCase() === 'K') {
+                document.getElementById('cake-lock').style.display = 'none';
+                document.getElementById('cake-interaction').style.display = 'block';
+            }
+        }
+
+        document.getElementById('main-flame').onclick = function () {
+            this.style.display = 'none';
+            document.getElementById('wish-hint').style.display = 'none';
+            document.getElementById('final-wish').style.display = 'block';
+            confetti({ particleCount: 250, spread: 80, origin: { y: 0.6 }, colors: ['#e50914', '#ffffff', '#ffd700'] });
+        };
+    </script>
+</body>
+
+</html>

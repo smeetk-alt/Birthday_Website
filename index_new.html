@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Daily Jubilee - Special Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Allura&family=Cookie&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --paper: #f0e6d2;
+            --ink: #2b2b2b;
+            --accent: #8a0303;
+            --gold: #bd9b19;
+            --wax-red: #bb0a0a;
+            --seal-shadow: rgba(0, 0, 0, 0.4);
+            --cream: #fdf5e6;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            color: var(--ink);
+            font-family: 'Cookie', cursive;
+            font-size: 1.5rem;
+            letter-spacing: 0.5px;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* --- THE ENVELOPE (LOCK SCREEN) --- */
+        #envelope-overlay {
+            position: fixed;
+            inset: 0;
+            background: #2e2621;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 1.5s cubic-bezier(0.7, 0, 0.3, 1), opacity 1s ease;
+            perspective: 1000px;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='3' opacity='0.3'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+        }
+
+        .envelope-body {
+            width: 90%;
+            max-width: 600px;
+            height: 450px;
+            background: #d8c8b0;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            border: 2px solid #bfaea0;
+            transform-style: preserve-3d;
+            background-image: linear-gradient(135deg, #d8c8b0 0%, #c4b49c 100%);
+            padding-bottom: 40px;
+            box-sizing: border-box;
+        }
+
+        .envelope-body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 200px 300px 0 300px;
+            border-color: #e3d3bd transparent transparent transparent;
+            z-index: 2;
+            filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.1));
+            pointer-events: none;
+        }
+
+        .wax-seal {
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle at 30% 30%, #ff4d4d, var(--wax-red));
+            border-radius: 50%;
+            position: absolute;
+            top: 160px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 5px 15px var(--seal-shadow), inset 0 -5px 10px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Allura', cursive;
+            font-size: 1.8rem;
+            border: 4px solid #900;
+        }
+
+        .countdown-frame {
+            font-family: 'Cookie', cursive;
+            font-size: 1.4rem;
+            color: #5c4033;
+            margin-bottom: 20px;
+            border: 3px double #8b4513;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.4);
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* --- THE NEWSPAPER --- */
+        .newspaper {
+            width: 100%;
+            max-width: 1000px;
+            margin: 40px 20px;
+            padding: 40px;
+            background: #fffbf0;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            position: relative;
+            transform-origin: top center;
+            animation: unfold 1.5s ease-out 1s backwards;
+        }
+
+        @keyframes unfold {
+            from {
+                transform: scaleY(0.1);
+                opacity: 0;
+            }
+
+            to {
+                transform: scaleY(1);
+                opacity: 1;
+            }
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 4px double var(--ink);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .brand {
+            font-family: 'Allura', cursive;
+            font-size: clamp(3rem, 10vw, 6rem);
+            font-weight: 900;
+            margin: 10px 0;
+        }
+
+        .meta-bar {
+            border-top: 1px solid var(--ink);
+            border-bottom: 1px solid var(--ink);
+            padding: 8px 0;
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Cookie', cursive;
+            font-size: 1.1rem;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1.5fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        /* --- PHOTOSTRIP --- */
+        .photostrip-container {
+            width: 100%;
+            overflow: hidden;
+            background: #2b2b2b;
+            padding: 20px 0;
+            margin: 40px 0;
+            transform: rotate(-1deg);
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .photostrip-track {
+            display: flex;
+            gap: 50px;
+            width: max-content;
+            animation: stripScroll 40s linear infinite;
+        }
+
+        .photostrip-container:hover .photostrip-track {
+            animation-play-state: paused;
+        }
+
+        @keyframes stripScroll {
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .photo-frame {
+            background: #fff;
+            padding: 10px 10px 30px 10px;
+            width: 250px;
+            filter: sepia(0.6) contrast(1.2);
+            transition: 0.3s;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .photo-frame:hover {
+            transform: scale(1.05);
+            filter: sepia(0);
+            z-index: 5;
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+
+        /* --- IMPROVED GRAPHIC CAKE --- */
+        #cake-finish {
+            display: none;
+            margin: 80px auto;
+            max-width: 500px;
+            height: 550px;
+            position: relative;
+            border-top: 2px dashed var(--ink);
+            padding-top: 50px;
+        }
+
+        .cake-graphic {
+            position: relative;
+            width: 280px;
+            height: 300px;
+            margin: 0 auto;
+        }
+
+        .g-layer {
+            height: 85px;
+            background: linear-gradient(180deg, #3e2723 0%, #211210 100%);
+            border-radius: 10px 10px 20px 20px;
+            border: 2px solid #2b1d19;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%) translateY(-1000px);
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .g-layer.base {
+            bottom: 0;
+            width: 280px;
+            z-index: 10;
+        }
+
+        .g-layer.mid {
+            bottom: 75px;
+            width: 220px;
+            z-index: 11;
+        }
+
+        .g-layer.top {
+            bottom: 145px;
+            width: 160px;
+            z-index: 12;
+        }
+
+        .g-icing {
+            position: absolute;
+            top: -2px;
+            left: -1px;
+            right: -1px;
+            height: 45px;
+            background: #5d4037;
+            border-radius: 8px 8px 15px 15px;
+        }
+
+        .g-icing::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 15px;
+            width: 25px;
+            height: 25px;
+            background: #5d4037;
+            border-radius: 50%;
+            box-shadow: 55px 10px 0 #5d4037, 120px 5px 0 #5d4037, 180px 12px 0 #5d4037, 230px 8px 0 #5d4037;
+        }
+
+        .g-candle {
+            width: 14px;
+            height: 60px;
+            background: repeating-linear-gradient(45deg, #fff, #fff 5px, var(--accent) 5px, var(--accent) 10px);
+            position: absolute;
+            bottom: 230px;
+            left: 50%;
+            transform: translateX(-50%) scaleY(0);
+            transform-origin: bottom;
+            transition: transform 0.6s ease-out;
+            z-index: 15;
+            cursor: pointer;
+        }
+
+        .g-flame {
+            width: 20px;
+            height: 30px;
+            background: #ff9800;
+            border-radius: 50% 50% 20% 20%;
+            position: absolute;
+            top: -32px;
+            left: -3px;
+            animation: flicker 0.2s infinite alternate;
+            box-shadow: 0 0 20px #ff9800;
+        }
+
+        @keyframes flicker {
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.1);
+            }
+        }
+
+        .drop-active {
+            transform: translateX(-50%) translateY(0) !important;
+        }
+
+        .grow-active {
+            transform: translateX(-50%) scaleY(1) !important;
+        }
+
+        .crossword-section {
+            border: 3px double var(--ink);
+            padding: 20px;
+            background: #f4f4f4;
+            text-align: center;
+        }
+
+        .cw-cell {
+            width: 35px;
+            height: 35px;
+            border: 2px solid var(--ink);
+            text-align: center;
+            font-family: 'Cookie', cursive;
+            font-size: 1.8rem;
+            background: white;
+            font-weight: bold;
+        }
+
+        .cw-input {
+            background: #fffbe6;
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        @media (max-width: 800px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .newspaper {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="envelope-overlay">
+        <div class="envelope-body">
+            <div class="wax-seal" id="secretSeal">K</div>
+            <div style="text-align: center; z-index: 5; width: 80%; margin-bottom: 20px;">
+                <div class="countdown-frame" id="countdown-frame">
+                    TIME TO UNLOCK<br>
+                    <span id="cu-d">00</span>:<span id="cu-h">00</span>:<span id="cu-m">00</span>:<span
+                        id="cu-s">00</span>
+                </div>
+                <div style="font-family: 'Cookie', cursive; color: #5c4033; font-size: 1.5rem;">
+                    "To be opened on the 18th Year"
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="newspaper" id="mainPaper">
+        <header class="header">
+            <h1 class="brand">The Celebration Chronicles</h1>
+            <div class="meta-bar">
+                <span>Vol. XVIII</span>
+                <span>January 20, 2026</span>
+                <span>Price: One Smile</span>
+            </div>
+        </header>
+
+        <h2 style="text-align:center; font-family: 'Allura', cursive; font-size: 3.5rem; margin-bottom: 5px;">Extra!
+            Extra! Kashvi Turns 18!</h2>
+        <h3 id="typewriter-headline"
+            style="text-align:center; color: var(--accent); font-family: 'Allura', cursive; font-size: 2.5rem;">
+        </h3>
+
+        <div class="content-grid">
+            <div class="col-left">
+                <div style="border-bottom: 2px solid var(--ink); margin-bottom: 10px; font-weight: bold;">WEATHER</div>
+                <p>Exceptionally bright with high visibility of success.</p>
+                <div
+                    style="border: 1px solid var(--ink); padding: 10px; margin-top: 20px; transform: rotate(-2deg); font-size: 0.8rem;">
+                    <strong>CLASSIFIED:</strong> Found a friendship built on reliability. Priceless.
+                </div>
+            </div>
+
+            <div class="col-center"
+                style="border-left: 1px solid var(--ink); border-right: 1px solid var(--ink); padding: 0 20px;">
+                <p><span style="font-size: 3rem; float: left; line-height: 0.8; margin-right: 8px;">H</span>istorians
+                    agree: A milestone of this magnitude requires documentation. From lab sessions to sharing earphones,
+                    the subject of today's headline has proven that quiet strength moves mountains.</p>
+                <p>Happy Birthday to someone who makes ordinary days feel lighter. Here's to a year of massive wins and
+                    stability. 🧿</p>
+            </div>
+
+            <div class="col-right">
+                <div class="crossword-section">
+                    <p style="font-size: 0.8rem; font-style: italic;">"I have layers and icing. What am I?"</p>
+                    <div style="display:flex; gap:5px; justify-content:center; margin: 10px 0;">
+                        <div class="cw-cell">C</div>
+                        <div class="cw-cell">A</div>
+                        <input class="cw-cell cw-input" id="missingChar" maxlength="1">
+                        <div class="cw-cell">E</div>
+                    </div>
+                    <button onclick="checkPuzzle()"
+                        style="background: var(--accent); color: white; border: none; padding: 5px 15px; cursor: pointer;">SOLVE</button>
+                    <div id="cw-msg" style="font-size: 0.7rem; margin-top: 5px; font-weight: bold;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="photostrip-container">
+            <div class="photostrip-track" id="photoWrap"></div>
+        </div>
+
+        <div id="cake-finish">
+            <h2 style="text-align: center; font-family: 'Allura', cursive; font-size: 3rem;">A Grand
+                Celebration</h2>
+            <div class="cake-graphic" id="cake-stage"></div>
+            <p id="cake-instruction"
+                style="text-align: center; font-family: 'Cookie', cursive; opacity: 0; transition: 1s; margin-top: 20px; font-size: 1.6rem;">
+                Click the candle to blow it out!
+            </p>
+        </div>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="birthday-song.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const galleryData = [
+            { img: "1.jpeg", text: "The Reliable Duo 🤝", desc: "Happy Birthday! It’s been great having someone so reliable to navigate the daily grind with." },
+            { img: "2.jpeg", text: "Lab Chronicles 🧪", desc: "From lab sessions to sharing earphones, thanks for making the long hours much more manageable." },
+            { img: "7.jpeg", text: "Healthy Competition 📈", desc: "I really value the healthy competition we have. You definitely keep me on my toes." },
+            { img: "8.jpeg", text: "Silent Support 🫂", desc: "Grateful for the times you've had my back quietly. It hasn't gone unnoticed." },
+            { img: "9.jpeg", text: "Laughter Therapy 😂", desc: "Here's to all the random laughs that helped us get through the stressful days." },
+            { img: "10.jpeg", text: "Strength & Grace ✨", desc: "I admire your strength when things get tough. Glad to be on this journey with you." },
+            { img: "5.jpeg", text: "The 18th Milestone 🧿", desc: "Enjoy your 18th! It's a big milestone, and I know you're going to achieve great things." },
+            { img: "6.jpeg", text: "Future Legend 💙", desc: "Genuinely glad for this bond. Looking forward to more wins and successful projects ahead." }
+        ];
+
+        // --- LOCK SCREEN LOGIC ---
+        const targetDate = new Date("January 18, 2026 00:00:00").getTime();
+
+        function unlockSite() {
+            document.getElementById('envelope-overlay').style.transform = "translateY(100vh)";
+            document.getElementById('bgMusic').volume = 0.3;
+            document.getElementById('bgMusic').play().catch(() => { });
+            typeWriter("A Story of Stability & Joy_");
+        }
+
+        document.getElementById('secretSeal').onclick = () => {
+            const now = new Date().getTime();
+            if (targetDate - now > 0) {
+                const pass = prompt("🔒 SYSTEM LOCKED\nEnter Override Password:");
+                if (pass && pass.toUpperCase() === "KASHVI18") {
+                    unlockSite();
+                } else {
+                    alert("⛔ ACCESS DENIED. Validation Failed.");
+                }
+            } else {
+                unlockSite();
+            }
+        };
+
+        setInterval(() => {
+            const dist = targetDate - new Date().getTime();
+            if (dist > 0) {
+                document.getElementById('cu-d').innerText = String(Math.floor(dist / 86400000)).padStart(2, '0');
+                document.getElementById('cu-h').innerText = String(Math.floor((dist % 86400000) / 3600000)).padStart(2, '0');
+                document.getElementById('cu-m').innerText = String(Math.floor((dist % 3600000) / 60000)).padStart(2, '0');
+                document.getElementById('cu-s').innerText = String(Math.floor((dist % 60000) / 1000)).padStart(2, '0');
+            } else {
+                document.getElementById('countdown-frame').innerHTML = "TIME TO CELEBRATE!";
+                document.getElementById('secretSeal').style.boxShadow = "0 0 30px #ff4d4d";
+            }
+        }, 1000);
+
+        function typeWriter(text) {
+            let i = 0;
+            const el = document.getElementById('typewriter-headline');
+            const t = setInterval(() => {
+                el.innerText = text.substring(0, i++);
+                if (i > text.length) clearInterval(t);
+            }, 100);
+        }
+
+        // --- GALLERY ---
+        const track = document.getElementById('photoWrap');
+        [...galleryData, ...galleryData].forEach(item => {
+            track.innerHTML += `
+                <div class="photo-frame">
+                    <img src="${item.img}" style="${item.img === '2.jpeg' ? 'object-position: top;' : ''}">
+                    <div class="photo-caption" style="font-weight: bold; margin-top: 10px; font-size: 1.1rem;">${item.text}</div>
+                    <div class="photo-desc" style="font-size: 1.3rem; margin-top: 5px; opacity: 0.8; line-height: 1.2;">${item.desc}</div>
+                </div>`;
+        });
+
+        // --- CAKE PUZZLE ---
+        function checkPuzzle() {
+            if (document.getElementById('missingChar').value.toUpperCase() === "K") {
+                document.getElementById('cw-msg').innerText = "ASSEMBLING CAKE...";
+                document.getElementById('cw-msg').style.color = "green";
+                startCake();
+            } else {
+                document.getElementById('cw-msg').innerText = "TRY AGAIN!";
+                document.getElementById('cw-msg').style.color = "red";
+            }
+        }
+
+        function startCake() {
+            const finish = document.getElementById('cake-finish');
+            finish.style.display = "block";
+            setTimeout(() => finish.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+
+            const stage = document.getElementById('cake-stage');
+            stage.innerHTML = '';
+
+            ['base', 'mid', 'top'].forEach((type, i) => {
+                const l = document.createElement('div');
+                l.className = `g-layer ${type}`;
+                l.innerHTML = `<div class="g-icing"></div>`;
+                stage.appendChild(l);
+                setTimeout(() => l.classList.add('drop-active'), i * 500);
+            });
+
+            setTimeout(() => {
+                const candle = document.createElement('div');
+                candle.className = 'g-candle';
+                candle.innerHTML = '<div class="g-flame" id="flame"></div>';
+                candle.onclick = function () {
+                    document.getElementById('flame').style.display = 'none';
+                    document.getElementById('cake-instruction').innerText = "Happy Birthday Kashvi! 🧿";
+                    confetti({ particleCount: 200, spread: 80, origin: { y: 0.7 } });
+                };
+                stage.appendChild(candle);
+                setTimeout(() => {
+                    candle.classList.add('grow-active');
+                    document.getElementById('cake-instruction').style.opacity = "1";
+                }, 100);
+            }, 1800);
+        }
+    </script>
+</body>
+
+</html>

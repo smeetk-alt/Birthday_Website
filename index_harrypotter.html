@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kashvi's 18th | Ministry of Magic Official Record</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=IM+Fell+DW+Pica+SC&family=MedievalSharp&family=Uncial+Antiqua&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #c5a059;
+            --primary-glow: rgba(197, 160, 89, 0.5);
+            --accent-color: #4a0404;
+            --paper: #d2b48c;
+            --dark-ink: #1a1a1a;
+        }
+
+        /* House Themes */
+        body.gryffindor {
+            --primary-color: #740001;
+            --primary-glow: rgba(116, 0, 1, 0.5);
+            --accent-color: #d3a625;
+        }
+
+        body.ravenclaw {
+            --primary-color: #0e1a40;
+            --primary-glow: rgba(14, 26, 64, 0.5);
+            --accent-color: #946b2d;
+        }
+
+        body.hufflepuff {
+            --primary-color: #ecb939;
+            --primary-glow: rgba(236, 185, 57, 0.5);
+            --accent-color: #000000;
+        }
+
+        body.slytherin {
+            --primary-color: #1a472a;
+            --primary-glow: rgba(26, 71, 42, 0.5);
+            --accent-color: #5d5d5d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #050505 url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+            color: var(--paper);
+            font-family: 'IM Fell DW Pica SC', serif;
+            overflow-x: hidden;
+            position: relative;
+            transition: all 1s ease;
+        }
+
+        /* House Banner */
+        #house-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(180deg, var(--primary-color) 0%, transparent 100%);
+            padding: 20px;
+            text-align: center;
+            z-index: 500;
+            display: none;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+
+        #house-banner.show {
+            display: block;
+            opacity: 1;
+        }
+
+        .house-crest-banner {
+            font-size: 3rem;
+            margin-bottom: 5px;
+            filter: drop-shadow(0 0 10px var(--primary-glow));
+        }
+
+        .house-name-banner {
+            font-family: 'Cinzel Decorative';
+            font-size: 1.5rem;
+            color: #fff;
+            text-shadow: 0 0 20px var(--primary-glow);
+            letter-spacing: 3px;
+        }
+
+        /* === PLATFORM 9¾ === */
+        #platform-intro {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 1000px;
+        }
+
+        .brick-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background:
+                url('https://www.transparenttextures.com/patterns/brick-wall.png'),
+                linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+                #3d3026;
+            background-size: 400px, cover, cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 1.5s cubic-bezier(0.7, 0, 0.3, 1);
+        }
+
+        .platform-sign {
+            background: linear-gradient(135deg, #222, #000);
+            border: 8px solid #444;
+            padding: 50px;
+            border-radius: 50%;
+            width: 280px;
+            height: 280px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 80px rgba(0, 0, 0, 0.9), inset 0 0 40px #000;
+            cursor: pointer;
+            transition: transform 0.3s;
+            position: relative;
+        }
+
+        .platform-sign:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 100px var(--primary-glow);
+        }
+
+        .platform-sign h1 {
+            font-family: 'Cinzel Decorative';
+            color: #ddd;
+            font-size: 5rem;
+            margin: 0;
+            text-shadow: 0 0 20px var(--primary-color);
+        }
+
+        .platform-sign span {
+            color: var(--primary-color);
+            letter-spacing: 4px;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        .platform-sign::before {
+            content: '✨ TAP TO ENTER ✨';
+            position: absolute;
+            bottom: -50px;
+            font-size: 0.8rem;
+            color: var(--primary-color);
+            animation: glow 2s infinite;
+        }
+
+        @keyframes glow {
+
+            0%,
+            100% {
+                opacity: 0.5;
+            }
+
+            50% {
+                opacity: 1;
+                text-shadow: 0 0 20px var(--primary-color);
+            }
+        }
+
+        .brick-container.zoom {
+            transform: scale(10) translateZ(500px);
+            filter: blur(10px);
+            opacity: 0;
+        }
+
+        /* === GOLDEN SNITCH === */
+        #golden-snitch {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            box-shadow: 0 0 30px var(--primary-color);
+            cursor: pointer;
+            z-index: 5000;
+            display: none;
+            animation: flutter 3s infinite ease-in-out;
+        }
+
+        #golden-snitch::before,
+        #golden-snitch::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 15px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        #golden-snitch::before {
+            left: -25px;
+        }
+
+        #golden-snitch::after {
+            right: -25px;
+        }
+
+        @keyframes flutter {
+
+            0%,
+            100% {
+                top: 20%;
+                left: 10%;
+            }
+
+            25% {
+                top: 70%;
+                left: 80%;
+            }
+
+            50% {
+                top: 30%;
+                left: 90%;
+            }
+
+            75% {
+                top: 60%;
+                left: 20%;
+            }
+        }
+
+        /* === FLOATING CANDLES === */
+        .candle-layer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .candle {
+            position: absolute;
+            width: 12px;
+            height: 80px;
+            background: linear-gradient(to bottom, #f5f5dc, #8b7355);
+            border-radius: 2px;
+            box-shadow: 0 0 20px rgba(255, 200, 100, 0.3);
+        }
+
+        .flame {
+            position: absolute;
+            top: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 20px;
+            background: radial-gradient(circle, #fff 0%, #ff9d00 30%, var(--primary-color) 70%, transparent);
+            border-radius: 50% 50% 20% 20%;
+            animation: flicker 0.15s infinite alternate;
+            filter: blur(1px);
+        }
+
+        @keyframes flicker {
+            from {
+                transform: translateX(-50%) scale(1) rotate(-2deg);
+            }
+
+            to {
+                transform: translateX(-50%) scale(1.15) rotate(2deg);
+            }
+        }
+
+        /* === MAIN CONTENT === */
+        #main-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 2s;
+            min-height: 100vh;
+            padding-bottom: 100px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 120px 20px 40px;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+        }
+
+        .header h1 {
+            font-family: 'Cinzel Decorative';
+            font-size: 3.5rem;
+            color: var(--primary-color);
+            text-shadow: 0 0 30px var(--primary-glow);
+            margin-bottom: 10px;
+            transition: color 1s;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #aaa;
+            letter-spacing: 3px;
+        }
+
+        /* === PROPHET CARDS === */
+        .prophet-card {
+            background: url('https://www.transparenttextures.com/patterns/old-map.png'), var(--paper);
+            color: var(--dark-ink);
+            max-width: 700px;
+            margin: 60px auto;
+            padding: 40px;
+            border-radius: 3px;
+            box-shadow: 20px 20px 60px rgba(0, 0, 0, 0.8);
+            transform: rotate(var(--rotate, -1deg));
+            position: relative;
+            opacity: 0;
+            animation: fadeInCard 1s forwards;
+            border: 2px solid var(--primary-color);
+            transition: border-color 1s;
+        }
+
+        @keyframes fadeInCard {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .prophet-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            box-shadow: inset 0 0 100px var(--primary-glow);
+            pointer-events: none;
+            border-radius: 3px;
+        }
+
+        .prophet-header {
+            text-align: center;
+            border-bottom: 3px double var(--dark-ink);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .prophet-header h2 {
+            font-family: 'Uncial Antiqua';
+            font-size: 2rem;
+            letter-spacing: 2px;
+        }
+
+        .prophet-header .date {
+            font-size: 0.9rem;
+            font-style: italic;
+            margin-top: 5px;
+        }
+
+        .moving-portrait {
+            width: 100%;
+            height: 350px;
+            background: #222;
+            margin: 25px 0;
+            border: 15px solid var(--primary-color);
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5), 0 0 20px var(--primary-glow);
+            transition: border-color 1s, box-shadow 1s;
+        }
+
+        .moving-portrait img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: sepia(0.4) contrast(1.2) brightness(0.85);
+            animation: portraitMove 8s infinite ease-in-out;
+        }
+
+        @keyframes portraitMove {
+
+            0%,
+            100% {
+                transform: scale(1.05);
+            }
+
+            50% {
+                transform: scale(1.1) rotate(0.5deg);
+            }
+        }
+
+        .article-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            text-align: justify;
+            margin-top: 20px;
+        }
+
+        .article-text::first-letter {
+            font-size: 3rem;
+            font-family: 'Uncial Antiqua';
+            float: left;
+            line-height: 1;
+            margin-right: 5px;
+            color: var(--primary-color);
+        }
+
+        /* === PHOTO GALLERY === */
+        #photo-gallery {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.98);
+            z-index: 9000;
+            padding: 40px 20px;
+            overflow-y: auto;
+        }
+
+        .gallery-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .gallery-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .gallery-header h2 {
+            font-family: 'Cinzel Decorative';
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            transition: color 1s;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .gallery-item {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s;
+            border: 3px solid var(--primary-color);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05) rotate(2deg);
+            box-shadow: 0 15px 50px var(--primary-glow);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, var(--primary-color));
+            padding: 40px 15px 15px;
+            color: #fff;
+            font-size: 0.9rem;
+            text-align: center;
+            transition: background 1s;
+            white-space: pre-line;
+            line-height: 1.5;
+        }
+
+        .close-gallery {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            cursor: pointer;
+            font-family: 'Cinzel Decorative';
+            border-radius: 5px;
+            z-index: 9001;
+            transition: background 1s;
+        }
+
+        /* === SORTING HAT === */
+        #sorting-hat {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 9500;
+            padding: 40px 20px;
+            overflow-y: auto;
+        }
+
+        .sorting-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: url('https://www.transparenttextures.com/patterns/old-map.png'), var(--paper);
+            padding: 50px 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 100px rgba(0, 0, 0, 0.8);
+            color: var(--dark-ink);
+        }
+
+        .hat-image {
+            text-align: center;
+            font-size: 5rem;
+            margin-bottom: 30px;
+            animation: hatWiggle 2s infinite;
+        }
+
+        @keyframes hatWiggle {
+
+            0%,
+            100% {
+                transform: rotate(-5deg);
+            }
+
+            50% {
+                transform: rotate(5deg);
+            }
+        }
+
+        .sorting-title {
+            font-family: 'Cinzel Decorative';
+            font-size: 2.5rem;
+            text-align: center;
+            color: #4a0404;
+            margin-bottom: 30px;
+        }
+
+        .question {
+            margin: 30px 0;
+        }
+
+        .question h3 {
+            font-family: 'MedievalSharp';
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #4a0404;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-btn {
+            background: linear-gradient(135deg, #1a1a1a, #000);
+            color: #c5a059;
+            border: 2px solid #c5a059;
+            padding: 15px;
+            font-family: 'IM Fell DW Pica SC';
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            border-radius: 5px;
+        }
+
+        .option-btn:hover {
+            background: #c5a059;
+            color: #000;
+            transform: translateX(10px);
+        }
+
+        .house-result {
+            display: none;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .house-crest {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            animation: creastGlow 2s infinite;
+        }
+
+        @keyframes creastGlow {
+
+            0%,
+            100% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 10px var(--primary-glow));
+            }
+
+            50% {
+                transform: scale(1.1);
+                filter: drop-shadow(0 0 30px var(--primary-glow));
+            }
+        }
+
+        .house-name {
+            font-family: 'Cinzel Decorative';
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .house-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        /* === SPELL BUTTONS === */
+        .spell-section {
+            text-align: center;
+            margin: 60px 20px;
+        }
+
+        .wand-btn {
+            background: linear-gradient(135deg, #1a1a1a, #000);
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            padding: 15px 35px;
+            font-family: 'Cinzel Decorative';
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 10px;
+            font-size: 0.9rem;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .wand-btn:hover {
+            background: var(--primary-color);
+            color: #fff;
+            box-shadow: 0 0 30px var(--primary-color), 0 0 50px var(--primary-glow);
+            transform: translateY(-3px);
+        }
+
+        .wand-btn:active {
+            transform: translateY(0);
+        }
+
+        /* === SPELL EFFECTS === */
+        .lightning {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: white;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 8500;
+        }
+
+        /* === MARAUDER'S MAP === */
+        #marauders-map {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 9000;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .map-content {
+            background: url('https://www.transparenttextures.com/patterns/old-map.png'), #e8d5b7;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px;
+            border-radius: 5px;
+            color: var(--dark-ink);
+            box-shadow: 0 0 100px rgba(0, 0, 0, 0.8);
+            position: relative;
+            border: 3px solid var(--primary-color);
+            transition: border-color 1s;
+        }
+
+        .map-header {
+            text-align: center;
+            font-family: 'MedievalSharp';
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: #654321;
+        }
+
+        .footprints {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footprint {
+            text-align: center;
+        }
+
+        .footprint-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-family: 'Cinzel Decorative';
+            border-radius: 5px;
+            transition: background 1s;
+        }
+
+        /* === HOWLER === */
+        #howler {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: linear-gradient(135deg, #8b0000, #dc143c);
+            padding: 40px;
+            border-radius: 10px;
+            z-index: 9500;
+            box-shadow: 0 0 100px rgba(220, 20, 60, 0.8);
+            max-width: 500px;
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        #howler.open {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .howler-text {
+            font-family: 'Cinzel Decorative';
+            font-size: 1.5rem;
+            color: #fff;
+            text-align: center;
+            text-transform: uppercase;
+            animation: shake 0.3s infinite;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: rotate(-1deg);
+            }
+
+            50% {
+                transform: rotate(1deg);
+            }
+        }
+
+        /* === HOUSE POINTS === */
+        .house-points {
+            text-align: center;
+            margin: 40px 20px;
+        }
+
+        .hourglass {
+            display: inline-block;
+            margin: 0 20px;
+            text-align: center;
+        }
+
+        .hourglass-icon {
+            font-size: 3rem;
+        }
+
+        .points {
+            font-family: 'Cinzel Decorative';
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-top: 10px;
+            transition: color 1s;
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .prophet-card {
+                margin: 40px 20px;
+                padding: 25px;
+            }
+
+            .moving-portrait {
+                height: 250px;
+            }
+
+            .wand-btn {
+                padding: 12px 25px;
+                font-size: 0.8rem;
+            }
+
+            .platform-sign {
+                width: 220px;
+                height: 220px;
+                padding: 40px;
+            }
+
+            .platform-sign h1 {
+                font-size: 4rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sorting-container {
+                padding: 30px 20px;
+            }
+
+            .footprints {
+                flex-direction: column;
+            }
+
+            .house-name-banner {
+                font-size: 1rem;
+            }
+
+            .house-crest-banner {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HOUSE BANNER -->
+    <div id="house-banner">
+        <div class="house-crest-banner" id="bannerCrest"></div>
+        <div class="house-name-banner" id="bannerName"></div>
+    </div>
+
+    <!-- PLATFORM 9¾ -->
+    <div id="platform-intro">
+        <div class="brick-container" id="brickWall">
+            <div class="platform-sign" onclick="enterHogwarts()">
+                <h1>9¾</h1>
+                <span>KASHVI EXPRESS</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- GOLDEN SNITCH -->
+    <div id="golden-snitch" onclick="catchSnitch()"></div>
+
+    <!-- CANDLES -->
+    <div class="candle-layer" id="candleLayer"></div>
+
+    <!-- SPELL EFFECTS -->
+    <div id="spellEffects"></div>
+    <div class="lightning" id="lightning"></div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main-content">
+        <div class="header">
+            <h1>⚡ THE DAILY PROPHET ⚡</h1>
+            <p>Special Edition - Kashvi Turns 18</p>
+        </div>
+
+        <!-- PROPHET CARD 1 -->
+        <div class="prophet-card" style="--rotate: -1deg; animation-delay: 0.2s;">
+            <div class="prophet-header">
+                <h2>MINISTRY CELEBRATES KASHVI'S COMING OF AGE</h2>
+                <p class="date">January 20, 2026</p>
+            </div>
+            <div class="moving-portrait">
+                <img src="1.jpeg" alt="Kashvi's Portrait">
+            </div>
+            <div class="article-text">
+                The Ministry of Magic is pleased to announce the celebration of Kashvi's 18th birthday. Known throughout
+                the wizarding world for exceptional teamwork skills and unparalleled dedication to academic excellence,
+                this young witch has demonstrated extraordinary potential in all magical endeavors.
+            </div>
+        </div>
+
+        <!-- PROPHET CARD 2 -->
+        <div class="prophet-card" style="--rotate: 1deg; animation-delay: 0.4s;">
+            <div class="prophet-header">
+                <h2>LABORATORY CHRONICLES: A MAGICAL PARTNERSHIP</h2>
+                <p class="date">Special Report</p>
+            </div>
+            <div class="moving-portrait">
+                <img src="2.jpeg" alt="Lab Moments">
+            </div>
+            <div class="article-text">
+                From conquering complex potions to mastering advanced charms, our partnership has been nothing short of
+                magical. The shared earphones, the late-night study sessions, and those moments when understanding
+                needed no words—all testament to a friendship forged in the fires of academic pursuit.
+            </div>
+        </div>
+
+        <!-- HOUSE POINTS -->
+        <div class="house-points">
+            <h2
+                style="font-family: 'Cinzel Decorative'; color: var(--primary-color); margin-bottom: 30px; transition: color 1s;">
+                FRIENDSHIP POINTS AWARDED</h2>
+            <div class="hourglass">
+                <div class="hourglass-icon">⏳</div>
+                <div class="points">100</div>
+                <div>For Loyalty</div>
+            </div>
+            <div class="hourglass">
+                <div class="hourglass-icon">⏳</div>
+                <div class="points">100</div>
+                <div>For Strength</div>
+            </div>
+            <div class="hourglass">
+                <div class="hourglass-icon">⏳</div>
+                <div class="points">100</div>
+                <div>For Laughter</div>
+            </div>
+        </div>
+
+        <!-- SPELL SECTION -->
+        <div class="spell-section">
+            <h2
+                style="font-family: 'Cinzel Decorative'; color: var(--primary-color); margin-bottom: 30px; transition: color 1s;">
+                CAST YOUR BIRTHDAY SPELLS</h2>
+            <button class="wand-btn" onclick="castLumos()">Lumos Maxima ✨</button>
+            <button class="wand-btn" onclick="castPatronus()">Expecto Patronum 🦌</button>
+            <button class="wand-btn" onclick="castWingardium()">Wingardium Leviosa 🪶</button>
+            <button class="wand-btn" onclick="castExpelliarmus()">Expelliarmus ⚡</button>
+            <button class="wand-btn" onclick="castRiddikulus()">Riddikulus 🎭</button>
+            <button class="wand-btn" onclick="openGallery()">Photo Album 📸</button>
+            <button class="wand-btn" onclick="openSortingHat()">Sorting Hat 🎩</button>
+            <button class="wand-btn" onclick="openMap()">Marauder's Map 🗺️</button>
+            <button class="wand-btn" onclick="openHowler()">Receive Howler 📮</button>
+            <button class="wand-btn" onclick="revealSnitch()">Accio Snitch 🏆</button>
+        </div>
+
+        <!-- FINAL MESSAGE -->
+        <div class="prophet-card" style="--rotate: 0.5deg; animation-delay: 0.8s;">
+            <div class="prophet-header">
+                <h2>⚡ HAPPY 18TH BIRTHDAY, KASHVI! ⚡</h2>
+                <p class="date">From Your Friend</p>
+            </div>
+            <div class="article-text">
+                Genuinely grateful to have you as a friend. You've had my back quietly, guided me toward better choices,
+                and pushed me to improve without ever making it feel heavy. Here's hoping this year brings you all the
+                laughter, wins, and peace you deserve. May your 18th year be filled with magic, adventure, and endless
+                possibilities. 🧿💙
+            </div>
+        </div>
+    </div>
+
+    <!-- PHOTO GALLERY -->
+    <div id="photo-gallery">
+        <button class="close-gallery" onclick="closeGallery()">Close Gallery ✕</button>
+        <div class="gallery-container">
+            <div class="gallery-header">
+                <h2>⚡ MAGICAL MEMORIES ⚡</h2>
+                <p style="color: var(--primary-color); letter-spacing: 2px; transition: color 1s;">A Collection of
+                    Enchanted Moments</p>
+            </div>
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Photos will be added here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- SORTING HAT -->
+    <div id="sorting-hat">
+        <div class="sorting-container">
+            <button class="close-btn" onclick="closeSortingHat()">Close ✕</button>
+            <div class="hat-image">🎩</div>
+            <h2 class="sorting-title">The Sorting Hat Ceremony</h2>
+            <p style="text-align: center; font-style: italic; margin-bottom: 30px;">
+                "Let the hat decide where you truly belong..."
+            </p>
+
+            <div id="quizQuestions">
+                <div class="question">
+                    <h3>Question 1: What quality do you value most?</h3>
+                    <div class="options">
+                        <button class="option-btn" onclick="answerQuestion(0, 'gryffindor')">Bravery and
+                            courage</button>
+                        <button class="option-btn" onclick="answerQuestion(0, 'ravenclaw')">Intelligence and
+                            wit</button>
+                        <button class="option-btn" onclick="answerQuestion(0, 'hufflepuff')">Loyalty and hard
+                            work</button>
+                        <button class="option-btn" onclick="answerQuestion(0, 'slytherin')">Ambition and
+                            cunning</button>
+                    </div>
+                </div>
+
+                <div class="question" style="display: none;" id="q2">
+                    <h3>Question 2: How do you approach challenges?</h3>
+                    <div class="options">
+                        <button class="option-btn" onclick="answerQuestion(1, 'gryffindor')">Face them head-on with
+                            courage</button>
+                        <button class="option-btn" onclick="answerQuestion(1, 'ravenclaw')">Think through every angle
+                            first</button>
+                        <button class="option-btn" onclick="answerQuestion(1, 'hufflepuff')">Work steadily until
+                            success</button>
+                        <button class="option-btn" onclick="answerQuestion(1, 'slytherin')">Find the most efficient
+                            path</button>
+                    </div>
+                </div>
+
+                <div class="question" style="display: none;" id="q3">
+                    <h3>Question 3: What's your ideal way to spend time?</h3>
+                    <div class="options">
+                        <button class="option-btn" onclick="answerQuestion(2, 'gryffindor')">Adventure and
+                            excitement</button>
+                        <button class="option-btn" onclick="answerQuestion(2, 'ravenclaw')">Reading and
+                            learning</button>
+                        <button class="option-btn" onclick="answerQuestion(2, 'hufflepuff')">Helping friends and
+                            family</button>
+                        <button class="option-btn" onclick="answerQuestion(2, 'slytherin')">Achieving personal
+                            goals</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="house-result" id="houseResult">
+                <div class="house-crest" id="houseCrest"></div>
+                <div class="house-name" id="houseName"></div>
+                <div class="house-description" id="houseDesc"></div>
+                <button class="wand-btn" onclick="applyHouseTheme()" style="margin: 10px;">Apply House Theme 🎨</button>
+                <button class="wand-btn" onclick="resetQuiz()">Try Again</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MARAUDER'S MAP -->
+    <div id="marauders-map">
+        <div class="map-content">
+            <button class="close-btn" onclick="closeMap()">Mischief Managed</button>
+            <div class="map-header">I Solemnly Swear That I Am Up To No Good</div>
+            <p style="text-align: center; margin: 20px 0;">The Marauder's Map reveals the journey of two friends...</p>
+            <div class="footprints">
+                <div class="footprint">
+                    <div class="footprint-icon">👣</div>
+                    <div>Labs Survived</div>
+                    <div style="font-weight: bold;">47+</div>
+                </div>
+                <div class="footprint">
+                    <div class="footprint-icon">👣</div>
+                    <div>Assignments Saved</div>
+                    <div style="font-weight: bold;">23+</div>
+                </div>
+                <div class="footprint">
+                    <div class="footprint-icon">👣</div>
+                    <div>Laughs Shared</div>
+                    <div style="font-weight: bold;">∞</div>
+                </div>
+                <div class="footprint">
+                    <div class="footprint-icon">👣</div>
+                    <div>Memories Created</div>
+                    <div style="font-weight: bold;">Countless</div>
+                </div>
+            </div>
+            <p style="text-align: center; font-style: italic; margin-top: 30px; color: #654321;">
+                "From the corridors of education to the halls of friendship—a magical journey continues."
+            </p>
+        </div>
+    </div>
+
+    <!-- HOWLER -->
+    <div id="howler">
+        <div class="howler-text">
+            KASHVI! HAPPY 18TH BIRTHDAY! THIS IS YOUR YEAR TO SHINE! MAY IT BE FILLED WITH EXTRAORDINARY MAGIC AND
+            ENDLESS JOY! 🎉⚡
+        </div>
+        <button class="wand-btn" onclick="closeHowler()" style="margin-top: 20px; width: 100%;">Close Howler</button>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="Harry_potter theme song.mpeg" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Photo Gallery Data
+        const photos = [
+            { src: '1.jpeg', caption: 'Lab Sessions Together\nWhere teamwork met magic' },
+            { src: '2.jpeg', caption: 'Shared Earphones Moments\nMusic that connected hearts' },
+            { src: '3.jpeg', caption: 'Study Group Adventures\nLate nights, lasting memories' },
+            { src: '4.jpeg', caption: 'Random Laughs\nJoy in the simplest moments' },
+            { src: '5.jpeg', caption: 'Quiz Preparations\nStress turned into strength' },
+            { src: '6.jpeg', caption: 'Teamwork at Its Best\nTogether we conquered it all' },
+            { src: '7.jpeg', caption: 'Magical Memories\nMoments frozen in time' },
+            { src: '8.jpeg', caption: 'Friendship Moments\nBonds that last forever' },
+            { src: '9.jpeg', caption: 'Adventures Together\nEvery day a new story' },
+            { src: '10.jpeg', caption: 'Forever Friends\nA friendship worth celebrating' }
+        ];
+
+        // Sorting Hat Variables
+        let answers = [];
+        let currentHouse = null;
+        const houses = {
+            gryffindor: {
+                name: 'GRYFFINDOR',
+                crest: '🦁',
+                color: '#740001',
+                accent: '#d3a625',
+                desc: 'Where dwell the brave at heart! Your courage and determination make you a true Gryffindor!'
+            },
+            ravenclaw: {
+                name: 'RAVENCLAW',
+                crest: '🦅',
+                color: '#0e1a40',
+                accent: '#946b2d',
+                desc: 'Wit beyond measure is your greatest treasure! Your wisdom and creativity shine bright!'
+            },
+            hufflepuff: {
+                name: 'HUFFLEPUFF',
+                crest: '🦡',
+                color: '#ecb939',
+                accent: '#000000',
+                desc: 'True and loyal! Your dedication and kindness make you an exceptional Hufflepuff!'
+            },
+            slytherin: {
+                name: 'SLYTHERIN',
+                crest: '🐍',
+                color: '#1a472a',
+                accent: '#5d5d5d',
+                desc: 'Cunning and ambitious! Your resourcefulness and determination define true Slytherin spirit!'
+            }
+        };
+
+        // Create Floating Candles
+        function createCandles() {
+            const layer = document.getElementById('candleLayer');
+            for (let i = 0; i < 6; i++) {
+                const candle = document.createElement('div');
+                candle.className = 'candle';
+                candle.innerHTML = '<div class="flame"></div>';
+                candle.style.left = Math.random() * 90 + 5 + '%';
+                candle.style.top = Math.random() * 70 + '%';
+
+                candle.animate([
+                    { transform: 'translateY(0px)' },
+                    { transform: 'translateY(-40px)' },
+                    { transform: 'translateY(0px)' }
+                ], {
+                    duration: 4000 + Math.random() * 3000,
+                    iterations: Infinity,
+                    easing: 'ease-in-out'
+                });
+
+                layer.appendChild(candle);
+            }
+        }
+
+        // Initialize Photo Gallery
+        function initGallery() {
+            const grid = document.getElementById('galleryGrid');
+            photos.forEach(photo => {
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+                item.innerHTML = `
+                    <img src="${photo.src}" alt="${photo.caption}">
+                    <div class="gallery-caption">${photo.caption}</div>
+                `;
+                item.onclick = () => {
+                    confetti({
+                        particleCount: 50,
+                        spread: 60,
+                        origin: { y: 0.7 },
+                        colors: currentHouse ? [houses[currentHouse].color, houses[currentHouse].accent] : ['#c5a059', '#ffd700']
+                    });
+                };
+                grid.appendChild(item);
+            });
+        }
+
+        // Enter Hogwarts
+        function enterHogwarts() {
+            const wall = document.getElementById('brickWall');
+            wall.classList.add('zoom');
+
+            const audio = document.getElementById('bgMusic');
+            audio.volume = 0;
+            audio.play().catch(() => { });
+            let v = 0;
+            let fadeIn = setInterval(() => {
+                if (v < 0.3) {
+                    v += 0.05;
+                    audio.volume = v;
+                } else {
+                    clearInterval(fadeIn);
+                }
+            }, 200);
+
+            setTimeout(() => {
+                document.getElementById('platform-intro').style.display = 'none';
+                const main = document.getElementById('main-content');
+                main.style.display = 'block';
+                setTimeout(() => {
+                    main.style.opacity = '1';
+                    createCandles();
+                    initGallery();
+                }, 100);
+            }, 1500);
+        }
+
+        // === SPELL EFFECTS ===
+
+        // Lumos
+        function castLumos() {
+            document.body.style.transition = "0.5s";
+            document.body.style.background = "#2a2a1a";
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ffffff', '#ffff00']
+            });
+            setTimeout(() => {
+                document.body.style.background = "#050505";
+            }, 2000);
+        }
+
+        // Patronus
+        function castPatronus() {
+            const colors = currentHouse ? [houses[currentHouse].color, '#ffffff', houses[currentHouse].accent] : ['#00fbff', '#ffffff', '#0099ff'];
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    confetti({
+                        particleCount: 100,
+                        spread: 100,
+                        origin: { y: 0.7 },
+                        colors: colors,
+                        shapes: ['circle']
+                    });
+                }, i * 300);
+            }
+        }
+
+        // Wingardium Leviosa
+        function castWingardium() {
+            const candles = document.querySelectorAll('.candle');
+            candles.forEach((candle, i) => {
+                setTimeout(() => {
+                    candle.animate([
+                        { transform: candle.style.transform || 'translateY(0)' },
+                        { transform: 'translateY(-200px)' },
+                        { transform: candle.style.transform || 'translateY(0)' }
+                    ], {
+                        duration: 2000,
+                        easing: 'ease-in-out'
+                    });
+                }, i * 100);
+            });
+        }
+
+        // Expelliarmus
+        function castExpelliarmus() {
+            const lightning = document.getElementById('lightning');
+            lightning.style.opacity = '0.8';
+            setTimeout(() => { lightning.style.opacity = '0'; }, 100);
+            setTimeout(() => { lightning.style.opacity = '0.8'; }, 200);
+            setTimeout(() => { lightning.style.opacity = '0'; }, 300);
+
+            confetti({
+                particleCount: 150,
+                spread: 180,
+                origin: { y: 0.5 },
+                colors: currentHouse ? [houses[currentHouse].color, houses[currentHouse].accent, '#ffff00'] : ['#ff0000', '#ff6600', '#ffff00'],
+                startVelocity: 45
+            });
+        }
+
+        // Riddikulus
+        function castRiddikulus() {
+            const emojis = ['😂', '🤣', '😆', '😄', '😁', '🎉', '🎊', '✨', '🌟', '💫'];
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const emoji = document.createElement('div');
+                    emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    emoji.style.position = 'fixed';
+                    emoji.style.left = Math.random() * 100 + '%';
+                    emoji.style.top = '-50px';
+                    emoji.style.fontSize = '3rem';
+                    emoji.style.zIndex = '9000';
+                    emoji.style.pointerEvents = 'none';
+                    document.body.appendChild(emoji);
+
+                    emoji.animate([
+                        { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+                        { transform: 'translateY(100vh) rotate(720deg)', opacity: 0 }
+                    ], {
+                        duration: 3000,
+                        easing: 'ease-in'
+                    });
+
+                    setTimeout(() => emoji.remove(), 3000);
+                }, i * 100);
+            }
+        }
+
+        // === GALLERY ===
+        function openGallery() {
+            document.getElementById('photo-gallery').style.display = 'block';
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                colors: currentHouse ? [houses[currentHouse].color, houses[currentHouse].accent] : ['#c5a059', '#ffd700']
+            });
+        }
+
+        function closeGallery() {
+            document.getElementById('photo-gallery').style.display = 'none';
+        }
+
+        // === SORTING HAT ===
+        function openSortingHat() {
+            document.getElementById('sorting-hat').style.display = 'block';
+            document.getElementById('houseResult').style.display = 'none';
+            document.getElementById('quizQuestions').style.display = 'block';
+        }
+
+        function closeSortingHat() {
+            document.getElementById('sorting-hat').style.display = 'none';
+        }
+
+        function answerQuestion(qNum, house) {
+            answers.push(house);
+
+            if (qNum < 2) {
+                document.querySelectorAll('.question')[qNum].style.display = 'none';
+                document.getElementById('q' + (qNum + 2)).style.display = 'block';
+            } else {
+                sortIntoHouse();
+            }
+        }
+
+        function sortIntoHouse() {
+            const counts = {};
+            answers.forEach(a => counts[a] = (counts[a] || 0) + 1);
+            const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+            currentHouse = sorted[0][0];
+            const house = houses[currentHouse];
+
+            document.getElementById('quizQuestions').style.display = 'none';
+            document.getElementById('houseCrest').textContent = house.crest;
+            document.getElementById('houseName').textContent = house.name;
+            document.getElementById('houseName').style.color = house.color;
+            document.getElementById('houseDesc').textContent = house.desc;
+            document.getElementById('houseResult').style.display = 'block';
+
+            confetti({
+                particleCount: 200,
+                spread: 120,
+                origin: { y: 0.6 },
+                colors: [house.color, house.accent, '#ffd700']
+            });
+        }
+
+        function applyHouseTheme() {
+            if (!currentHouse) return;
+
+            const house = houses[currentHouse];
+
+            // Apply house class to body
+            document.body.className = currentHouse;
+
+            // Show house banner
+            const banner = document.getElementById('house-banner');
+            document.getElementById('bannerCrest').textContent = house.crest;
+            document.getElementById('bannerName').textContent = house.name + ' PRIDE';
+            banner.classList.add('show');
+
+            // Confetti celebration
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    confetti({
+                        particleCount: 100,
+                        spread: 100,
+                        origin: { y: 0.6 },
+                        colors: [house.color, house.accent, '#ffd700']
+                    });
+                }, i * 300);
+            }
+
+            // Close sorting hat
+            closeSortingHat();
+
+            // Alert
+            alert(`🎉 Welcome to ${house.name}! The entire website now reflects your house colors! 🎉`);
+        }
+
+        function resetQuiz() {
+            answers = [];
+            document.getElementById('houseResult').style.display = 'none';
+            document.getElementById('quizQuestions').style.display = 'block';
+            document.querySelectorAll('.question').forEach((q, i) => {
+                q.style.display = i === 0 ? 'block' : 'none';
+            });
+        }
+
+        // === OTHER FUNCTIONS ===
+        function openMap() {
+            document.getElementById('marauders-map').style.display = 'block';
+        }
+
+        function closeMap() {
+            document.getElementById('marauders-map').style.display = 'none';
+        }
+
+        function openHowler() {
+            document.getElementById('howler').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('howler').classList.add('open');
+            }, 100);
+        }
+
+        function closeHowler() {
+            document.getElementById('howler').classList.remove('open');
+            setTimeout(() => {
+                document.getElementById('howler').style.display = 'none';
+            }, 500);
+        }
+
+        function revealSnitch() {
+            document.getElementById('golden-snitch').style.display = 'block';
+        }
+
+        function catchSnitch() {
+            confetti({
+                particleCount: 200,
+                spread: 160,
+                origin: { y: 0.6 },
+                colors: currentHouse ? [houses[currentHouse].color, houses[currentHouse].accent, '#ffd700'] : ['#c5a059', '#ffd700', '#ffed4e']
+            });
+            alert('🏆 150 POINTS TO YOU! You caught the Golden Snitch! Wishing you victories in everything you pursue! 🏆');
+            document.getElementById('golden-snitch').style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>
