@@ -379,7 +379,8 @@
                     <span id="cu-d">00</span>:<span id="cu-h">00</span>:<span id="cu-m">00</span>:<span
                         id="cu-s">00</span>
                 </div>
-                <div style="font-family: 'Cookie', cursive; color: #5c4033; font-size: 1.5rem;">
+                <div id="secretTrigger"
+                    style="font-family: 'Cookie', cursive; color: #5c4033; font-size: 1.5rem; cursor: pointer;">
                     "To be opened on the 18th Year"
                 </div>
             </div>
@@ -469,7 +470,7 @@
         ];
 
         // --- LOCK SCREEN LOGIC ---
-        const targetDate = new Date("January 18, 2026 00:00:00").getTime();
+        const targetDate = new Date("January 20, 2026 00:00:00").getTime();
 
         function unlockSite() {
             document.getElementById('envelope-overlay').style.transform = "translateY(100vh)";
@@ -478,17 +479,23 @@
             typeWriter("A Story of Stability & Joy_");
         }
 
+        // NORMAL UNLOCK (Wax Seal) - Only works when timer is out
         document.getElementById('secretSeal').onclick = () => {
             const now = new Date().getTime();
-            if (targetDate - now > 0) {
-                const pass = prompt("🔒 SYSTEM LOCKED\nEnter Override Password:");
-                if (pass && pass.toUpperCase() === "KASHVI18") {
-                    unlockSite();
-                } else {
-                    alert("⛔ ACCESS DENIED. Validation Failed.");
-                }
-            } else {
+            if (targetDate - now <= 0) {
                 unlockSite();
+            } else {
+                alert("⏳ THE TIME IS NOT YET RIGHT\nThis envelope is sealed until the 18th Year.");
+            }
+        };
+
+        // SECRET OVERRIDE (Clicking the quote)
+        document.getElementById('secretTrigger').onclick = () => {
+            const pass = prompt("🔒 AUTHORIZED PERSONNEL ONLY\nEnter Override Password:");
+            if (pass && pass.toUpperCase() === "KASHVI18") {
+                unlockSite();
+            } else if (pass) {
+                alert("⛔ ACCESS DENIED. Fingerprint required... just kidding, wrong password.");
             }
         };
 
