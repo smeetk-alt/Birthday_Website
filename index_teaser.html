@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special Invitation - Kashvi's 18th</title>
+    <link href="https://fonts.googleapis.com/css2?family=Allura&family=Cookie&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --wax-red: #bb0a0a;
+            --gold: #bd9b19;
+            --ink: #2b2b2b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #2e2621 0%, #1a1410 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cookie', cursive;
+            color: #f0e6d2;
+            overflow-x: hidden;
+            overflow-y: auto;
+            position: relative;
+            padding: 20px;
+        }
+
+        /* Floating particles */
+        .particles {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(189, 155, 25, 0.4);
+            border-radius: 50%;
+            animation: float 15s infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-100px) translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Envelope */
+        .envelope-container {
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            z-index: 10;
+            animation: floatIn 2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes floatIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .envelope-body {
+            width: 100%;
+            aspect-ratio: 3/2;
+            background: linear-gradient(135deg, #d8c8b0 0%, #c4b49c 100%);
+            position: relative;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+            border: 2px solid #bfaea0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+        }
+
+        /* Envelope flap */
+        .envelope-body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 150px 250px 0 250px;
+            border-color: #e3d3bd transparent transparent transparent;
+            filter: drop-shadow(0 5px 8px rgba(0, 0, 0, 0.2));
+            z-index: 2;
+        }
+
+        .wax-seal {
+            width: 90px;
+            height: 90px;
+            background: radial-gradient(circle at 30% 30%, #ff4d4d, var(--wax-red));
+            border-radius: 50%;
+            position: absolute;
+            top: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5), inset 0 -5px 10px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Allura', cursive;
+            font-size: 2.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            border: 5px solid #900;
+            transition: all 0.3s ease;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5), 0 0 0 0 rgba(255, 77, 77, 0.7);
+            }
+
+            50% {
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5), 0 0 0 20px rgba(255, 77, 77, 0);
+            }
+        }
+
+        .wax-seal:hover {
+            transform: translateX(-50%) scale(1.1);
+            box-shadow: 0 0 40px rgba(255, 77, 77, 0.8);
+        }
+
+        .teaser-content {
+            text-align: center;
+            z-index: 5;
+            position: relative;
+            margin-top: 40px;
+            width: 80%;
+        }
+
+        .teaser-title {
+            font-family: 'Allura', cursive;
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            color: #5c4033;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3);
+        }
+
+        .countdown-display {
+            font-size: clamp(1.4rem, 4vw, 2rem);
+            color: #5c4033;
+            border: 3px double #8b4513;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.5);
+            font-weight: bold;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .countdown-display span {
+            color: var(--wax-red);
+            font-size: 1.2em;
+        }
+
+        .secret-hint {
+            font-size: 1.2rem;
+            color: #5c4033;
+            font-style: italic;
+            opacity: 0.9;
+            margin-top: 10px;
+        }
+
+        /* Unlocked state */
+        .unlocked {
+            animation: openEnvelope 1.5s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+        }
+
+        @keyframes openEnvelope {
+            to {
+                transform: translateY(-120vh);
+                opacity: 0;
+            }
+        }
+
+        /* Teaser message after unlock */
+        .message-reveal {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #2e2621 0%, #1a1410 100%);
+            z-index: 100;
+            opacity: 0;
+            animation: fadeIn 2s ease forwards;
+        }
+
+        .message-reveal.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+        }
+
+        .message-box {
+            max-width: 700px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 60px 40px;
+            background: linear-gradient(135deg, #f0e6d2 0%, #e8dcc8 100%);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+            border: 3px solid var(--gold);
+            text-align: center;
+            border-radius: 10px;
+            animation: scaleIn 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.5s backwards;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.5) rotate(-5deg);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .message-title {
+            font-family: 'Allura', cursive;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            color: var(--wax-red);
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .message-text {
+            font-size: clamp(1.4rem, 3vw, 2rem);
+            color: var(--ink);
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, var(--wax-red) 0%, #8a0303 100%);
+            color: white;
+            border: none;
+            padding: 18px 45px;
+            font-family: 'Cookie', cursive;
+            font-size: 1.8rem;
+            cursor: pointer;
+            border-radius: 50px;
+            box-shadow: 0 10px 25px rgba(138, 3, 3, 0.4);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(138, 3, 3, 0.6);
+            background: linear-gradient(135deg, #c00 0%, var(--wax-red) 100%);
+        }
+
+        .cta-button.secondary {
+            background: linear-gradient(135deg, #5c4033 0%, #3e2a1f 100%);
+            box-shadow: 0 10px 25px rgba(92, 64, 51, 0.4);
+        }
+
+        .cta-button.secondary:hover {
+            background: linear-gradient(135deg, #6d4f3e 0%, #5c4033 100%);
+            box-shadow: 0 15px 35px rgba(92, 64, 51, 0.6);
+        }
+
+        .choice-question {
+            font-size: clamp(1.3rem, 3vw, 1.8rem);
+            color: var(--ink);
+            margin: 25px 0;
+            font-style: italic;
+            line-height: 1.5;
+        }
+
+        .choice-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .choice-btn {
+            flex: 1;
+            min-width: 200px;
+            max-width: 280px;
+        }
+
+        @media (max-width: 600px) {
+            .envelope-body::before {
+                border-width: 100px 200px 0 200px;
+            }
+
+            .wax-seal {
+                width: 70px;
+                height: 70px;
+                font-size: 2rem;
+                top: 80px;
+            }
+
+            .message-box {
+                padding: 40px 25px;
+                margin: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Floating particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Main Teaser Message (No Lock) -->
+    <div class="message-box" id="mainMessageBox"
+        style="position: relative; z-index: 10; animation: scaleIn 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.5s backwards;">
+        <!-- Countdown Timer at Top -->
+        <div class="countdown-display" id="countdownDisplay" style="margin-bottom: 30px;">
+            <div style="font-size: 1rem; margin-bottom: 8px; opacity: 0.8;">Time Until the Big Day:</div>
+            <span id="timerText" style="font-size: 1.4em;">LOADING...</span>
+        </div>
+
+        <div class="message-title">Tonight, You Turn 18! ✨</div>
+        <div class="message-text" style="line-height: 1.8;">
+            <strong style="color: var(--wax-red); font-size: 1.3em;">Dear Kashvi,</strong><br><br>
+
+            As the clock ticks closer to midnight, know that something extraordinary awaits you.<br>
+            A celebration crafted with care, filled with memories, laughter, and all the good vibes you deserve.<br><br>
+
+            <span style="font-size: 1.15em; font-style: italic; color: var(--gold);">
+                Here's to 18 years of being absolutely incredible.<br>
+                Here's to your quiet strength that moves mountains.<br>
+                Here's to every little moment that made this friendship priceless. 🧿
+            </span><br><br>
+
+            <strong style="font-size: 1.2em;">May this year bring you everything your heart desires and
+                more!</strong><br>
+            <span style="font-size: 0.95em; opacity: 0.9;">The journey ahead is yours to conquer. Let's make it
+                legendary.</span>
+        </div>
+        <div class="choice-question" style="margin-top: 35px; font-size: 1.65rem; font-weight: bold;">
+            A digital celebration awaits...<br>
+            <span style="font-size: 0.8em; opacity: 0.85; font-weight: normal; font-style: italic;">
+                But some moments are best shared together, don't you think?
+            </span>
+        </div>
+        <div class="choice-buttons">
+            <button class="cta-button choice-btn primary-choice" onclick="showWaitMessage()">
+                ⏰ Save It for Class ✨
+            </button>
+            <button class="cta-button choice-btn secondary" onclick="confirmOpen()">
+                🎁 I Can't Wait...
+            </button>
+        </div>
+        <div style="font-size: 0.9rem; margin-top: 15px; opacity: 0.7; font-style: italic;">
+            (Trust me, the anticipation will make it even sweeter! 😊)
+        </div>
+    </div>
+
+    <!-- Wait Message -->
+    <div class="message-reveal" id="waitMessage">
+        <div class="message-box">
+            <div class="message-title">That's the Spirit! 🎉</div>
+            <div class="message-text" style="line-height: 1.8;">
+                <strong style="color: var(--wax-red); font-size: 1.2em;">
+                    Patience makes the heart grow fonder, doesn't it?
+                </strong><br><br>
+
+                The anticipation, the excitement, the curiosity...<br>
+                It's all part of the magic! ✨<br><br>
+
+                <span style="font-style: italic; color: var(--gold); font-size: 1.1em;">
+                    "The best things in life are worth waiting for."
+                </span><br><br>
+
+                See you in class on <strong>January 20, 2026</strong><br>
+                where we'll all celebrate this milestone together!<br><br>
+
+                <span style="font-size: 0.95em; opacity: 0.85;">
+                    Until then, sleep tight knowing tomorrow is going to be absolutely legendary! 🧿
+                </span>
+            </div>
+            <div style="font-size: 3rem; margin-top: 25px; animation: pulse 2s infinite;">✨🎂🧿</div>
+            <button class="cta-button" onclick="location.reload()" style="margin-top: 30px;">
+                💭 Wait... Maybe I'll Peek Now
+            </button>
+        </div>
+    </div>
+
+    <!-- First Confirmation: Are You Sure? -->
+    <div class="message-reveal" id="confirmMessage1">
+        <div class="message-box">
+            <div class="message-title" style="color: var(--wax-red);">Wait, Are You Sure? 🤔</div>
+            <div class="message-text" style="line-height: 1.8;">
+                <img src="https://media.giphy.com/media/a5viI92PAF89q/giphy.gif" alt="Thinking GIF"
+                    style="width: 100%; max-width: 400px; border-radius: 10px; margin: 20px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                <br>
+                <strong style="font-size: 1.2em;">You're really going to peek now?</strong><br><br>
+                Think about it... the magic of unwrapping this with everyone...<br>
+                the laughter, the shared moment... 🎉<br><br>
+                <span style="font-style: italic; opacity: 0.9;">
+                    Are you absolutely certain you want to see it alone?
+                </span>
+            </div>
+            <div class="choice-buttons" style="margin-top: 30px;">
+                <button class="cta-button choice-btn primary-choice" onclick="backToChoices()">
+                    ⬅️ You're Right, I'll Wait
+                </button>
+                <button class="cta-button choice-btn secondary" onclick="confirmOpen2()">
+                    Yes, I'm Sure
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Second Confirmation: Pakka??? -->
+    <div class="message-reveal" id="confirmMessage2">
+        <div class="message-box">
+            <div class="message-title" style="color: var(--wax-red);">Pakka??? 😳</div>
+            <div class="message-text" style="line-height: 1.8;">
+                <div style="font-size: 4rem; margin: 20px 0;">🎁❓</div>
+                <strong style="font-size: 1.3em;">One last chance to reconsider...</strong><br><br>
+
+                Imagine: Tomorrow in class, everyone's excitement,<br>
+                the energy, the vibe... and you'll have already seen it. 😔<br><br>
+
+                <span style="font-size: 1.15em; color: var(--gold); font-style: italic;">
+                    Are you REALLY, TRULY, ABSOLUTELY sure?
+                </span><br><br>
+
+                <strong style="font-size: 1.1em;">Pakka???</strong>
+            </div>
+            <div class="choice-buttons" style="margin-top: 30px;">
+                <button class="cta-button choice-btn primary-choice" onclick="backToChoices()">
+                    🤔 Okay Fine, I'll Wait!
+                </button>
+                <button class="cta-button choice-btn secondary" onclick="finalRedirect()">
+                    Yes, 100% Pakka!
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Generate particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 25; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 15 + 's';
+            particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        // Countdown logic
+        const targetDate = new Date("January 20, 2026 00:00:00").getTime();
+        const timerText = document.getElementById('timerText');
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance > 0) {
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                timerText.innerHTML = `${String(days).padStart(2, '0')}:${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            } else {
+                timerText.innerHTML = '✨ TIME TO CELEBRATE! ✨';
+                document.getElementById('sealBtn').style.animation = 'pulse 1s ease-in-out infinite';
+            }
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        function showWaitMessage() {
+            document.getElementById('mainMessageBox').style.animation = 'fadeOut 0.5s ease forwards';
+            setTimeout(() => {
+                document.getElementById('mainMessageBox').style.display = 'none';
+                document.getElementById('waitMessage').classList.add('active');
+            }, 500);
+        }
+
+        function confirmOpen() {
+            document.getElementById('mainMessageBox').style.animation = 'fadeOut 0.5s ease forwards';
+            setTimeout(() => {
+                document.getElementById('mainMessageBox').style.display = 'none';
+                document.getElementById('confirmMessage1').classList.add('active');
+            }, 500);
+        }
+
+        function confirmOpen2() {
+            document.getElementById('confirmMessage1').classList.remove('active');
+            setTimeout(() => {
+                document.getElementById('confirmMessage2').classList.add('active');
+            }, 300);
+        }
+
+        function backToChoices() {
+            location.reload();
+        }
+
+        function finalRedirect() {
+            window.location.href = 'index_new.html';
+        }
+    </script>
+</body>
+
+</html>
