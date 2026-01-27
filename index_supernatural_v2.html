@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palak's 19th Birthday | Welcome to Mystic Falls</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:ital@0;1&family=Playfair+Display:wght@400;700&family=Great+Vibes&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --blood-red: #660000;
+            --mystic-purple: #4a0e4a;
+            --gold-accent: #c5a028;
+            --dark-bg: #050505;
+            --parchment: #e8dcc5;
+            --mikaelson-blue: #0f1e33;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: radial-gradient(circle at center, #1a0505 0%, #000000 100%);
+            color: #dcdcdc;
+            font-family: 'Crimson Text', serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* === FOG ANIMATION === */
+        #fog-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+            background:
+                url('https://raw.githubusercontent.com/danielstuart14/CSS_FOG_ANIMATION/master/img/fog1.png') repeat-x 0 100%,
+                url('https://raw.githubusercontent.com/danielstuart14/CSS_FOG_ANIMATION/master/img/fog2.png') repeat-x 0 100%;
+            background-size: 200% auto;
+            animation: fogAnim 60s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes fogAnim {
+            0% {
+                background-position: 0 100%;
+            }
+
+            100% {
+                background-position: -200% 100%;
+            }
+        }
+
+        /* === MYSTIC FALLS INTRO === */
+        #clock-tower-intro {
+            position: fixed;
+            inset: 0;
+            background: url('https://static0.srcdn.com/wordpress/wp-content/uploads/2020/01/Mystic-Falls-Hidden-Details.jpg?w=1600&h=900&fit=crop') center/cover;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #clock-tower-intro::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        .town-sign {
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(135deg, rgba(20, 0, 0, 0.9), rgba(0, 0, 0, 0.95));
+            border: 4px double var(--gold-accent);
+            padding: 50px 90px;
+            border-radius: 5px;
+            box-shadow: 0 0 50px rgba(139, 0, 0, 0.3), inset 0 0 30px rgba(0, 0, 0, 0.8);
+            cursor: pointer;
+            transition: transform 0.5s;
+            text-align: center;
+            position: relative;
+        }
+
+        .town-sign::after {
+            content: '';
+            position: absolute;
+            inset: 5px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            pointer-events: none;
+        }
+
+        .town-sign:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 80px rgba(212, 175, 55, 0.4);
+        }
+
+        .town-sign h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            color: var(--gold-accent);
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+        }
+
+        .town-sign p {
+            font-size: 1.3rem;
+            color: #ccc;
+            font-style: italic;
+        }
+
+        .population {
+            margin-top: 20px;
+            font-size: 1rem;
+            color: #999;
+        }
+
+        .town-sign.fade-out {
+            animation: fadeAway 1s forwards;
+        }
+
+        @keyframes fadeAway {
+            to {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+        }
+
+        /* === FLOATING ELEMENTS === */
+        .vervain-particle {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: var(--mystic-purple);
+            border-radius: 50%;
+            opacity: 0.6;
+            pointer-events: none;
+            animation: floatUp 8s infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.6;
+            }
+
+            90% {
+                opacity: 0.6;
+            }
+
+            100% {
+                transform: translateY(-100vh);
+                opacity: 0;
+            }
+        }
+
+        /* === RANDOM QUOTE POPUP === */
+        .quote-popup {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            max-width: 400px;
+            background: linear-gradient(135deg, rgba(139, 0, 0, 0.95), rgba(26, 16, 16, 0.95));
+            border: 2px solid var(--gold-accent);
+            padding: 25px;
+            border-radius: 15px;
+            z-index: 5000;
+            transform: translateX(150%);
+            transition: transform 0.5s;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+        }
+
+        .quote-popup.show {
+            transform: translateX(0);
+        }
+
+        .quote-text {
+            font-style: italic;
+            color: #fff;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .quote-author {
+            font-family: 'Cinzel', serif;
+            color: var(--gold-accent);
+            text-align: right;
+        }
+
+        /* === MAIN CONTENT === */
+        #main-content {
+            display: none;
+        }
+
+        section {
+            padding: 100px 5%;
+            position: relative;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            color: var(--gold-accent);
+            text-align: center;
+            margin-bottom: 60px;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+        }
+
+        /* === SALVATORE BOARDING HOUSE === */
+        .boarding-house {
+            background: linear-gradient(to bottom, #1a0505, #000);
+            border-top: 2px solid var(--gold-accent);
+            border-bottom: 2px solid var(--gold-accent);
+            box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.9);
+        }
+
+        .chandelier {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 50px;
+            background: radial-gradient(circle, var(--gold-accent), #8b7500);
+            clip-path: polygon(50% 0%, 30% 30%, 0% 30%, 20% 50%, 10% 80%, 50% 70%, 90% 80%, 80% 50%, 100% 30%, 70% 30%);
+            animation: sway 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.6));
+        }
+
+        @keyframes sway {
+
+            0%,
+            100% {
+                transform: rotate(-3deg);
+            }
+
+            50% {
+                transform: rotate(3deg);
+            }
+        }
+
+        /* === PHOTO GALLERY WITH LIGHTBOX === */
+        .portrait-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .portrait-frame {
+            position: relative;
+            height: 450px;
+            border-radius: 3px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.5s, box-shadow 0.5s;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+            border: 8px solid #1a1a1a;
+            outline: 2px solid var(--gold-accent);
+            outline-offset: -5px;
+        }
+
+        .portrait-frame:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(139, 0, 0, 0.4);
+            border-color: var(--gold-accent);
+        }
+
+        .portrait-image {
+            width: 100%;
+            height: 75%;
+            object-fit: cover;
+            transition: filter 0.5s;
+        }
+
+        .portrait-frame.era-1920s .portrait-image {
+            filter: sepia(0.8) brightness(0.9);
+        }
+
+        .portrait-frame.era-1950s .portrait-image {
+            filter: saturate(1.3) brightness(1.1);
+        }
+
+        .portrait-frame.era-modern .portrait-image {
+            filter: brightness(0.95);
+        }
+
+        .portrait-frame:hover .portrait-image {
+            filter: none !important;
+        }
+
+        .portrait-caption {
+            padding: 25px;
+            background: rgba(10, 10, 10, 0.95);
+            text-align: center;
+        }
+
+        .portrait-caption h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--gold-accent);
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+        }
+
+        /* === LIGHTBOX === */
+        .lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+
+        .lightbox-img {
+            max-width: 100%;
+            max-height: 90vh;
+            border: 5px solid var(--gold-accent);
+            border-radius: 10px;
+            box-shadow: 0 0 100px rgba(212, 175, 55, 0.5);
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(212, 175, 55, 0.3);
+            color: white;
+            border: none;
+            padding: 20px;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .lightbox-nav:hover {
+            background: rgba(212, 175, 55, 0.6);
+        }
+
+        .lightbox-prev {
+            left: 20px;
+        }
+
+        .lightbox-next {
+            right: 20px;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--blood-red);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border-radius: 5px;
+            font-family: 'Cinzel', serif;
+        }
+
+        /* === INTERACTIVE ELEMENTS === */
+        .vervain-necklace {
+            width: 150px;
+            height: 180px;
+            margin: 50px auto;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.5s;
+        }
+
+        .chain {
+            width: 3px;
+            height: 60px;
+            background: linear-gradient(to bottom, silver, #999);
+            margin: 0 auto;
+        }
+
+        .pendant {
+            width: 80px;
+            height: 100px;
+            background: linear-gradient(135deg, #9370db, #6a0dad);
+            margin: 0 auto;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            box-shadow: 0 0 40px var(--mystic-purple), inset 0 0 20px rgba(255, 255, 255, 0.3);
+            animation: pendantGlow 2s infinite;
+        }
+
+        @keyframes pendantGlow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 40px var(--mystic-purple), inset 0 0 20px rgba(255, 255, 255, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 0 60px var(--mystic-purple), inset 0 0 30px rgba(255, 255, 255, 0.5);
+            }
+        }
+
+        .vervain-necklace:hover {
+            transform: scale(1.2);
+        }
+
+        /* === SPELL EFFECTS === */
+        .spell-burst {
+            position: fixed;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--mystic-purple), transparent);
+            pointer-events: none;
+            animation: burstExpand 1s forwards;
+            z-index: 8000;
+        }
+
+        @keyframes burstExpand {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(5);
+                opacity: 0;
+            }
+        }
+
+        /* === KLAUS SECTION === */
+        .klaus-section {
+            background: linear-gradient(135deg, #1a0505, #000);
+            border-top: 3px solid var(--blood-red);
+        }
+
+        .hybrid-eyes-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 40px auto;
+            cursor: pointer;
+        }
+
+        .hybrid-eye {
+            width: 80px;
+            height: 40px;
+            background: #fff;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            transition: all 0.3s;
+        }
+
+        .hybrid-iris {
+            width: 30px;
+            height: 30px;
+            background: #4a3b00;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.5s;
+        }
+
+        .hybrid-pupil {
+            width: 12px;
+            height: 12px;
+            background: #000;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .hybrid-eye.transformed .hybrid-iris {
+            background: #ffd700;
+            box-shadow: 0 0 20px #ffd700;
+        }
+
+        .hybrid-eye.transformed .hybrid-pupil {
+            height: 25px;
+            width: 4px;
+        }
+
+        /* === GRIMOIRE WITH SPELLS === */
+        .grimoire-book {
+            width: 400px;
+            height: 300px;
+            margin: 50px auto;
+            background: linear-gradient(135deg, #3a2a1a, #2d1f1f);
+            border: 5px solid var(--gold-accent);
+            border-radius: 10px;
+            position: relative;
+            cursor: pointer;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.8);
+            transition: transform 0.5s;
+        }
+
+        .grimoire-book:hover {
+            transform: rotateY(10deg) scale(1.05);
+        }
+
+        .grimoire-cover {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            color: var(--gold-accent);
+            padding: 40px;
+            text-align: center;
+        }
+
+        /* === MIKAELSON SECTION === */
+        .originals-section {
+            background: linear-gradient(135deg, rgba(30, 58, 95, 0.9), rgba(10, 10, 10, 0.9));
+            border-top: 3px solid var(--mikaelson-blue);
+        }
+
+        .mikaelson-crest {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 50px;
+            background: var(--mikaelson-blue);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cinzel', serif;
+            font-size: 4rem;
+            color: var(--gold-accent);
+            box-shadow: 0 0 40px rgba(30, 58, 95, 0.8);
+            cursor: pointer;
+            transition: transform 0.5s;
+        }
+
+        .mikaelson-crest:hover {
+            transform: rotate(360deg) scale(1.1);
+        }
+
+        .originals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .original-card {
+            background: rgba(30, 58, 95, 0.3);
+            border: 2px solid var(--mikaelson-blue);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s;
+        }
+
+        .original-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 40px rgba(30, 58, 95, 0.6);
+            border-color: var(--gold-accent);
+        }
+
+        .original-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .original-name {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            color: var(--gold-accent);
+            margin-bottom: 15px;
+        }
+
+        /* === LETTERS === */
+        .letters-section {
+            background: linear-gradient(to bottom, rgba(45, 31, 31, 0.9), rgba(10, 10, 10, 0.9));
+        }
+
+        .letter {
+            max-width: 700px;
+            margin: 40px auto;
+            background: var(--parchment);
+            padding: 50px;
+            border-radius: 10px;
+            color: #333;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.8);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .letter:hover {
+            transform: scale(1.02);
+        }
+
+        .letter-header {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.5rem;
+            color: var(--blood-red);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .letter-body {
+            font-size: 1.2rem;
+            line-height: 2;
+            font-style: italic;
+        }
+
+        .signature {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2rem;
+            text-align: right;
+            margin-top: 30px;
+            color: var(--blood-red);
+        }
+
+        /* === COUNTDOWN === */
+        .countdown-timer {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--gold-accent);
+            margin-top: 40px;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 2.5rem;
+            }
+
+            .town-sign {
+                padding: 30px 40px;
+            }
+
+            .town-sign h1 {
+                font-size: 2.5rem;
+            }
+
+            .portrait-gallery,
+            .originals-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .grimoire-book {
+                width: 90%;
+            }
+
+            .quote-popup {
+                max-width: 90%;
+                right: 5%;
+                bottom: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Mystic Falls Intro -->
+    <div id="clock-tower-intro">
+        <div class="town-sign" onclick="enterMysticFalls()">
+            <h1>Welcome to Mystic Falls</h1>
+            <p>"A Town with Secrets"</p>
+            <div class="population">Est. 1860 • Population: Forever Young</div>
+        </div>
+    </div>
+
+    <!-- Floating Vervain -->
+    <div id="vervain-container"></div>
+    <!-- Fog Layer -->
+    <div id="fog-layer"></div>
+
+    <!-- Quote Popup -->
+    <div class="quote-popup" id="quotePopup">
+        <div class="quote-text" id="quoteText"></div>
+        <div class="quote-author" id="quoteAuthor"></div>
+    </div>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" onclick="closeLightbox()">✕ Close</button>
+        <button class="lightbox-nav lightbox-prev" onclick="changePhoto(-1)">‹</button>
+        <div class="lightbox-content">
+            <img class="lightbox-img" id="lightboxImg" src="" alt="Portrait">
+        </div>
+        <button class="lightbox-nav lightbox-next" onclick="changePhoto(1)">›</button>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content">
+        <!-- Salvatore Boarding House -->
+        <section class="boarding-house">
+            <div class="chandelier"></div>
+            <h2 class="section-title">The Salvatore Boarding House</h2>
+            <p
+                style="text-align: center; font-size: 1.3rem; max-width: 700px; margin: 0 auto 50px; font-style: italic;">
+                Step inside the walls that have witnessed centuries of memories...
+            </p>
+
+            <div class="portrait-gallery">
+                <div class="portrait-frame era-1920s" onclick="openLightbox(0)">
+                    <img src="https://via.placeholder.com/400x600/8b7500/fff?text=1920s+Photo+1" class="portrait-image"
+                        alt="Portrait 1">
+                    <div class="portrait-caption">
+                        <h3>🎭 The Roaring Twenties</h3>
+                        <p>Klaus's Decade Dance</p>
+                    </div>
+                </div>
+                <div class="portrait-frame era-1920s" onclick="openLightbox(1)">
+                    <img src="https://via.placeholder.com/400x600/8b7500/fff?text=1920s+Photo+2" class="portrait-image"
+                        alt="Portrait 2">
+                    <div class="portrait-caption">
+                        <h3>🎭 Jazz Age Memories</h3>
+                        <p>Prohibition Era Elegance</p>
+                    </div>
+                </div>
+                <div class="portrait-frame era-1920s" onclick="openLightbox(2)">
+                    <img src="https://via.placeholder.com/400x600/8b7500/fff?text=1920s+Photo+3" class="portrait-image"
+                        alt="Portrait 3">
+                    <div class="portrait-caption">
+                        <h3>🎭 Speakeasy Nights</h3>
+                        <p>When Time Stood Still</p>
+                    </div>
+                </div>
+                <div class="portrait-frame era-1950s" onclick="openLightbox(3)">
+                    <img src="https://via.placeholder.com/400x600/ff6b9d/fff?text=1950s+Photo+4" class="portrait-image"
+                        alt="Portrait 4">
+                    <div class="portrait-caption">
+                        <h3>🎸 Fabulous Fifties</h3>
+                        <p>Decade of Dreams</p>
+                    </div>
+                </div>
+                <div class="portrait-frame era-1950s" onclick="openLightbox(4)">
+                    <img src="https://via.placeholder.com/400x600/ff6b9d/fff?text=1950s+Photo+5" class="portrait-image"
+                        alt="Portrait 5">
+                    <div class="portrait-caption">
+                        <h3>🎸 Diner Days</h3>
+                        <p>At the Mystic Grill</p>
+                    </div>
+                </div>
+                <div class="portrait-frame era-1950s" onclick="openLightbox(5)">
+                    <img src="https://via.placeholder.com/400x600/ff6b9d/fff?text=1950s+Photo+6" class="portrait-image"
+                        alt="Portrait 6">
+                    <div class="portrait-caption">
+                        <h3>🎸 Rock & Roll Revival</h3>
+                        <p>Eternal Youth</p>
+                    </div>
+                </div>
+                <div class="portrait-frame era-modern" onclick="openLightbox(6)">
+                    <img src="https://via.placeholder.com/400x600/6a0dad/fff?text=Modern+Photo+7" class="portrait-image"
+                        alt="Portrait 7">
+                    <div class="portrait-caption">
+                        <h3>💜 Present Day</h3>
+                        <p>Living in the Moment</p>
+                    </div>
+                </div>
+                <div class="portrait-frame era-modern" onclick="openLightbox(7)">
+                    <img src="https://via.placeholder.com/400x600/6a0dad/fff?text=Modern+Photo+8" class="portrait-image"
+                        alt="Portrait 8">
+                    <div class="portrait-caption">
+                        <h3>💜 Modern Mystic Falls</h3>
+                        <p>New Beginnings</p>
+                    </div>
+                </div>
+                <div class="portrait-frame era-modern" onclick="openLightbox(8)">
+                    <img src="https://via.placeholder.com/400x600/6a0dad/fff?text=Modern+Photo+9" class="portrait-image"
+                        alt="Portrait 9">
+                    <div class="portrait-caption">
+                        <h3>💜 The Journey Continues</h3>
+                        <p>Turning 19</p>
+                    </div>
+                </div>
+                <div class="portrait-frame era-modern" onclick="openLightbox(9)">
+                    <img src="https://via.placeholder.com/400x600/6a0dad/fff?text=Modern+Photo+10"
+                        class="portrait-image" alt="Portrait 10">
+                    <div class="portrait-caption">
+                        <h3>💜 Forever Young</h3>
+                        <p>The Champion Emerges</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Vervain Necklace -->
+        <section style="text-align: center; padding: 100px 5%;">
+            <h2 class="section-title">Elena's Protection</h2>
+            <p style="font-size: 1.3rem; max-width: 700px; margin: 0 auto 30px; font-style: italic;">
+                "This necklace contains vervain... it protects you from compulsion."
+            </p>
+            <div class="vervain-necklace" onclick="activateProtection()">
+                <div class="chain"></div>
+                <div class="pendant"></div>
+            </div>
+        </section>
+
+        <!-- The Originals -->
+        <section class="originals-section">
+            <h2 class="section-title">The Original Family</h2>
+            <div class="mikaelson-crest" onclick="showAlwaysForever()">M</div>
+            <p
+                style="text-align: center; font-size: 1.3rem; max-width: 800px; margin: 0 auto 50px; font-style: italic;">
+                "From New Orleans, the Mikaelsons send their regards... Always and Forever."
+            </p>
+
+            <div class="originals-grid">
+                <div class="original-card" onclick="meetOriginal('Klaus')">
+                    <div class="original-icon">👑</div>
+                    <div class="original-name">Niklaus</div>
+                    <p>The Hybrid King</p>
+                </div>
+                <div class="original-card" onclick="meetOriginal('Elijah')">
+                    <div class="original-icon">🎩</div>
+                    <div class="original-name">Elijah</div>
+                    <p>The Noble One</p>
+                </div>
+                <div class="original-card" onclick="meetOriginal('Rebekah')">
+                    <div class="original-icon">👗</div>
+                    <div class="original-name">Rebekah</div>
+                    <p>The Wild Heart</p>
+                </div>
+                <div class="original-card" onclick="meetOriginal('Kol')">
+                    <div class="original-icon">🃏</div>
+                    <div class="original-name">Kol</div>
+                    <p>The Wild Card</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Klaus Section -->
+        <section class="klaus-section" style="text-align: center;">
+            <h2 class="section-title">The Hybrid's Gift</h2>
+            <p style="font-size: 1.3rem; margin-bottom: 40px; font-style: italic;">
+                "Unleash your true nature..."
+            </p>
+            <div class="hybrid-eyes-container" onclick="transformHybrid()">
+                <div class="hybrid-eye">
+                    <div class="hybrid-iris">
+                        <div class="hybrid-pupil"></div>
+                    </div>
+                </div>
+                <div class="hybrid-eye">
+                    <div class="hybrid-iris">
+                        <div class="hybrid-pupil"></div>
+                    </div>
+                </div>
+            </div>
+            <p style="color: var(--blood-red);">Click to trigger the transformation</p>
+        </section>
+
+        <!-- Grimoire -->
+        <section style="text-align: center; padding: 100px 5%;">
+            <h2 class="section-title">The Bennett Grimoire</h2>
+            <div class="grimoire-book" onclick="castSpell()">
+                <div class="grimoire-cover">
+                    <div>📖</div>
+                    <div style="margin-top: 20px;">BENNETT</div>
+                    <div style="font-size: 1.2rem; margin-top: 10px;">Family Grimoire</div>
+                    <div
+                        style="font-family: 'Crimson Text', serif; font-style: italic; font-size: 1.2rem; color: #ccc; margin-top: 20px;">
+                        "Phasmatos tribum, nas ex veras..."
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Countdown -->
+        <section style="text-align: center; padding: 100px 5%; background: rgba(106, 13, 173, 0.2);">
+            <h2 class="section-title">The Other Side</h2>
+            <p style="font-size: 1.3rem; margin-bottom: 30px; font-style: italic;">
+                "The veil is thinning..."
+            </p>
+            <div class="countdown-timer" id="countdown">Loading...</div>
+            <p style="font-size: 1.2rem; margin-top: 20px; color: var(--mystic-purple);">
+                Until you cross over on <strong>February 8, 2026</strong>
+            </p>
+        </section>
+
+        <!-- Letters -->
+        <section class="letters-section">
+            <h2 class="section-title">Messages from Mystic Falls</h2>
+
+            <div class="letter" onclick="letterEffect(this)">
+                <div class="letter-header">My Dearest Palak</div>
+                <div class="letter-body">
+                    Love,<br><br>
+                    They tell me it is your birthday. Nineteen years of mortality, yet I sense something eternal within
+                    you.<br><br>
+                    Remember: power is not given, it is taken. Your 19th year is yours to command. Paint it in bold
+                    strokes, fearlessly and unapologetically.<br><br>
+                    Happy Birthday, love. Make it legendary.
+                </div>
+                <div class="signature">- Niklaus Mikaelson</div>
+            </div>
+
+            <div class="letter" onclick="letterEffect(this)">
+                <div class="letter-header">From Damon Salvatore</div>
+                <div class="letter-body">
+                    Dear Palak,<br><br>
+                    Happy Birthday. Nineteen looks good on you. Much better than 178, trust me.<br><br>
+                    Here's to questionable decisions, epic moments, and friendships that defy time itself.<br><br>
+                    Enjoy your mortality while it lasts. It's overrated, but memorable.
+                </div>
+                <div class="signature">- Damon</div>
+            </div>
+
+            <div class="letter" onclick="letterEffect(this)">
+                <div class="letter-header">Dear Diary...</div>
+                <div class="letter-body">
+                    Today marks Palak's 19th birthday. Another year older, another year wiser, another year of magic
+                    waiting to unfold.<br><br>
+                    May this year bring you courage, love, and adventures worth writing about.<br><br>
+                    Happy Birthday! 💜
+                </div>
+                <div class="signature">- Elena Gilbert</div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer
+            style="padding: 80px 5%; text-align: center; background: var(--dark-bg); border-top: 3px solid var(--gold-accent);">
+            <div
+                style="font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--gold-accent); margin-bottom: 20px; font-style: italic;">
+                "I was feeling epic."
+            </div>
+            <p style="font-size: 1.2rem; color: #ccc; opacity: 0.8; margin-top: 20px;">
+                Because some birthdays are worth remembering forever.
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Photo data
+        const photos = [
+            'https://via.placeholder.com/800x1200/8b7500/fff?text=1920s+Photo+1',
+            'https://via.placeholder.com/800x1200/8b7500/fff?text=1920s+Photo+2',
+            'https://via.placeholder.com/800x1200/8b7500/fff?text=1920s+Photo+3',
+            'https://via.placeholder.com/800x1200/ff6b9d/fff?text=1950s+Photo+4',
+            'https://via.placeholder.com/800x1200/ff6b9d/fff?text=1950s+Photo+5',
+            'https://via.placeholder.com/800x1200/ff6b9d/fff?text=1950s+Photo+6',
+            'https://via.placeholder.com/800x1200/6a0dad/fff?text=Modern+Photo+7',
+            'https://via.placeholder.com/800x1200/6a0dad/fff?text=Modern+Photo+8',
+            'https://via.placeholder.com/800x1200/6a0dad/fff?text=Modern+Photo+9',
+            'https://via.placeholder.com/800x1200/6a0dad/fff?text=Modern+Photo+10'
+        ];
+
+        let currentPhotoIndex = 0;
+
+        // Quotes
+        const quotes = [
+            { text: "I'm not a hero, Elena. I don't do good. It's not in me.", author: "Damon Salvatore" },
+            { text: "Family is power.", author: "Klaus Mikaelson" },
+            { text: "Life sucks when you're ordinary.", author: "Damon Salvatore" },
+            { text: "I'm the thing that monsters have nightmares about.", author: "Klaus Mikaelson" },
+            { text: "I will always choose you.", author: "Elena Gilbert" },
+            { text: "Always and Forever.", author: "The Mikaelsons" }
+        ];
+
+        // Create vervain particles
+        const vervainContainer = document.getElementById('vervain-container');
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'vervain-particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 8 + 's';
+            particle.style.animationDuration = (Math.random() * 8 + 8) + 's';
+            vervainContainer.appendChild(particle);
+        }
+
+        // Show random quotes
+        function showRandomQuote() {
+            const quote = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('quoteText').textContent = `"${quote.text}"`;
+            document.getElementById('quoteAuthor').textContent = `— ${quote.author}`;
+            document.getElementById('quotePopup').classList.add('show');
+
+            setTimeout(() => {
+                document.getElementById('quotePopup').classList.remove('show');
+            }, 5000);
+        }
+
+        setInterval(showRandomQuote, 15000);
+
+        // Enter Mystic Falls
+        function enterMysticFalls() {
+            document.getElementById('clock-tower-intro').classList.add('fade-out');
+            setTimeout(() => {
+                document.getElementById('clock-tower-intro').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                setTimeout(showRandomQuote, 2000);
+            }, 1000);
+        }
+
+        // Lightbox functions
+        function openLightbox(index) {
+            currentPhotoIndex = index;
+            document.getElementById('lightboxImg').src = photos[index];
+            document.getElementById('lightbox').classList.add('active');
+            confetti({
+                particleCount: 50,
+                spread: 60,
+                colors: ['#d4af37', '#6a0dad', '#8b0000']
+            });
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+
+        function changePhoto(direction) {
+            currentPhotoIndex += direction;
+            if (currentPhotoIndex < 0) currentPhotoIndex = photos.length - 1;
+            if (currentPhotoIndex >= photos.length) currentPhotoIndex = 0;
+            document.getElementById('lightboxImg').src = photos[currentPhotoIndex];
+        }
+
+        // Protection
+        function activateProtection() {
+            confetti({
+                particleCount: 150,
+                spread: 100,
+                origin: { y: 0.6 },
+                colors: ['#6a0dad', '#9370db', '#ffffff']
+            });
+            setTimeout(() => {
+                alert('💜 Protection activated! You are now safe from compulsion!');
+            }, 500);
+        }
+
+        // Meet Original
+        function meetOriginal(name) {
+            const messages = {
+                'Klaus': '👑 Niklaus: "Happy Birthday, love. May your 19th year be as legendary as my thousand. Remember - be the villain if it means protecting what matters."',
+                'Elijah': '🎩 Elijah: "With honor and grace, I wish you a magnificent birthday. Always choose nobility."',
+                'Rebekah': '👗 Rebekah: "Darling, make it fabulous! Never apologize for wanting it all."',
+                'Kol': '🃏 Kol: "Chaos and fun, love. That\'s what your 19th should be!"'
+            };
+
+            confetti({
+                particleCount: 100,
+                spread: 80,
+                colors: ['#1e3a5f', '#d4af37']
+            });
+
+            setTimeout(() => alert(messages[name]), 300);
+        }
+
+        // Always and Forever
+        function showAlwaysForever() {
+            confetti({
+                particleCount: 200,
+                spread: 120,
+                colors: ['#1e3a5f', '#d4af37', '#ffffff']
+            });
+        }
+
+        // Transform Hybrid
+        function transformHybrid() {
+            document.querySelectorAll('.hybrid-eye').forEach(eye => {
+                eye.classList.add('transformed');
+            });
+
+            confetti({
+                particleCount: 120,
+                spread: 90,
+                colors: ['#ffd700', '#8b0000']
+            });
+
+            setTimeout(() => {
+                document.querySelectorAll('.hybrid-eye').forEach(eye => {
+                    eye.classList.remove('transformed');
+                });
+            }, 3000);
+        }
+
+        // Cast Spell
+        function castSpell() {
+            // Create spell burst effect
+            const burst = document.createElement('div');
+            burst.className = 'spell-burst';
+            burst.style.left = '50%';
+            burst.style.top = '50%';
+            document.body.appendChild(burst);
+
+            setTimeout(() => burst.remove(), 1000);
+
+            confetti({
+                particleCount: 200,
+                spread: 120,
+                colors: ['#6a0dad', '#9370db', '#d4af37']
+            });
+
+            setTimeout(() => {
+                alert('📖 "Phasmatos tribum, nas ex veras...\nOn this day of your nineteenth year, may magic surround you. So mote it be!"');
+            }, 500);
+        }
+
+        // Letter Effect
+        function letterEffect(element) {
+            element.style.transform = 'scale(1.05)';
+            confetti({
+                particleCount: 30,
+                spread: 50,
+                origin: {
+                    x: element.getBoundingClientRect().left / window.innerWidth,
+                    y: element.getBoundingClientRect().top / window.innerHeight
+                }
+            });
+            setTimeout(() => {
+                element.style.transform = 'scale(1)';
+            }, 300);
+        }
+
+        // Countdown
+        function updateCountdown() {
+            const target = new Date('February 8, 2026 00:00:00').getTime();
+            const now = new Date().getTime();
+            const distance = target - now;
+
+            if (distance < 0) {
+                document.getElementById('countdown').textContent = '🎉 You\'ve crossed over! 🎉';
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('countdown').textContent =
+                `${days}d ${hours}h ${minutes}m ${seconds}s`;
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Keyboard navigation for lightbox
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('lightbox').classList.contains('active')) {
+                if (e.key === 'ArrowLeft') changePhoto(-1);
+                if (e.key === 'ArrowRight') changePhoto(1);
+                if (e.key === 'Escape') closeLightbox();
+            }
+        });
+    </script>
+</body>
+
+</html>

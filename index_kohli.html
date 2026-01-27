@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>King Kohli Theme | Happy Birthday Palak</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Bebas+Neue&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --charcoal: #121212;
+            --gold: #D4AF37;
+            --royal-blue: #002366;
+            --white: #ffffff;
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--charcoal);
+            color: var(--white);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            height: 100vh;
+        }
+
+        /* --- LOADING / INTRO --- */
+        #stadium-intro {
+            position: fixed;
+            inset: 0;
+            background: black;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1s ease;
+        }
+
+        .lights-flicker {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            background: radial-gradient(circle at center, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            animation: flicker 2s infinite;
+        }
+
+        @keyframes flicker {
+
+            0%,
+            18%,
+            22%,
+            25%,
+            53%,
+            57%,
+            100% {
+                opacity: 0;
+            }
+
+            20%,
+            24%,
+            55% {
+                opacity: 1;
+            }
+        }
+
+        .king-crown {
+            width: 150px;
+            filter: drop-shadow(0 0 20px var(--gold));
+            animation: pulse 2s infinite ease-in-out;
+            margin-bottom: 20px;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        /* --- PASSWORD GATE --- */
+        #password-gate {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1100;
+        }
+
+        .jersey-input {
+            background: transparent;
+            border: 2px solid var(--gold);
+            color: var(--gold);
+            font-size: 4rem;
+            font-family: 'Bebas Neue', sans-serif;
+            width: 120px;
+            text-align: center;
+            margin-top: 20px;
+            outline: none;
+            border-radius: 10px;
+        }
+
+        /* --- MAIN CONTENT --- */
+        #main-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 1s;
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('C:/Users/smeet/.gemini/antigravity/brain/203986eb-522d-44af-8640-7bd5e33f468a/kohli_stadium_background_1769168806758.png') center/cover no-repeat;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .hero-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 6rem;
+            color: var(--gold);
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .sub-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+        }
+
+        /* --- BAT SWING REVEAL --- */
+        .bat-container {
+            position: relative;
+            width: 300px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .bat-image {
+            width: 100%;
+            transform-origin: top center;
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .bat-container:hover .bat-image {
+            transform: rotate(-15deg);
+        }
+
+        .bat-container.swung .bat-image {
+            transform: rotate(-120deg);
+        }
+
+        /* --- SCORECARD AREA --- */
+        #scorecard-reveal {
+            display: none;
+            width: 100%;
+            max-width: 600px;
+            background: rgba(0, 35, 102, 0.8);
+            border: 2px solid var(--gold);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            backdrop-filter: blur(10px);
+            animation: slideUp 0.8s forwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 0;
+            font-size: 1.2rem;
+        }
+
+        .stat-label {
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        .stat-value {
+            font-weight: 400;
+        }
+
+        .btn-celebrate {
+            background: var(--gold);
+            color: black;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: 900;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: var(--transition);
+            text-transform: uppercase;
+        }
+
+        .btn-celebrate:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px var(--gold);
+        }
+
+        /* --- RESPONSIVENESS --- */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 4rem;
+            }
+
+            .sub-title {
+                font-size: 1rem;
+            }
+
+            .bat-container {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- STADIUM INTRO -->
+    <div id="stadium-intro">
+        <div class="lights-flicker"></div>
+        <img src="C:/Users/smeet/.gemini/antigravity/brain/203986eb-522d-44af-8640-7bd5e33f468a/kohli_crown_logo_1769168821074.png"
+            alt="King Crown" class="king-crown">
+        <div id="password-gate">
+            <p style="letter-spacing: 5px; font-weight: 700;">ENTER THE ICONIC NUMBER</p>
+            <input type="password" maxlength="2" class="jersey-input" id="jersey-input" placeholder="00" autofocus>
+            <p style="color: #666; margin-top: 10px; font-size: 0.8rem;">Hint: The GOAT's Jersey Number</p>
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD -->
+    <div id="main-content">
+        <h1 class="hero-title">KING KOHLI EDITION</h1>
+        <p class="sub-title">Celebrating Palak's 19th Innings</p>
+
+        <div class="bat-container" id="bat-trigger" onclick="swingBat()">
+            <img src="C:/Users/smeet/.gemini/antigravity/brain/203986eb-522d-44af-8640-7bd5e33f468a/kohli_bat_reveal_1769168836675.png"
+                alt="Cricket Bat" class="bat-image">
+            <p style="text-align: center; margin-top: 10px; font-weight: 700; color: var(--gold);">CLICK TO SWING &
+                REVEAL</p>
+        </div>
+
+        <div id="scorecard-reveal">
+            <h2 style="text-align: center; margin-bottom: 20px; font-family: 'Bebas Neue'; font-size: 2.5rem;">PALAK'S
+                STATS</h2>
+            <div class="stat-row">
+                <span class="stat-label">MATS (Years)</span>
+                <span class="stat-value">19*</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">NOT OUT (Resilience)</span>
+                <span class="stat-value">100%</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">BOUNDARIES (Achievements)</span>
+                <span class="stat-value">Unlimited</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">STRIKE RATE (Energy)</span>
+                <span class="stat-value">Elite</span>
+            </div>
+
+            <div style="text-align: center;">
+                <button class="btn-celebrate" onclick="grandFinale()">Celebrate Innings</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Init Logic
+        setTimeout(() => {
+            document.getElementById('password-gate').style.display = 'flex';
+        }, 2000);
+
+        const jerseyInput = document.getElementById('jersey-input');
+        jerseyInput.addEventListener('input', (e) => {
+            if (e.target.value === '18') {
+                unlockStadium();
+            }
+        });
+
+        function unlockStadium() {
+            const intro = document.getElementById('stadium-intro');
+            const main = document.getElementById('main-content');
+
+            intro.style.opacity = '0';
+            setTimeout(() => {
+                intro.style.display = 'none';
+                main.style.display = 'flex';
+                setTimeout(() => {
+                    main.style.opacity = '1';
+                }, 50);
+            }, 1000);
+        }
+
+        function swingBat() {
+            const bat = document.getElementById('bat-trigger');
+            const scorecard = document.getElementById('scorecard-reveal');
+
+            bat.classList.add('swung');
+            setTimeout(() => {
+                scorecard.style.display = 'block';
+                bat.style.display = 'none';
+            }, 400);
+        }
+
+        function grandFinale() {
+            const duration = 15 * 1000;
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            const interval = setInterval(function () {
+                const timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                const particleCount = 50 * (timeLeft / duration);
+                // since particles fall down, start them a bit higher than average
+                confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }, colors: ['#D4AF37', '#002366', '#ffffff'] });
+                confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }, colors: ['#D4AF37', '#002366', '#ffffff'] });
+            }, 250);
+
+            alert("HAPPY 19th BIRTHDAY PALAK! YOU ARE THE GOAT! 🧿🔥");
+        }
+    </script>
+</body>
+
+</html>
