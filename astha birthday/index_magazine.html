@@ -1,0 +1,1917 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASTHA — The Birthday Issue</title>
+    <meta name="description" content="A modern magazine-style birthday celebration for Astha's 19th birthday.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        /* ═══════════════════════════════════════════
+           DESIGN TOKENS
+        ═══════════════════════════════════════════ */
+        :root {
+            --bg-dark: #08080e;
+            --bg-card: rgba(255, 255, 255, 0.04);
+            --bg-glass: rgba(255, 255, 255, 0.06);
+            --text-primary: #f0f0f5;
+            --text-secondary: #b8b8d0;
+            --text-muted: #7a7a98;
+            --accent-1: #f472b6;
+            --accent-2: #c084fc;
+            --accent-3: #818cf8;
+            --accent-4: #22d3ee;
+            --accent-5: #fb923c;
+            --accent-gradient: linear-gradient(135deg, #f472b6, #c084fc, #818cf8);
+            --accent-gradient-wide: linear-gradient(135deg, #fb923c, #f472b6, #c084fc, #818cf8, #22d3ee);
+            --accent-glow: rgba(192, 132, 252, 0.35);
+            --glow-pink: rgba(244, 114, 182, 0.15);
+            --glow-purple: rgba(192, 132, 252, 0.12);
+            --glow-blue: rgba(129, 140, 248, 0.12);
+            --gold: #fbbf24;
+            --border: rgba(255, 255, 255, 0.1);
+            --border-color: rgba(192, 132, 252, 0.15);
+            --radius-sm: 12px;
+            --radius-md: 20px;
+            --radius-lg: 32px;
+            --transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Ambient gradient mesh background */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background:
+                radial-gradient(ellipse 600px 600px at 10% 20%, rgba(244, 114, 182, 0.08), transparent),
+                radial-gradient(ellipse 500px 500px at 80% 10%, rgba(129, 140, 248, 0.07), transparent),
+                radial-gradient(ellipse 700px 700px at 60% 60%, rgba(192, 132, 252, 0.06), transparent),
+                radial-gradient(ellipse 400px 400px at 30% 80%, rgba(34, 211, 238, 0.05), transparent),
+                radial-gradient(ellipse 500px 500px at 90% 90%, rgba(251, 146, 60, 0.04), transparent);
+            pointer-events: none;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-gradient);
+            border-radius: 10px;
+        }
+
+        /* ═══════════════════════════════════════════
+           LOCK SCREEN — MODERN GLASS CARD
+        ═══════════════════════════════════════════ */
+        #lock-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: var(--bg-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 1s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.8s ease;
+        }
+
+        #lock-screen::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.15), transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse-glow 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+
+            0%,
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.6;
+            }
+
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        .lock-card {
+            position: relative;
+            width: 90%;
+            max-width: 420px;
+            padding: 50px 40px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            text-align: center;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .lock-card .issue-tag {
+            display: inline-block;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .lock-card .title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 8px;
+        }
+
+        .lock-card .subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+
+        .countdown-modern {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 28px;
+        }
+
+        .countdown-modern .cd-unit {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            min-width: 60px;
+        }
+
+        .countdown-modern .cd-num {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .countdown-modern .cd-label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .unlock-btn {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 2px solid rgba(168, 85, 247, 0.4);
+            background: rgba(168, 85, 247, 0.1);
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .unlock-btn::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .unlock-btn:hover::before {
+            opacity: 1;
+        }
+
+        .unlock-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 40px var(--accent-glow);
+        }
+
+        .secret-link {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .secret-link:hover {
+            color: var(--accent-1);
+        }
+
+        .lock-open {
+            transform: translateY(-100vh);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* ═══════════════════════════════════════════
+           MAGAZINE CONTENT
+        ═══════════════════════════════════════════ */
+        .magazine {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- STICKY NAV BAR --- */
+        .mag-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 16px 0;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background: rgba(8, 8, 14, 0.8);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .mag-nav::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--accent-gradient-wide);
+            opacity: 0.4;
+        }
+
+        .mag-nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .mag-logo {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.4rem;
+            letter-spacing: -0.5px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .mag-nav-links {
+            display: flex;
+            gap: 24px;
+            list-style: none;
+        }
+
+        .mag-nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            position: relative;
+            padding-bottom: 4px;
+        }
+
+        .mag-nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-gradient);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .mag-nav-links a:hover {
+            color: var(--accent-1);
+        }
+
+        .mag-nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 100px 0 60px;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            background: var(--accent-gradient-wide);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            border: 1px solid rgba(192, 132, 252, 0.25);
+            border-radius: 50px;
+            padding: 8px 24px;
+            margin-bottom: 30px;
+            animation: fadeUp 1s ease 0.2s backwards;
+        }
+
+        .hero-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(3.5rem, 10vw, 7.5rem);
+            font-weight: 700;
+            line-height: 1.05;
+            margin-bottom: 20px;
+            animation: fadeUp 1s ease 0.4s backwards;
+        }
+
+        .hero-title .highlight {
+            background: var(--accent-gradient-wide);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 500px;
+            margin: 0 auto 40px;
+            animation: fadeUp 1s ease 0.6s backwards;
+        }
+
+        .hero-scroll-hint {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            animation: fadeUp 1s ease 0.8s backwards, bounce 2s infinite 2s;
+        }
+
+        .hero-scroll-hint span {
+            display: block;
+            margin-top: 8px;
+            font-size: 1.2rem;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(8px);
+            }
+        }
+
+        /* Floating gradient orbs behind hero */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--accent-1);
+            top: -100px;
+            left: -100px;
+            animation: float 8s infinite alternate;
+        }
+
+        .orb-2 {
+            width: 350px;
+            height: 350px;
+            background: var(--accent-3);
+            bottom: -50px;
+            right: -80px;
+            animation: float 10s infinite alternate-reverse;
+        }
+
+        @keyframes float {
+            from {
+                transform: translate(0, 0);
+            }
+
+            to {
+                transform: translate(40px, -30px);
+            }
+        }
+
+        /* --- SECTION HEADERS --- */
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-top: 80px;
+            position: relative;
+        }
+
+        .section-label {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            background: var(--accent-gradient-wide);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            line-height: 1.15;
+        }
+
+        .section-divider {
+            width: 80px;
+            height: 3px;
+            background: var(--accent-gradient-wide);
+            margin: 20px auto 0;
+            border-radius: 10px;
+        }
+
+        /* --- FEATURED ARTICLE (EDITORIAL SPREAD) --- */
+        .editorial-spread {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+            margin-bottom: 80px;
+            padding: 60px 40px;
+            border-radius: var(--radius-lg);
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .editorial-spread:hover {
+            background: rgba(255, 255, 255, 0.02);
+            box-shadow: 0 0 60px rgba(192, 132, 252, 0.06);
+        }
+
+        .editorial-spread.reverse {
+            direction: rtl;
+        }
+
+        .editorial-spread.reverse>* {
+            direction: ltr;
+        }
+
+        .editorial-img-wrap {
+            position: relative;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            aspect-ratio: 4/5;
+            border: 1px solid var(--border-color);
+        }
+
+        .editorial-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease, filter 0.5s;
+        }
+
+        .editorial-img-wrap:hover img {
+            transform: scale(1.05);
+            filter: saturate(1.15) brightness(1.05);
+        }
+
+        .editorial-img-wrap::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: var(--radius-md);
+            background: var(--accent-gradient);
+            z-index: -1;
+            opacity: 0;
+            filter: blur(8px);
+            transition: opacity 0.5s;
+        }
+
+        .editorial-img-wrap:hover::before {
+            opacity: 0.5;
+        }
+
+        .editorial-img-wrap::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 40%, rgba(8, 8, 14, 0.7) 100%);
+            pointer-events: none;
+        }
+
+        .editorial-img-number {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 5rem;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.08);
+            line-height: 1;
+            z-index: 2;
+        }
+
+        .editorial-text {
+            padding: 20px 0;
+        }
+
+        .editorial-tag {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            background: var(--accent-gradient-wide);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+        }
+
+        .editorial-text h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--text-primary) 40%, var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .editorial-text p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+
+        .editorial-quote {
+            border-left: 3px solid transparent;
+            border-image: var(--accent-gradient) 1;
+            padding-left: 20px;
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 1.2rem;
+            color: var(--text-primary);
+            margin: 24px 0;
+            line-height: 1.6;
+            background: linear-gradient(90deg, rgba(192, 132, 252, 0.05), transparent);
+            padding: 16px 16px 16px 20px;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        }
+
+        /* --- HIGHLIGHT EDITORIAL (for the special img 14 spread) --- */
+        .editorial-spread.highlight {
+            position: relative;
+            background: var(--bg-glass);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 60px 50px;
+            margin-bottom: 100px;
+        }
+
+        .editorial-spread.highlight::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: var(--radius-lg);
+            background: var(--accent-gradient);
+            z-index: -1;
+            opacity: 0.4;
+            filter: blur(6px);
+            animation: glow-pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes glow-pulse {
+
+            0%,
+            100% {
+                opacity: 0.3;
+            }
+
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        .editorial-spread.highlight .editorial-img-wrap {
+            aspect-ratio: 3/4;
+            box-shadow: 0 20px 50px rgba(232, 67, 147, 0.2);
+        }
+
+        .highlight-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.6rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            background: var(--accent-gradient);
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 50px;
+            z-index: 10;
+        }
+
+        .photographer-credit {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            padding: 6px 16px;
+            margin-top: 16px;
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .photographer-credit .cam-icon {
+            font-size: 1rem;
+        }
+
+        /* --- PHOTO GALLERY GRID --- */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 80px;
+        }
+
+        .gallery-card {
+            position: relative;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            aspect-ratio: 3/4;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .gallery-card::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: var(--radius-md);
+            background: var(--accent-gradient);
+            z-index: -1;
+            opacity: 0;
+            filter: blur(10px);
+            transition: opacity 0.4s;
+        }
+
+        .gallery-card:hover::before {
+            opacity: 0.6;
+        }
+
+        .gallery-card:hover {
+            border-color: rgba(192, 132, 252, 0.3);
+            transform: translateY(-4px);
+        }
+
+        .gallery-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease, filter 0.4s;
+        }
+
+        .gallery-card:hover img {
+            transform: scale(1.08);
+            filter: brightness(0.75) saturate(1.2);
+        }
+
+        .gallery-card-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 20%, rgba(8, 8, 14, 0.92) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 24px;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .gallery-card:hover .gallery-card-overlay {
+            opacity: 1;
+        }
+
+        .gallery-card-overlay h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gallery-card-overlay p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Feature card spans two columns */
+        .gallery-card.featured {
+            grid-column: span 2;
+            aspect-ratio: 16/9;
+        }
+
+        /* --- ARTICLES SECTION --- */
+        .articles-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+
+        .article-main {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            transition: transform var(--transition), box-shadow var(--transition);
+            position: relative;
+        }
+
+        .article-main::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: var(--radius-md);
+            background: var(--accent-gradient);
+            z-index: -1;
+            opacity: 0;
+            filter: blur(12px);
+            transition: opacity 0.4s;
+        }
+
+        .article-main:hover::before {
+            opacity: 0.4;
+        }
+
+        .article-main:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 50px rgba(192, 132, 252, 0.12);
+            border-color: rgba(192, 132, 252, 0.25);
+        }
+
+        .article-main-img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            transition: filter 0.5s;
+        }
+
+        .article-main:hover .article-main-img {
+            filter: saturate(1.2) brightness(1.05);
+        }
+
+        .article-main-body {
+            padding: 30px;
+        }
+
+        .article-category {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.6rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            background: var(--accent-gradient-wide);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .article-main-body h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.9rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            line-height: 1.3;
+            background: linear-gradient(135deg, var(--text-primary) 50%, var(--accent-1));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .article-main-body p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .article-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .article-side-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            display: flex;
+            gap: 16px;
+            padding: 16px;
+            transition: all var(--transition);
+            position: relative;
+        }
+
+        .article-side-card:hover {
+            transform: translateX(6px);
+            box-shadow: 0 10px 30px rgba(192, 132, 252, 0.1);
+            border-color: rgba(244, 114, 182, 0.25);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .article-side-img {
+            width: 80px;
+            height: 80px;
+            border-radius: var(--radius-sm);
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 1px solid var(--border-color);
+            transition: border-color 0.3s;
+        }
+
+        .article-side-card:hover .article-side-img {
+            border-color: rgba(192, 132, 252, 0.4);
+        }
+
+        .article-side-text h4 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            line-height: 1.3;
+            transition: color 0.3s;
+        }
+
+        .article-side-card:hover .article-side-text h4 {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .article-side-text p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* --- INTERACTIVE PUZZLE SECTION --- */
+        .puzzle-section {
+            background: var(--bg-glass);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 60px 40px;
+            text-align: center;
+            margin-bottom: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .puzzle-section::before {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(244, 114, 182, 0.1), transparent 70%);
+            top: -150px;
+            right: -150px;
+        }
+
+        .puzzle-section::after {
+            content: '';
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(129, 140, 248, 0.08), transparent 70%);
+            bottom: -100px;
+            left: -100px;
+        }
+
+        .puzzle-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+        }
+
+        .puzzle-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+        }
+
+        .puzzle-cells {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .puzzle-cell {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--radius-sm);
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .puzzle-input {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--radius-sm);
+            background: rgba(168, 85, 247, 0.1);
+            border: 2px solid var(--accent-2);
+            text-align: center;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent-1);
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .puzzle-input:focus {
+            box-shadow: 0 0 20px var(--accent-glow);
+            border-color: var(--accent-1);
+        }
+
+        .solve-btn {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 14px 40px;
+            border: none;
+            border-radius: 50px;
+            background: var(--accent-gradient);
+            color: #fff;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .solve-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px var(--accent-glow);
+        }
+
+        #puzzle-msg {
+            margin-top: 16px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* --- CAKE SECTION --- */
+        #cake-section {
+            display: none;
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .cake-container {
+            position: relative;
+            width: 280px;
+            height: 300px;
+            margin: 40px auto;
+        }
+
+        .mg-layer {
+            height: 85px;
+            background: linear-gradient(180deg, var(--accent-1), var(--accent-2));
+            border-radius: 16px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%) translateY(-800px);
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 0 rgba(0, 0, 0, 0.15);
+        }
+
+        .mg-layer.base {
+            bottom: 0;
+            width: 280px;
+            z-index: 10;
+            background: linear-gradient(180deg, #e84393, #c43c81);
+        }
+
+        .mg-layer.mid {
+            bottom: 75px;
+            width: 220px;
+            z-index: 11;
+            background: linear-gradient(180deg, #a855f7, #9333ea);
+        }
+
+        .mg-layer.top {
+            bottom: 145px;
+            width: 160px;
+            z-index: 12;
+            background: linear-gradient(180deg, #6366f1, #4f46e5);
+        }
+
+        .mg-icing {
+            position: absolute;
+            top: -2px;
+            left: -1px;
+            right: -1px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 14px 14px 20px 20px;
+        }
+
+        .mg-icing::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 15px;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            box-shadow: 40px 6px 0 rgba(255, 255, 255, 0.15), 90px 4px 0 rgba(255, 255, 255, 0.18), 140px 8px 0 rgba(255, 255, 255, 0.12);
+        }
+
+        .mg-candle {
+            width: 14px;
+            height: 60px;
+            background: repeating-linear-gradient(45deg, #fff, #fff 5px, var(--accent-1) 5px, var(--accent-1) 10px);
+            position: absolute;
+            bottom: 230px;
+            left: 50%;
+            transform: translateX(-50%) scaleY(0);
+            transform-origin: bottom;
+            transition: transform 0.6s ease-out;
+            z-index: 15;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        .mg-flame {
+            width: 20px;
+            height: 30px;
+            background: radial-gradient(circle at 50% 60%, #ffd700, #ff9800);
+            border-radius: 50% 50% 20% 20%;
+            position: absolute;
+            top: -32px;
+            left: -3px;
+            animation: flicker 0.2s infinite alternate;
+            box-shadow: 0 0 25px #ff9800, 0 0 50px rgba(255, 152, 0, 0.4);
+        }
+
+        @keyframes flicker {
+            from {
+                transform: scale(1) rotate(-2deg);
+            }
+
+            to {
+                transform: scale(1.15) rotate(2deg);
+            }
+        }
+
+        .mg-drop {
+            transform: translateX(-50%) translateY(0) !important;
+        }
+
+        .mg-grow {
+            transform: translateX(-50%) scaleY(1) !important;
+        }
+
+        #cake-instruction {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-top: 30px;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+
+        /* --- FOOTER --- */
+        .mag-footer {
+            border-top: none;
+            padding: 80px 0 60px;
+            text-align: center;
+            margin-top: 40px;
+            position: relative;
+        }
+
+        .mag-footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 2px;
+            background: var(--accent-gradient-wide);
+            border-radius: 2px;
+        }
+
+        .mag-footer::after {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 500px;
+            height: 200px;
+            background: radial-gradient(ellipse, rgba(192, 132, 252, 0.08), transparent 70%);
+            pointer-events: none;
+        }
+
+        .mag-footer .footer-brand {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: var(--accent-gradient-wide);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+
+        .mag-footer p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .mag-footer .heart {
+            color: var(--accent-1);
+            animation: heartbeat 1.2s infinite;
+            display: inline-block;
+            filter: drop-shadow(0 0 8px rgba(244, 114, 182, 0.5));
+        }
+
+        @keyframes heartbeat {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.3);
+            }
+        }
+
+        /* --- SCROLL ANIMATIONS --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- AMBIENT ORBS (floating throughout) --- */
+        .ambient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .ambient-orb.pink {
+            width: 350px;
+            height: 350px;
+            background: rgba(244, 114, 182, 0.12);
+            animation: float-slow 12s ease-in-out infinite alternate;
+        }
+
+        .ambient-orb.purple {
+            width: 300px;
+            height: 300px;
+            background: rgba(192, 132, 252, 0.1);
+            animation: float-slow 15s ease-in-out infinite alternate-reverse;
+        }
+
+        .ambient-orb.cyan {
+            width: 280px;
+            height: 280px;
+            background: rgba(34, 211, 238, 0.08);
+            animation: float-slow 10s ease-in-out infinite alternate;
+        }
+
+        .ambient-orb.orange {
+            width: 250px;
+            height: 250px;
+            background: rgba(251, 146, 60, 0.07);
+            animation: float-slow 14s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes float-slow {
+            from {
+                transform: translate(0, 0) scale(1);
+            }
+
+            to {
+                transform: translate(30px, -25px) scale(1.1);
+            }
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 900px) {
+            .editorial-spread {
+                grid-template-columns: 1fr;
+            }
+
+            .editorial-spread.reverse {
+                direction: ltr;
+            }
+
+            .articles-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery-card.featured {
+                grid-column: span 1;
+                aspect-ratio: 3/4;
+            }
+
+            .mag-nav-links {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .gallery-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            .lock-card {
+                padding: 30px 24px;
+            }
+
+            .lock-card .title {
+                font-size: 2.2rem;
+            }
+
+            .countdown-modern .cd-unit {
+                padding: 8px 10px;
+                min-width: 50px;
+            }
+
+            .countdown-modern .cd-num {
+                font-size: 1.4rem;
+            }
+
+            .puzzle-section {
+                padding: 40px 20px;
+            }
+        }
+
+        /* --- LIGHTBOX --- */
+        #lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 5000;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            cursor: pointer;
+        }
+
+        #lightbox.active {
+            display: flex;
+        }
+
+        #lightbox img {
+            max-width: 90%;
+            max-height: 85vh;
+            object-fit: contain;
+            border-radius: var(--radius-md);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+        }
+
+        #lightbox .lb-caption {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            max-width: 500px;
+        }
+
+        #lightbox .lb-caption h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+        }
+
+        #lightbox .lb-caption p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ======= LOCK SCREEN ======= -->
+    <div id="lock-screen">
+        <div class="lock-card">
+            <div class="issue-tag">Special Birthday Issue</div>
+            <h1 class="title">ASTHA</h1>
+            <p class="subtitle">The Birthday Issue — Vol. XIX, February 2026</p>
+
+            <div class="countdown-modern" id="countdown-area">
+                <div class="cd-unit">
+                    <div class="cd-num" id="cd-d">00</div>
+                    <div class="cd-label">Days</div>
+                </div>
+                <div class="cd-unit">
+                    <div class="cd-num" id="cd-h">00</div>
+                    <div class="cd-label">Hours</div>
+                </div>
+                <div class="cd-unit">
+                    <div class="cd-num" id="cd-m">00</div>
+                    <div class="cd-label">Mins</div>
+                </div>
+                <div class="cd-unit">
+                    <div class="cd-num" id="cd-s">00</div>
+                    <div class="cd-label">Secs</div>
+                </div>
+            </div>
+
+            <button class="unlock-btn" id="sealBtn" title="Unlock">🔐</button>
+            <div class="secret-link" id="secretTrigger">"To the one who understands me best"</div>
+        </div>
+    </div>
+
+    <!-- ======= NAV ======= -->
+    <nav class="mag-nav">
+        <div class="mag-nav-inner">
+            <div class="mag-logo">ASTHA MAG</div>
+            <ul class="mag-nav-links">
+                <li><a href="#feature">Feature</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#articles">Articles</a></li>
+                <li><a href="#puzzle">Puzzle</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ======= HERO ======= -->
+    <section class="hero-section" id="hero">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="hero-content magazine">
+            <div class="hero-badge">February 21, 2026 — 19th Edition</div>
+            <h1 class="hero-title">
+                The <span class="highlight">Astha</span> Issue
+            </h1>
+            <p class="hero-subtitle" id="typewriter-target"></p>
+            <div class="hero-scroll-hint">
+                Scroll to explore
+                <span>↓</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======= EDITORIAL SPREADS ======= -->
+    <section class="magazine" id="feature" style="position: relative;">
+        <!-- Ambient orbs -->
+        <div class="ambient-orb pink" style="top: 200px; left: -150px;"></div>
+        <div class="ambient-orb purple" style="top: 800px; right: -100px;"></div>
+        <div class="ambient-orb cyan" style="top: 1500px; left: -80px;"></div>
+        <div class="ambient-orb orange" style="top: 2200px; right: -120px;"></div>
+        <div class="section-header reveal">
+            <div class="section-label">Cover Story</div>
+            <h2 class="section-title">A Bond Beyond Words</h2>
+            <div class="section-divider"></div>
+        </div>
+
+        <!-- Spread 1 -->
+        <div class="editorial-spread reveal">
+            <div class="editorial-img-wrap">
+                <div class="editorial-img-number">01</div>
+                <img src="1.jpeg" alt="Astha — The Rant Partner">
+            </div>
+            <div class="editorial-text">
+                <div class="editorial-tag">The Beginning</div>
+                <h2>The Rant Partner 🗣️</h2>
+                <p>Every great story has a beginning, and ours started with endless conversations. From the first time
+                    we
+                    connected, there was something magnetic — a mutual understanding that words alone can't capture.</p>
+                <div class="editorial-quote">
+                    "Some people arrive and make such a beautiful impact on your life, you can hardly remember what life
+                    was like without them."
+                </div>
+                <p>Astha is more than just a neighbor or a friend; she's the one who held the umbrella when life was a
+                    storm. From deepest rants to matters no one else would understand, she's been the silent pillar of
+                    strength.</p>
+            </div>
+        </div>
+
+        <!-- Spread 2 -->
+        <div class="editorial-spread reverse reveal">
+            <div class="editorial-img-wrap">
+                <div class="editorial-img-number">02</div>
+                <img src="5.jpeg" alt="Astha — Family by Choice">
+            </div>
+            <div class="editorial-text">
+                <div class="editorial-tag">The Bond</div>
+                <h2>Family by Choice ❤️</h2>
+                <p>There are friends, and then there are the people who become family. She didn't just enter my life;
+                    she rewrote its chapters. Through every high and low, the bond only grew stronger.</p>
+                <div class="editorial-quote">
+                    "I consider you more than a friend. You're family to me, through and through."
+                </div>
+                <p>Happy Birthday to the person who makes the impossible feel manageable. You are family, and I'm
+                    forever grateful for our late-night rants and unwavering support. 🧿</p>
+            </div>
+        </div>
+
+        <!-- Spread 3 -->
+        <div class="editorial-spread reveal">
+            <div class="editorial-img-wrap">
+                <div class="editorial-img-number">03</div>
+                <img src="9.jpeg" alt="Astha — Late Night Talks">
+            </div>
+            <div class="editorial-text">
+                <div class="editorial-tag">The Midnight Chapters</div>
+                <h2>Late Night Talks 🌙</h2>
+                <p>Some of the best conversations happen when the rest of the world is asleep. Under the quiet of the
+                    night,
+                    no topic is too heavy, no feeling too fragile. These are the moments that define our friendship.</p>
+                <div class="editorial-quote">
+                    "Here's to many more nights of sharing our lives and supporting each other."
+                </div>
+                <p>It's in these quiet hours that the real bond shines — unguarded, unfiltered, and unbreakable. Late
+                    night talks aren't just conversations; they're therapy sessions with the best person in the world.
+                </p>
+            </div>
+        </div>
+
+        <!-- Spread 4 -->
+        <div class="editorial-spread reverse reveal">
+            <div class="editorial-img-wrap">
+                <div class="editorial-img-number">04</div>
+                <img src="11.jpeg" alt="Astha — The Best Companion">
+            </div>
+            <div class="editorial-text">
+                <div class="editorial-tag">The Constant</div>
+                <h2>The Best Companion 🌟</h2>
+                <p>Some people walk into your life and you just know — they're meant to stay. Astha isn't the friend you
+                    call only when things are good. She's the one you call first when everything falls apart, and she
+                    picks up every single time.</p>
+                <div class="editorial-quote">
+                    "Life is so much better with you navigating it by my side. You make the chaos feel like an
+                    adventure."
+                </div>
+                <p>Whether it's random 2 AM thoughts or the biggest decisions of life, having her around makes
+                    everything feel lighter. She doesn't just listen — she understands. And that's the rarest kind of
+                    companion you can find.</p>
+            </div>
+        </div>
+
+        <!-- Spread 5 — ⭐ HIGHLIGHT: Image 14 (The Photographer's Frame) -->
+        <div class="editorial-spread highlight reveal">
+            <div class="highlight-badge">⭐ Editor's Pick</div>
+            <div class="editorial-img-wrap">
+                <div class="editorial-img-number">05</div>
+                <img src="14.jpeg" alt="Astha — The Final Frame">
+            </div>
+            <div class="editorial-text">
+                <div class="editorial-tag">The Photographer's Frame</div>
+                <h2>Happy Birthday — Through My Lens 📸</h2>
+                <p>They say a photographer captures moments, but some moments capture the photographer. This one's
+                    special — because behind the camera was someone who truly sees you, not just the way you look,
+                    but the way you make the world feel brighter just by being in it.</p>
+                <div class="editorial-quote">
+                    "To many more years of being each other's person. I love you, fam! 🧿 Here's to the birthday girl
+                    who deserves every frame, every chapter, and every celebration the universe can offer."
+                </div>
+                <p>This photo isn't just a picture — it's a promise. A promise that no matter how many birthdays pass,
+                    no matter how far life takes us, I'll always be there with the camera ready, capturing the moments
+                    that make our story worth telling. Happy 19th, Astha. The best is yet to come. 🎂✨</p>
+                <div class="photographer-credit">
+                    <span class="cam-icon">📷</span>
+                    Shot by Smeet — your personal paparazzi
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======= PHOTO GALLERY ======= -->
+    <section class="magazine" id="gallery" style="position: relative;">
+        <div class="ambient-orb purple" style="top: 100px; right: -120px;"></div>
+        <div class="ambient-orb pink" style="bottom: 100px; left: -100px;"></div>
+        <div class="section-header reveal">
+            <div class="section-label">Photo Journal</div>
+            <h2 class="section-title">Moments Worth a Thousand Words</h2>
+            <div class="section-divider"></div>
+        </div>
+
+        <div class="gallery-grid reveal" id="galleryGrid"></div>
+    </section>
+
+    <!-- ======= ARTICLES SECTION ======= -->
+    <section class="magazine" id="articles" style="position: relative;">
+        <div class="ambient-orb cyan" style="top: 50px; left: -150px;"></div>
+        <div class="ambient-orb orange" style="bottom: 50px; right: -130px;"></div>
+        <div class="section-header reveal">
+            <div class="section-label">Behind The Scenes</div>
+            <h2 class="section-title">Stories From Our Journey</h2>
+            <div class="section-divider"></div>
+        </div>
+
+        <div class="articles-grid reveal">
+            <div class="article-main">
+                <img src="3.jpeg" class="article-main-img" alt="Soul Connection">
+                <div class="article-main-body">
+                    <div class="article-category">Feature Story</div>
+                    <h3>The Soul Connection That Changed Everything ✨</h3>
+                    <p>They say some connections are written in the stars. Our friendship isn't built on weekend outings
+                        or social media — it's built on the raw, real moments where we've shown up for each other when
+                        it mattered the most. She's helped me through things I couldn't even speak about with others. In
+                        a world of filtered friendships, this one is refreshingly real.</p>
+                </div>
+            </div>
+
+            <div class="article-sidebar">
+                <div class="article-side-card">
+                    <img src="4.jpeg" class="article-side-img" alt="Life's Anchor">
+                    <div class="article-side-text">
+                        <h4>Life's Anchor ⚓</h4>
+                        <p>Without you, some situations would have been impossible to handle.</p>
+                    </div>
+                </div>
+                <div class="article-side-card">
+                    <img src="6.jpeg" class="article-side-img" alt="The Listener">
+                    <div class="article-side-text">
+                        <h4>The Listener 👂</h4>
+                        <p>Thanks for always being there when I need to rant, and for trusting me with yours.</p>
+                    </div>
+                </div>
+                <div class="article-side-card">
+                    <img src="7.jpeg" class="article-side-img" alt="Shared Secrets">
+                    <div class="article-side-text">
+                        <h4>Shared Secrets 🤫</h4>
+                        <p>Grateful for the bond where we can talk about anything without judgment.</p>
+                    </div>
+                </div>
+                <div class="article-side-card">
+                    <img src="8.jpeg" class="article-side-img" alt="Unwavering Support">
+                    <div class="article-side-text">
+                        <h4>Unwavering Support 🫂</h4>
+                        <p>You've had my back in ways that have truly changed my life.</p>
+                    </div>
+                </div>
+                <div class="article-side-card">
+                    <img src="10.jpeg" class="article-side-img" alt="Strength & Grace">
+                    <div class="article-side-text">
+                        <h4>Strength & Grace ✨</h4>
+                        <p>I admire how you handle everything life throws at you. You're an inspiration.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======= PUZZLE SECTION ======= -->
+    <section class="magazine" id="puzzle">
+        <div class="puzzle-section reveal">
+            <div class="section-label">Interactive</div>
+            <h2 class="puzzle-title">Unlock the Celebration 🎂</h2>
+            <p class="puzzle-desc">"I have layers and icing. What am I?"</p>
+
+            <div class="puzzle-cells">
+                <div class="puzzle-cell">C</div>
+                <div class="puzzle-cell">A</div>
+                <input class="puzzle-input" id="missingChar" maxlength="1" autocomplete="off">
+                <div class="puzzle-cell">E</div>
+            </div>
+
+            <button class="solve-btn" onclick="checkPuzzle()">SOLVE</button>
+            <div id="puzzle-msg"></div>
+        </div>
+    </section>
+
+    <!-- ======= CAKE SECTION ======= -->
+    <section class="magazine" id="cake-section">
+        <div class="section-header">
+            <div class="section-label">Grand Finale</div>
+            <h2 class="section-title">A Grand Celebration 🎉</h2>
+            <div class="section-divider"></div>
+        </div>
+
+        <div class="cake-container" id="cake-stage"></div>
+        <p id="cake-instruction">Click the candle to blow it out!</p>
+    </section>
+
+    <!-- ======= FOOTER ======= -->
+    <footer class="mag-footer">
+        <div class="footer-brand">ASTHA MAG</div>
+        <p>Made with <span class="heart">♥</span> for the best soul sister in the world</p>
+        <p style="margin-top: 8px; font-size: 0.75rem; color: var(--text-muted);">February 21, 2026 — 19th Birthday
+            Special</p>
+    </footer>
+
+    <!-- ======= LIGHTBOX ======= -->
+    <div id="lightbox">
+        <img id="lb-img" src="" alt="Gallery Image">
+        <div class="lb-caption">
+            <h3 id="lb-title"></h3>
+            <p id="lb-desc"></p>
+        </div>
+    </div>
+
+    <!-- ======= AUDIO ======= -->
+    <audio id="bgMusic" loop>
+        <source src="birthday-song.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // ═══════════════════════════════════════════
+        //  DATA
+        // ═══════════════════════════════════════════
+        const galleryData = [
+            { img: "1.jpeg", text: "The Rant Partner 🗣️", desc: "For all the times you've listened when I needed to vent. You understand me like no one else." },
+            { img: "2.jpeg", text: "Society Bonding 🏠", desc: "From meeting in the society to becoming family. Grateful for every conversation." },
+            { img: "3.jpeg", text: "Soul Connection ✨", desc: "You've helped me through things I couldn't even speak about with others." },
+            { img: "4.jpeg", text: "Life's Anchor ⚓", desc: "Without you, some situations would have been impossible to handle." },
+            { img: "5.jpeg", text: "Family by Choice ❤️", desc: "I consider you more than a friend. You're family to me, through and through." },
+            { img: "6.jpeg", text: "The Listener 👂", desc: "Thanks for always being there when I need to rant, and for trusting me with yours." },
+            { img: "7.jpeg", text: "Shared Secrets 🤫", desc: "Grateful for the bond where we can talk about anything without judgment." },
+            { img: "8.jpeg", text: "Unwavering Support 🫂", desc: "You've had my back in ways that have truly changed my life." },
+            { img: "9.jpeg", text: "Late Night Talks 🌙", desc: "Here's to many more nights of sharing our lives and supporting each other." },
+            { img: "10.jpeg", text: "Strength & Grace ✨", desc: "I admire how you handle everything life throws at you. You're an inspiration." },
+            { img: "11.jpeg", text: "The Best Companion 🌟", desc: "Life is so much better with you navigating it by my side." },
+            { img: "12.jpeg", text: "Endless Laughter 😂", desc: "Thanks for the rants that always end in laughter." },
+            { img: "13.jpeg", text: "A True Gem 💎", desc: "You are a rare kind of person, Astha. Never change." },
+            { img: "14.jpeg", text: "Happy Birthday! 🎈", desc: "To many more years of being each other's person. I love you, fam! 🧿" }
+        ];
+
+        // ═══════════════════════════════════════════
+        //  LOCK SCREEN
+        // ═══════════════════════════════════════════
+        const targetDate = new Date("February 21, 2026 00:00:00").getTime();
+
+        function unlockSite() {
+            document.getElementById('lock-screen').classList.add('lock-open');
+            document.getElementById('bgMusic').volume = 0.3;
+            document.getElementById('bgMusic').play().catch(() => { });
+            typeWriter("A Bond Beyond Words — Celebrating friendship, laughter, and everything in between.");
+        }
+
+        document.getElementById('sealBtn').onclick = () => {
+            const now = new Date().getTime();
+            if (targetDate - now <= 0) {
+                unlockSite();
+            } else {
+                alert("⏳ THE TIME IS NOT YET RIGHT\nThis issue drops when the celebration begins.");
+            }
+        };
+
+        document.getElementById('secretTrigger').onclick = () => {
+            const pass = prompt("🔒 EDITOR'S ACCESS\nEnter Override Password:");
+            if (pass && pass.toUpperCase() === "ASTHA19") {
+                unlockSite();
+            } else if (pass) {
+                alert("⛔ ACCESS DENIED. Nice try though!");
+            }
+        };
+
+        // Countdown
+        setInterval(() => {
+            const dist = targetDate - new Date().getTime();
+            if (dist > 0) {
+                document.getElementById('cd-d').innerText = String(Math.floor(dist / 86400000)).padStart(2, '0');
+                document.getElementById('cd-h').innerText = String(Math.floor((dist % 86400000) / 3600000)).padStart(2, '0');
+                document.getElementById('cd-m').innerText = String(Math.floor((dist % 3600000) / 60000)).padStart(2, '0');
+                document.getElementById('cd-s').innerText = String(Math.floor((dist % 60000) / 1000)).padStart(2, '0');
+            } else {
+                document.getElementById('countdown-area').innerHTML = '<div style="font-family: Outfit; font-size:1.2rem; font-weight:700; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">🎉 TIME TO CELEBRATE! 🎉</div>';
+                document.getElementById('sealBtn').style.boxShadow = '0 0 40px var(--accent-glow)';
+            }
+        }, 1000);
+
+        // ═══════════════════════════════════════════
+        //  TYPEWRITER
+        // ═══════════════════════════════════════════
+        function typeWriter(text) {
+            let i = 0;
+            const el = document.getElementById('typewriter-target');
+            const t = setInterval(() => {
+                el.innerText = text.substring(0, i++);
+                if (i > text.length) clearInterval(t);
+            }, 40);
+        }
+
+        // ═══════════════════════════════════════════
+        //  GALLERY — Build grid
+        // ═══════════════════════════════════════════
+        const grid = document.getElementById('galleryGrid');
+        galleryData.forEach((item, idx) => {
+            const card = document.createElement('div');
+            card.className = 'gallery-card' + (idx === 0 ? ' featured' : '');
+            card.innerHTML = `
+                <img src="${item.img}" alt="${item.text}">
+                <div class="gallery-card-overlay">
+                    <h3>${item.text}</h3>
+                    <p>${item.desc}</p>
+                </div>
+            `;
+            card.onclick = () => openLightbox(item);
+            grid.appendChild(card);
+        });
+
+        // ═══════════════════════════════════════════
+        //  LIGHTBOX
+        // ═══════════════════════════════════════════
+        const lightbox = document.getElementById('lightbox');
+        function openLightbox(item) {
+            document.getElementById('lb-img').src = item.img;
+            document.getElementById('lb-title').innerText = item.text;
+            document.getElementById('lb-desc').innerText = item.desc;
+            lightbox.classList.add('active');
+        }
+        lightbox.onclick = () => lightbox.classList.remove('active');
+
+        // ═══════════════════════════════════════════
+        //  PUZZLE
+        // ═══════════════════════════════════════════
+        function checkPuzzle() {
+            const val = document.getElementById('missingChar').value.toUpperCase();
+            const msg = document.getElementById('puzzle-msg');
+            if (val === "K") {
+                msg.innerText = "✨ ASSEMBLING CAKE...";
+                msg.style.color = "#a855f7";
+                startCake();
+            } else {
+                msg.innerText = "❌ TRY AGAIN!";
+                msg.style.color = "#e84393";
+            }
+        }
+
+        // ═══════════════════════════════════════════
+        //  CAKE
+        // ═══════════════════════════════════════════
+        function startCake() {
+            const section = document.getElementById('cake-section');
+            section.style.display = 'block';
+            setTimeout(() => section.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+
+            const stage = document.getElementById('cake-stage');
+            stage.innerHTML = '';
+
+            ['base', 'mid', 'top'].forEach((type, i) => {
+                const l = document.createElement('div');
+                l.className = `mg-layer ${type}`;
+                l.innerHTML = `<div class="mg-icing"></div>`;
+                stage.appendChild(l);
+                setTimeout(() => l.classList.add('mg-drop'), i * 500);
+            });
+
+            setTimeout(() => {
+                const candle = document.createElement('div');
+                candle.className = 'mg-candle';
+                candle.innerHTML = '<div class="mg-flame" id="mgFlame"></div>';
+                candle.onclick = () => {
+                    document.getElementById('mgFlame').style.display = 'none';
+                    document.getElementById('cake-instruction').innerText = "🎂 Happy Birthday Astha! 🧿";
+                    document.getElementById('cake-instruction').style.fontSize = '1.6rem';
+                    document.getElementById('cake-instruction').style.background = 'var(--accent-gradient)';
+                    document.getElementById('cake-instruction').style.webkitBackgroundClip = 'text';
+                    document.getElementById('cake-instruction').style.webkitTextFillColor = 'transparent';
+                    confetti({ particleCount: 250, spread: 100, origin: { y: 0.6 }, colors: ['#e84393', '#a855f7', '#6366f1', '#f5c842'] });
+                    setTimeout(() => confetti({ particleCount: 100, spread: 60, origin: { y: 0.5 } }), 600);
+                };
+                stage.appendChild(candle);
+                setTimeout(() => {
+                    candle.classList.add('mg-grow');
+                    document.getElementById('cake-instruction').style.opacity = '1';
+                }, 100);
+            }, 1800);
+        }
+
+        // ═══════════════════════════════════════════
+        //  SCROLL REVEAL ANIMATION
+        // ═══════════════════════════════════════════
+        const revealEls = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        revealEls.forEach(el => observer.observe(el));
+    </script>
+</body>
+
+</html>
