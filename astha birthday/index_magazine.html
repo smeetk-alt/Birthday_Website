@@ -1414,6 +1414,91 @@
             font-size: 0.9rem;
             color: var(--text-secondary);
         }
+
+        /* --- SHAKE TO REVEAL EASTER EGG --- */
+        .shake-reveal-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--radius-lg);
+        }
+
+        .shake-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 100;
+            background: rgba(8, 8, 14, 0.85);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px;
+            transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
+            cursor: pointer;
+        }
+
+        .shake-overlay.revealed {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(1.1);
+        }
+
+        .shake-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: phoneShake 2s infinite;
+        }
+
+        @keyframes phoneShake {
+
+            0%,
+            100% {
+                transform: rotate(0);
+            }
+
+            10%,
+            30%,
+            50%,
+            70%,
+            90% {
+                transform: rotate(-10deg);
+            }
+
+            20%,
+            40%,
+            60%,
+            80% {
+                transform: rotate(10deg);
+            }
+        }
+
+        .shake-overlay h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            background: var(--accent-gradient-wide);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .shake-overlay p {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            max-width: 300px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .shake-overlay .desktop-hint {
+            display: block;
+            margin-top: 15px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
     </style>
 </head>
 
@@ -1578,28 +1663,40 @@
         </div>
 
         <!-- Spread 5 — ⭐ HIGHLIGHT: Image 14 (The Photographer's Frame) -->
-        <div class="editorial-spread highlight reveal">
-            <div class="highlight-badge">⭐ Editor's Pick</div>
-            <div class="editorial-img-wrap">
-                <div class="editorial-img-number">05</div>
-                <img src="14.jpeg" alt="Astha — The Final Frame">
+        <div class="shake-reveal-container reveal">
+            <div class="shake-overlay" id="shakeOverlay" ondblclick="revealEditorChoice()">
+                <div class="shake-icon">📱</div>
+                <h3>Editor's Exclusive</h3>
+                <p>Shake your phone to reveal the final frame</p>
+                <span class="desktop-hint">(Or double-click on desktop)</span>
             </div>
-            <div class="editorial-text">
-                <div class="editorial-tag">The Photographer's Frame</div>
-                <h2>Happy Birthday — Through My Lens 📸</h2>
-                <p>They say a photographer captures moments, but some moments capture the photographer. This one's
-                    special — because behind the camera was someone who truly sees you, not just the way you look,
-                    but the way you make the world feel brighter just by being in it.</p>
-                <div class="editorial-quote">
-                    "To many more years of being each other's person. I love you, fam! 🧿 Here's to the birthday girl
-                    who deserves every frame, every chapter, and every celebration the universe can offer."
+
+            <div class="editorial-spread highlight">
+                <div class="highlight-badge">⭐ Editor's Pick</div>
+                <div class="editorial-img-wrap">
+                    <div class="editorial-img-number">05</div>
+                    <img src="14.jpeg" alt="Astha — The Final Frame">
                 </div>
-                <p>This photo isn't just a picture — it's a promise. A promise that no matter how many birthdays pass,
-                    no matter how far life takes us, I'll always be there with the camera ready, capturing the moments
-                    that make our story worth telling. Happy 19th, Astha. The best is yet to come. 🎂✨</p>
-                <div class="photographer-credit">
-                    <span class="cam-icon">📷</span>
-                    Shot by Smeet — your personal paparazzi
+                <div class="editorial-text">
+                    <div class="editorial-tag">The Photographer's Frame</div>
+                    <h2>Happy Birthday — Through My Lens 📸</h2>
+                    <p>They say a photographer captures moments, but some moments capture the photographer. This one's
+                        special — because behind the camera was someone who truly sees you, not just the way you look,
+                        but the way you make the world feel brighter just by being in it.</p>
+                    <div class="editorial-quote">
+                        "To many more years of being each other's person. I love you, fam! 🧿 Here's to the birthday
+                        girl
+                        who deserves every frame, every chapter, and every celebration the universe can offer."
+                    </div>
+                    <p>This photo isn't just a picture — it's a promise. A promise that no matter how many birthdays
+                        pass,
+                        no matter how far life takes us, I'll always be there with the camera ready, capturing the
+                        moments
+                        that make our story worth telling. Happy 19th, Astha. The best is yet to come. 🎂✨</p>
+                    <div class="photographer-credit">
+                        <span class="cam-icon">📷</span>
+                        Shot by Smeet — your personal paparazzi
+                    </div>
                 </div>
             </div>
         </div>
@@ -1911,6 +2008,49 @@
         }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
         revealEls.forEach(el => observer.observe(el));
+        // --- SHAKE TO REVEAL ---
+        function revealEditorChoice() {
+            const overlay = document.getElementById('shakeOverlay');
+            if (overlay) {
+                overlay.classList.add('revealed');
+                // Confetti for extra hype
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#f472b6', '#c084fc', '#818cf8', '#22d3ee']
+                });
+            }
+        }
+
+        // Detect shake event
+        let lastX, lastY, lastZ;
+        let moveCounter = 0;
+
+        window.addEventListener('devicemotion', function (event) {
+            let acceleration = event.accelerationIncludingGravity;
+            let x = acceleration.x;
+            let y = acceleration.y;
+            let z = acceleration.z;
+
+            if (lastX !== undefined) {
+                let deltaX = Math.abs(x - lastX);
+                let deltaY = Math.abs(y - lastY);
+                let deltaZ = Math.abs(z - lastZ);
+
+                if (deltaX + deltaY + deltaZ > 25) { // Sensitivity threshold
+                    moveCounter++;
+                    if (moveCounter > 5) { // Consecutive shakes
+                        revealEditorChoice();
+                        moveCounter = 0;
+                    }
+                }
+            }
+
+            lastX = x;
+            lastY = y;
+            lastZ = z;
+        });
     </script>
 </body>
 

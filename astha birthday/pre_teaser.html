@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>??? — Something is Coming</title>
+    <meta name="description" content="Something extraordinary is about to happen. Are you ready?">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #05050a;
+            --text-primary: #f0f0f5;
+            --text-secondary: #b8b8d0;
+            --text-muted: #5a5a78;
+            --accent-1: #f472b6;
+            --accent-2: #c084fc;
+            --accent-3: #818cf8;
+            --accent-4: #22d3ee;
+            --accent-gradient: linear-gradient(135deg, #f472b6, #c084fc, #818cf8);
+            --accent-gradient-wide: linear-gradient(135deg, #fb923c, #f472b6, #c084fc, #818cf8, #22d3ee);
+            --border-color: rgba(192, 132, 252, 0.12);
+            --radius-lg: 32px;
+            --radius-md: 20px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background:
+                radial-gradient(ellipse 500px 500px at 15% 25%, rgba(244, 114, 182, 0.06), transparent),
+                radial-gradient(ellipse 400px 400px at 85% 15%, rgba(129, 140, 248, 0.05), transparent),
+                radial-gradient(ellipse 600px 600px at 50% 70%, rgba(192, 132, 252, 0.04), transparent);
+            pointer-events: none;
+        }
+
+        /* SCANLINES */
+        .scanlines {
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            pointer-events: none;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.03) 2px, rgba(0, 0, 0, 0.03) 4px);
+        }
+
+        /* PARTICLES */
+        .particles {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: floatP 18s infinite;
+        }
+
+        .particle.p1 {
+            width: 4px;
+            height: 4px;
+            background: rgba(244, 114, 182, 0.4);
+            box-shadow: 0 0 8px rgba(244, 114, 182, 0.2);
+        }
+
+        .particle.p2 {
+            width: 3px;
+            height: 3px;
+            background: rgba(192, 132, 252, 0.4);
+            box-shadow: 0 0 8px rgba(192, 132, 252, 0.2);
+        }
+
+        .particle.p3 {
+            width: 2px;
+            height: 2px;
+            background: rgba(34, 211, 238, 0.4);
+            box-shadow: 0 0 8px rgba(34, 211, 238, 0.2);
+        }
+
+        @keyframes floatP {
+
+            0%,
+            100% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-100px) translateX(60px);
+                opacity: 0;
+            }
+        }
+
+        /* MAIN CONTAINER */
+        .main-wrapper {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            max-width: 600px;
+            width: 90%;
+        }
+
+        /* GLITCH TITLE */
+        .glitch-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.4rem, 8vw, 4.2rem);
+            font-weight: 700;
+            text-align: center;
+            position: relative;
+            line-height: 1.1;
+            animation: fadeInUp 1.5s ease backwards;
+        }
+
+        .glitch-title span {
+            background: var(--accent-gradient-wide);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+
+        .glitch-title::before,
+        .glitch-title::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            font-family: inherit;
+            font-size: inherit;
+            font-weight: inherit;
+            background: var(--accent-gradient-wide);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .glitch-title::before {
+            animation: glitch1 3s infinite;
+            clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+        }
+
+        .glitch-title::after {
+            animation: glitch2 3s infinite;
+            clip-path: polygon(0 66%, 100% 66%, 100% 100%, 0 100%);
+        }
+
+        @keyframes glitch1 {
+
+            0%,
+            90%,
+            100% {
+                transform: translate(0);
+            }
+
+            92% {
+                transform: translate(-3px, 1px);
+            }
+
+            94% {
+                transform: translate(3px, -1px);
+            }
+
+            96% {
+                transform: translate(-2px, 0);
+            }
+        }
+
+        @keyframes glitch2 {
+
+            0%,
+            88%,
+            100% {
+                transform: translate(0);
+            }
+
+            90% {
+                transform: translate(3px, 1px);
+            }
+
+            93% {
+                transform: translate(-3px, -1px);
+            }
+
+            95% {
+                transform: translate(2px, 0);
+            }
+        }
+
+        /* MYSTERY PHOTO */
+        .photo-frame {
+            width: 280px;
+            height: 280px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            animation: fadeInUp 1.5s ease 0.3s backwards;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(192, 132, 252, 0.1);
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(2px) saturate(0.3) brightness(0.4);
+            transform: scale(1.3);
+            transition: filter 0.5s ease, transform 0.5s ease;
+        }
+
+        .photo-frame:hover img {
+            filter: blur(0px) saturate(0.4) brightness(0.5);
+            transform: scale(1.35);
+        }
+
+        .photo-frame::after {
+            content: '🔒';
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            background: radial-gradient(circle, transparent 30%, rgba(5, 5, 10, 0.7) 100%);
+            animation: lockPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes lockPulse {
+
+            0%,
+            100% {
+                opacity: 0.8;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        /* PHOTO SWAP */
+        .photo-frame.swapping img {
+            animation: photoGlitch 0.6s ease;
+        }
+
+        @keyframes photoGlitch {
+            0% {
+                opacity: 1;
+                transform: scale(1.3);
+            }
+
+            30% {
+                opacity: 0;
+                transform: scale(1.5) rotate(2deg);
+                filter: blur(40px) brightness(2);
+            }
+
+            60% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1.3);
+            }
+        }
+
+        /* COUNTDOWN */
+        .countdown-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 30px 40px;
+            backdrop-filter: blur(20px);
+            text-align: center;
+            animation: fadeInUp 1.5s ease 0.6s backwards;
+            width: 100%;
+        }
+
+        .countdown-label {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+        }
+
+        .countdown-row {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cd-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .cd-num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+            min-width: 55px;
+        }
+
+        .cd-lbl {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.5rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .cd-sep {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            color: var(--text-muted);
+            padding-bottom: 14px;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.2;
+            }
+        }
+
+        .unlock-label {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 14px;
+        }
+
+        /* QUOTE */
+        .quote-box {
+            border-left: 3px solid transparent;
+            border-image: var(--accent-gradient) 1;
+            padding: 16px 16px 16px 20px;
+            background: linear-gradient(90deg, rgba(192, 132, 252, 0.04), transparent);
+            border-radius: 0 12px 12px 0;
+            text-align: left;
+            width: 100%;
+            animation: fadeInUp 1.5s ease 0.9s backwards;
+            min-height: 90px;
+            transition: opacity 0.4s ease;
+        }
+
+        .quote-text {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            opacity: 1;
+            transition: opacity 0.4s ease;
+        }
+
+        .quote-text.fading {
+            opacity: 0;
+        }
+
+        /* MYSTERY HINTS */
+        .hints-strip {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeInUp 1.5s ease 1.2s backwards;
+        }
+
+        .hint-chip {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 8px 18px;
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(10px);
+            animation: chipGlow 4s ease-in-out infinite;
+        }
+
+        .hint-chip:nth-child(2) {
+            animation-delay: 1s;
+        }
+
+        .hint-chip:nth-child(3) {
+            animation-delay: 2s;
+        }
+
+        .hint-chip:nth-child(4) {
+            animation-delay: 3s;
+        }
+
+        @keyframes chipGlow {
+
+            0%,
+            100% {
+                border-color: rgba(192, 132, 252, 0.1);
+                color: var(--text-muted);
+            }
+
+            50% {
+                border-color: rgba(192, 132, 252, 0.35);
+                color: var(--text-secondary);
+            }
+        }
+
+        /* TEASER LINK (disabled until Feb 20 8pm) */
+        .teaser-btn {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 16px 40px;
+            border: none;
+            border-radius: 50px;
+            cursor: not-allowed;
+            text-decoration: none;
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 1.5s ease 1.5s backwards;
+            transition: all 0.4s ease;
+        }
+
+        .teaser-btn.unlocked {
+            cursor: pointer;
+            background: var(--accent-gradient);
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 8px 30px rgba(192, 132, 252, 0.35);
+            animation: unlockPulse 2s ease-in-out infinite;
+        }
+
+        .teaser-btn.unlocked:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 14px 45px rgba(192, 132, 252, 0.5);
+        }
+
+        @keyframes unlockPulse {
+
+            0%,
+            100% {
+                box-shadow: 0 8px 30px rgba(192, 132, 252, 0.35);
+            }
+
+            50% {
+                box-shadow: 0 8px 50px rgba(244, 114, 182, 0.45);
+            }
+        }
+
+        .lock-icon {
+            margin-right: 8px;
+        }
+
+        /* FOOTER */
+        .footer-whisper {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: 10px;
+            animation: fadeInUp 1.5s ease 1.8s backwards;
+            opacity: 0.6;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 600px) {
+            .photo-frame {
+                width: 220px;
+                height: 220px;
+            }
+
+            .countdown-card {
+                padding: 22px 18px;
+            }
+
+            .cd-num {
+                font-size: 2.2rem;
+                min-width: 42px;
+            }
+
+            .hints-strip {
+                gap: 6px;
+            }
+
+            .hint-chip {
+                padding: 6px 14px;
+                font-size: 0.6rem;
+            }
+        }
+
+        /* EASTER EGG FLASH */
+        .flash-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 5000;
+            background: white;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.1s ease;
+        }
+
+        .flash-overlay.active {
+            opacity: 0.15;
+            transition: opacity 0.05s ease;
+        }
+
+        /* EASTER EGG STYLES */
+        .easter-egg-msg {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            pointer-events: none;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--accent-gradient-wide);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(192, 132, 252, 0.4);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .easter-egg-msg.active {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-20px);
+        }
+
+        .sparkle-burst {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent-1);
+            box-shadow: 0 0 10px var(--accent-1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="scanlines"></div>
+    <div class="particles" id="particles"></div>
+    <div class="flash-overlay" id="flashOverlay"></div>
+    <div id="easterEggMsg" class="easter-egg-msg">19 clicks for 19 years 💫</div>
+
+    <div class="main-wrapper">
+        <!-- GLITCH TITLE -->
+        <h1 class="glitch-title" data-text="Something is Coming...">
+            <span>Something is Coming...</span>
+        </h1>
+
+        <!-- MYSTERY PHOTO -->
+        <div class="photo-frame" id="photoFrame" onclick="swapPhoto()">
+            <img id="mysteryPhoto" src="1.jpeg" alt="???">
+        </div>
+
+        <!-- COUNTDOWN TO TEASER UNLOCK -->
+        <div class="countdown-card">
+            <div class="countdown-label">Teaser Unlocks In</div>
+            <div class="countdown-row">
+                <div class="cd-unit">
+                    <div class="cd-num" id="cd-d">00</div>
+                    <div class="cd-lbl">Days</div>
+                </div>
+                <div class="cd-sep">:</div>
+                <div class="cd-unit">
+                    <div class="cd-num" id="cd-h">00</div>
+                    <div class="cd-lbl">Hours</div>
+                </div>
+                <div class="cd-sep">:</div>
+                <div class="cd-unit">
+                    <div class="cd-num" id="cd-m">00</div>
+                    <div class="cd-lbl">Mins</div>
+                </div>
+                <div class="cd-sep">:</div>
+                <div class="cd-unit">
+                    <div class="cd-num" id="cd-s">00</div>
+                    <div class="cd-lbl">Secs</div>
+                </div>
+            </div>
+            <div class="unlock-label">Feb 20 · 8:00 PM</div>
+        </div>
+
+        <!-- RANDOM QUOTE -->
+        <div class="quote-box" id="quoteBox">
+            <p class="quote-text" id="quoteText">Loading whispers...</p>
+        </div>
+
+        <!-- MYSTERY HINT CHIPS -->
+        <div class="hints-strip">
+            <div class="hint-chip">🔮 Memories</div>
+            <div class="hint-chip">✨ 19 Years</div>
+            <div class="hint-chip">🎭 A Reveal</div>
+            <div class="hint-chip">🧿 Friendship</div>
+        </div>
+
+        <!-- TEASER BUTTON (locked) -->
+        <a class="teaser-btn" id="teaserBtn" href="javascript:void(0)" onclick="tryTeaser()">
+            <span class="lock-icon">🔒</span> <span id="btnText">Teaser Locked</span>
+        </a>
+
+        <div class="footer-whisper">
+            "The ones who wait... experience the magic tenfold." ✨
+        </div>
+    </div>
+
+    <script>
+        // ═══════════════════════════════════════════
+        //  PARTICLES
+        // ═══════════════════════════════════════════
+        const pc = document.getElementById('particles');
+        const cls = ['p1', 'p2', 'p3'];
+        for (let i = 0; i < 25; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle ' + cls[Math.floor(Math.random() * cls.length)];
+            p.style.left = Math.random() * 100 + '%';
+            p.style.animationDelay = Math.random() * 18 + 's';
+            p.style.animationDuration = (12 + Math.random() * 12) + 's';
+            pc.appendChild(p);
+        }
+
+        // ═══════════════════════════════════════════
+        //  PHOTO RANDOMIZER
+        // ═══════════════════════════════════════════
+        const totalPhotos = 14;
+        let currentPhoto = Math.floor(Math.random() * totalPhotos) + 1;
+        document.getElementById('mysteryPhoto').src = currentPhoto + '.jpeg';
+
+        function swapPhoto() {
+            const frame = document.getElementById('photoFrame');
+            const img = document.getElementById('mysteryPhoto');
+            const flash = document.getElementById('flashOverlay');
+            frame.classList.add('swapping');
+            flash.classList.add('active');
+            setTimeout(() => flash.classList.remove('active'), 150);
+            setTimeout(() => {
+                let next;
+                do { next = Math.floor(Math.random() * totalPhotos) + 1; } while (next === currentPhoto);
+                currentPhoto = next;
+                img.src = currentPhoto + '.jpeg';
+                frame.classList.remove('swapping');
+            }, 350);
+        }
+
+        // Auto-swap every 8 seconds
+        setInterval(swapPhoto, 8000);
+
+        // ═══════════════════════════════════════════
+        //  COUNTDOWN TO FEB 20, 8 PM IST
+        // ═══════════════════════════════════════════
+        const unlockDate = new Date("2026-02-20T20:00:00+05:30").getTime();
+
+        function checkUnlock() {
+            const now = Date.now();
+            const dist = unlockDate - now;
+            if (dist > 0) {
+                const d = Math.floor(dist / (1000 * 60 * 60 * 24));
+                const h = Math.floor((dist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((dist % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((dist % (1000 * 60)) / 1000);
+                document.getElementById('cd-d').textContent = String(d).padStart(2, '0');
+                document.getElementById('cd-h').textContent = String(h).padStart(2, '0');
+                document.getElementById('cd-m').textContent = String(m).padStart(2, '0');
+                document.getElementById('cd-s').textContent = String(s).padStart(2, '0');
+            } else {
+                document.getElementById('cd-d').textContent = '🎉';
+                document.getElementById('cd-h').textContent = '✨';
+                document.getElementById('cd-m').textContent = '🎁';
+                document.getElementById('cd-s').textContent = '💫';
+                const btn = document.getElementById('teaserBtn');
+                btn.classList.add('unlocked');
+                document.getElementById('btnText').textContent = 'View the Teaser';
+                btn.querySelector('.lock-icon').textContent = '🔓';
+            }
+        }
+        checkUnlock();
+        setInterval(checkUnlock, 1000);
+
+        let clickCount = 0;
+        function tryTeaser() {
+            if (Date.now() >= unlockDate) {
+                window.location.href = 'teaser_magazine.html';
+            } else {
+                clickCount++;
+                const btn = document.getElementById('teaserBtn');
+                btn.style.animation = 'none';
+                btn.offsetHeight;
+                btn.style.animation = '';
+                btn.style.borderColor = 'rgba(244,114,182,0.5)';
+                setTimeout(() => btn.style.borderColor = '', 800);
+
+                if (clickCount === 19) {
+                    triggerEasterEgg();
+                }
+            }
+        }
+
+        function triggerEasterEgg() {
+            const msg = document.getElementById('easterEggMsg');
+            msg.classList.add('active');
+
+            // Burst effect
+            for (let i = 0; i < 20; i++) {
+                const s = document.createElement('div');
+                s.className = 'sparkle-burst';
+                s.style.left = '50%';
+                s.style.top = '20%';
+                document.body.appendChild(s);
+
+                const angle = Math.random() * Math.PI * 2;
+                const dist = 50 + Math.random() * 150;
+                const tx = Math.cos(angle) * dist;
+                const ty = Math.sin(angle) * dist;
+
+                s.animate([
+                    { transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
+                    { transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0)`, opacity: 0 }
+                ], {
+                    duration: 1000 + Math.random() * 500,
+                    easing: 'cubic-bezier(0.19, 1, 0.22, 1)'
+                }).onfinish = () => s.remove();
+            }
+
+            setTimeout(() => {
+                msg.classList.remove('active');
+                clickCount = 0; // Reset
+            }, 4000);
+        }
+
+        // ═══════════════════════════════════════════
+        //  1000 QUOTES BANK
+        // ═══════════════════════════════════════════
+        const quotes = [
+            "The best is yet to come...",
+            "Good things come to those who wait.",
+            "Patience is a virtue wrapped in magic.",
+            "Every countdown brings us closer to something beautiful.",
+            "Some surprises are worth every second of waiting.",
+            "Behind every locked door lies a world of wonder.",
+            "The sweetest moments are the ones we anticipate the most.",
+            "Trust the timing of your life.",
+            "Something magical this way comes...",
+            "Not all who wander are lost — some are just early.",
+            "The stars aligned for this moment.",
+            "A friendship like ours is written in the stars.",
+            "19 years of being extraordinary.",
+            "Some bonds are forged in fire, ours in laughter.",
+            "Every great story has a prologue...",
+            "This is just the beginning of something epic.",
+            "Hold your breath... magic is loading.",
+            "What if the wait IS the gift?",
+            "Anticipation makes the heart grow fonder.",
+            "Behind this blur is a universe of memories.",
+            "Some pages are meant to be turned together.",
+            "Life is beautiful, but friendship makes it magical.",
+            "The clock ticks, but the heart remembers.",
+            "In a world of ordinary, you are extraordinary.",
+            "Secrets whispered between true friends last forever.",
+            "The universe conspired to make this moment.",
+            "A celebration isn't a celebration without YOU.",
+            "Time flies, but memories are forever.",
+            "Every second of this countdown is a heartbeat.",
+            "This teaser has a teaser. How meta.",
+            "You're not ready. Trust me.",
+            "If this is the pre-show, imagine the main event.",
+            "Some doors open only at the perfect moment.",
+            "The anticipation is the appetizer of joy.",
+            "Buckle up. Something legendary approaches.",
+            "They say patience is bitter, but its fruit is sweet.",
+            "A mystery wrapped in friendship.",
+            "When the clock hits zero, everything changes.",
+            "This isn't just a countdown. It's a promise.",
+            "Every photo tells a story you can't quite see yet.",
+            "The blur will lift. The magic will unfold.",
+            "You've waited 19 years. What's a few more hours?",
+            "Behind every great moment is greater anticipation.",
+            "The best birthdays are the ones you never see coming.",
+            "This is your story. Chapter 19 is about to begin.",
+            "Not even this teaser can contain the excitement.",
+            "The universe has something incredible planned.",
+            "Friendship: the only ship that never sinks.",
+            "A sneak peek of a sneak peek. Inception vibes.",
+            "Close your eyes. Imagine the possibilities.",
+            "The wait makes the reveal a thousand times sweeter.",
+            "Something beautiful is being crafted just for you.",
+            "19 candles, infinite memories.",
+            "Your story isn't over — the best chapter starts now.",
+            "The countdown is poetry in motion.",
+            "Even the stars are excited for this reveal.",
+            "Moments like these are what friendships are built on.",
+            "A digital love letter is being prepared...",
+            "If curiosity killed the cat, satisfaction brought it back.",
+            "Every pixel of this page is buzzing with excitement.",
+            "The blur is a metaphor. Life gets clearer with time.",
+            "You can't rush art. Or birthday surprises.",
+            "This page knows something you don't. Yet.",
+            "Feb 20, 8 PM. Mark it. Live it. Love it.",
+            "The greatest reveals happen to those who wait.",
+            "A friendship celebrated is a friendship cherished.",
+            "Behind this lock is a treasure trove of love.",
+            "The fog will clear. The picture will emerge.",
+            "Some things in life are worth being patient for.",
+            "This is just the whisper before the shout.",
+            "Imagine the most beautiful thing. Now multiply it.",
+            "The countdown to something unforgettable has begun.",
+            "Every tick of the clock is a drum roll.",
+            "Your birthday week just got a whole lot more interesting.",
+            "Ssshh... the teaser is sleeping. Wake it on the 20th.",
+            "A present wrapped in time itself.",
+            "The anticipation is part of the adventure.",
+            "You're witnessing history in the making. Sort of.",
+            "This blurred photo holds more than you think.",
+            "Friendship isn't measured in years, but in moments.",
+            "The best surprises come to those who don't peek.",
+            "A love letter to patience and friendship.",
+            "You'll understand when the time comes. Trust.",
+            "19 years young. A lifetime of memories to celebrate.",
+            "The suspense is killing you, isn't it? Good.",
+            "Every great reveal needs a great buildup.",
+            "This is just the trailer for the trailer.",
+            "Something so special, it needed TWO teasers.",
+            "The wait is a gift in disguise.",
+            "Life's greatest pleasures come after the longest waits.",
+            "A masterpiece takes time to unveil.",
+            "The clock is your friend. It's bringing you closer.",
+            "Behind every countdown, a celebration waits patiently.",
+            "The magic is almost ready. Almost.",
+            "Hold tight. The storm of joy is approaching.",
+            "In the silence of waiting, excitement grows louder.",
+            "A teaser teasing a teaser. We've gone full circle.",
+            "Your patience will be rewarded beyond imagination.",
+            "The locked door hides a room full of love.",
+            "Each blurred pixel represents a cherished memory.",
+            "Counting down to a moment that will last forever.",
+            "True friendship is worth every second of this wait.",
+            "The calm before the storm of celebrations.",
+            "Not all treasures are found. Some are revealed.",
+            "This moment right here? Part of the magic.",
+            "The art of suspense, perfected for you.",
+            "Somewhere, a celebration is being orchestrated.",
+            "Only the most special people get two teasers.",
+            "The universe asked me to tell you: be patient.",
+            "What's behind the blur? Only time will tell.",
+            "A countdown powered by love and friendship.",
+            "The wait is almost over. Almost. Not yet.",
+            "Picture perfect moments require picture perfect timing.",
+            "The best gifts aren't wrapped, they're timed.",
+            "In the space between seconds, magic happens.",
+            "A whisper before the roar of celebration.",
+            "Your curiosity is adorable. But patience pays.",
+            "The teaser's teaser: because you deserve double the hype.",
+            "Close your eyes and feel the excitement building.",
+            "Every moment of waiting is a moment of love.",
+            "The anticipation train has left the station.",
+            "Final destination: An unforgettable celebration.",
+            "Loading: 19 years of amazing memories...",
+            "The blur is temporary. The memories are permanent.",
+            "A secret so sweet, it needs a countdown.",
+            "The stars are aligning for February 20th.",
+            "Between now and then, let your imagination run wild.",
+            "This is just the aperitif. The feast awaits.",
+            "A mystery only time can solve.",
+            "When patience meets love, magic happens.",
+            "The clock whispers: 'Something wonderful is coming.'",
+            "Ready or not, the celebration is coming.",
+            "A friendship worth celebrating deserves this buildup.",
+            "The delay is not denial. It's preparation.",
+            "In the grand theater of life, this is the overture.",
+            "Keep wondering. The truth is beautiful.",
+            "What if I told you this is just 1% of the surprise?",
+            "The universe said: 'Make this one special.'",
+            "Feb 20 isn't just a date. It's a destination.",
+            "A promise of something extraordinary awaits.",
+            "The anticipation is the seasoning of surprise.",
+            "Not yet. But soon. Very, very soon.",
+            "The best chapter of your year is about to be written.",
+            "Patience: the secret ingredient of every great surprise.",
+            "Behind the blur, a story unfolds.",
+            "The countdown isn't just numbers. It's heartbeats.",
+            "A celebration so grand, it needed a preview of a preview.",
+            "The magic ingredient? Time.",
+            "You're standing at the threshold of something amazing.",
+            "Every second brings you closer to a smile.",
+            "The tease before the tease before the reveal.",
+            "A countdown fueled by friendship and excitement.",
+            "The wait is the caterpillar. The reveal is the butterfly.",
+            "Trust the process. The result is breathtaking.",
+            "You've unlocked this page. The rest comes at 8 PM.",
+            "A digital breadcrumb leading to a feast of memories.",
+            "What hides in the pixels will warm your heart.",
+            "The best journeys start with a single countdown.",
+            "In a world of instant, some things are worth waiting for.",
+            "The locked teaser is a love note to patience.",
+            "Brighter days are exactly... *checks countdown*... that far away.",
+            "This pre-teaser was crafted with 100% pure friendship.",
+            "Your birthday celebration starts with a single question: are you ready?",
+            "Hint: it involves you, memories, and a lot of love.",
+            "The blur protects the surprise. You're welcome.",
+            "A special kind of magic is being prepared.",
+            "When the lock opens, a world of joy unfolds.",
+            "The countdown is just foreplay for the surprise.",
+            "Something tells me Feb 20th will be unforgettable.",
+            "Patience is the wrapping paper of this gift.",
+            "The only thing better than this tease? The actual thing.",
+            "A little mystery adds spice to life.",
+            "Your waiting room to happiness is this page.",
+            "Each passing second is a step closer to wonder.",
+            "A surprise so big, it couldn't be contained in one page.",
+            "You could refresh this page forever. Each time, new magic.",
+            "The blur will dissolve. The memories won't.",
+            "This is one of those 'you had to be there' moments. Almost.",
+            "The lock clicks open in your future. How poetic.",
+            "A friendship like ours deserves this level of drama.",
+            "Spoiler: it's going to be incredible.",
+            "This page is powered by love, coded with care.",
+            "The ticking clock is actually a drumroll.",
+            "Not all heroes wear capes. Some wear countdowns.",
+            "Your anticipation fuels the magic. Keep waiting.",
+            "Between the lines of this page, a surprise hides.",
+            "A puzzle with one missing piece: time.",
+            "The most beautiful things are worth the most beautiful waits.",
+            "You + patience = the best surprise ever.",
+            "The final piece of the puzzle drops Feb 20.",
+            "A celebration designed by the cosmos, delivered by a friend.",
+            "Just a few more ticks of the clock...",
+            "Your curiosity brought you here. Your patience will reward you.",
+            "The locked door is smiling. It knows what's behind it.",
+            "Breathe. The magic is almost here.",
+            "A story is being written. You're the main character.",
+            "This teaser has more mystery than a Sherlock episode.",
+            "Tick, tock. The countdown to joy continues.",
+            "Somewhere in this blur is a memory you'll love.",
+            "Feb 20, 8 PM: The moment everything clicks.",
+            "The greatest gift is the gift of anticipation.",
+            "Digital confetti is loading in the background.",
+            "What did one teaser say to the other? 'Wait for it.'",
+            "The universe is wrapping your surprise right now.",
+            "A million pixels of love, hidden in a blur.",
+            "The countdown is a dance. The reveal is the standing ovation.",
+            "If excitement were electricity, this page would power a city.",
+            "Between friends, even waiting is fun.",
+            "The teaser's teaser agrees: you're going to love this.",
+            "A locked treasure chest of digital love.",
+            "The suspense isn't accidental. It's intentional. Enjoy it.",
+            "Every refresh is a new whisper from the universe.",
+            "Some things are so good, they need two intros.",
+            "The journey to the reveal is part of the fun.",
+            "Ready to be amazed? Not yet. But soon.",
+            "A promise carved in code: this will be worth it.",
+            "The most exciting part? You haven't seen anything yet.",
+            "A digital drumroll, just for you.",
+            "This page radiates more love than the sun radiates heat.",
+            "The wait is the appetizer at a Michelin-star celebration.",
+            "In the grand story of us, this is the prologue.",
+            "Even the blur is blushing with excitement.",
+            "A few hours stand between you and pure joy.",
+            "The greatest things in life deserve the greatest intros.",
+            "You've stumbled upon a page full of secrets.",
+            "A pinch of mystery, a dash of suspense, infinite love.",
+            "The countdown numbers are actually dance moves.",
+            "Life's best moments start with 'something is coming.'",
+            "A riddle wrapped in a countdown topped with love.",
+            "This page is an emotion disguised as a website.",
+            "The wait sharpens the excitement. Scientific fact.",
+            "You are standing on the edge of awesome.",
+            "A friendship forged in fire now celebrated in pixels.",
+            "Behind every blurred image is a crystal-clear memory.",
+            "The universe drafted this page. I just coded it.",
+            "Feb 20 called. It said 'get ready.'",
+            "A birthday surprise that surprises even the surpriser.",
+            "This countdown has its own heartbeat. Can you feel it?",
+            "Somewhere in the digital realm, your surprise is loading.",
+            "If patience were a currency, you'd be rich.",
+            "The reward for waiting: absolutely everything.",
+            "A tease wrapped in a tease wrapped in love.",
+            "The locked page is humming a birthday tune.",
+            "Between second 1 and the final second: pure magic.",
+            "This isn't just any countdown. It's YOUR countdown.",
+            "A secret is only sweet when shared at the right time.",
+            "Love, laughter, and a locked page walk into a bar...",
+            "The anticipation is writing its own love story.",
+            "Your surprise has a surprise. Surpriseception.",
+            "The wait is the gift wrapping. The reveal is the gift.",
+            "Every moment you spend here adds to the magic.",
+            "A masterpiece doesn't reveal itself all at once.",
+            "The lock knows something wonderful. It's keeping the secret.",
+            "A toast to the ones who wait: you're the real MVPs.",
+            "This countdown has more energy than a thousand suns.",
+            "Feb 20: When patience meets payoff.",
+            "A digital whisper in a world of noise.",
+            "Your dedication to this page will be rewarded.",
+            "The blur is just the universe playing hard to get.",
+            "Some call it a countdown. I call it a love timer.",
+            "Between now and 8 PM on the 20th: infinite possibilities.",
+            "This page was born from friendship and built with care.",
+            "The locked teaser is doing push-ups, getting ready for you.",
+            "A secret garden of memories, behind a timed lock.",
+            "The only spoiler: it's going to be beautiful.",
+            "Every pixel on this page is cheering for you.",
+            "This isn't a page. It's a promise.",
+            "A friendship so beautiful, it needs a staged reveal.",
+            "The blur hides treasures. Time is the key.",
+            "Welcome to the waiting room of pure joy.",
+            "The anticipation Olympics. Gold medal: you.",
+            "A secret told too early loses its magic.",
+            "This countdown is more dramatic than a K-drama finale.",
+            "The locked teaser winked at me. It's excited too.",
+            "A digital time capsule, set to open on Feb 20.",
+            "Your patience level: legendary.",
+            "The universe played matchmaker between you and this surprise.",
+            "Between the blur and clarity: a beautiful journey.",
+            "A surprise worth its weight in gold. Digital gold.",
+            "You can almost hear the locked teaser giggling.",
+            "Every tick closer. Every tock sweeter.",
+            "The ultimate test of friendship patience. You're acing it.",
+            "A locked page full of unlocked love.",
+            "This mystery deepens with every passing second.",
+            "The reveal will be chef's kiss. I guarantee it.",
+            "Between you and the teaser: just a little more time.",
+            "This page is silently screaming with excitement.",
+            "A journey of a thousand smiles begins with this countdown.",
+            "The locked teaser is wrapping itself in a bow for you.",
+            "In the dictionary of surprises, this one gets its own page.",
+            "A countdown that counts EVERY moment of our friendship.",
+            "The suspense thickens. Like friendship milkshake.",
+            "Feb 20, 8 PM: Clear your schedule. Clear your mind.",
+            "A pre-teaser so good, the teaser is jealous.",
+            "The magic is marinating. Don't rush the chef.",
+            "Your surprise is getting a manicure. It wants to look good.",
+            "In a parallel universe, you've already seen the teaser.",
+            "But in THIS universe, you wait. And it's worth it.",
+            "A digital hug disguised as a countdown.",
+            "The locked page sends its regards.",
+            "Every quote on this page is a bridge to the surprise.",
+            "The mystery of the blur: solved on Feb 20.",
+            "A celebration so grand, it needed advance notice.",
+            "The countdown is doing its happy dance.",
+            "Between friends, time is just another adventure.",
+            "This page contains 1000 reasons to smile.",
+            "A locked teaser is like a wrapped present. Irresistible.",
+            "The best part about waiting? The explosion of joy at the end.",
+            "Your surprise is practicing its entrance in the mirror.",
+            "A digital bonfire of friendship and warmth.",
+            "The countdown is the red carpet. The teaser is the star.",
+            "In the language of love, waiting means caring.",
+            "A friendship so deep, even this page can feel it.",
+            "The suspense is a love letter to your patience.",
+            "Feb 20 is getting dressed up. It wants to impress you.",
+            "A tease so tantalizing, it should be illegal.",
+            "Between here and there: magic in every moment.",
+            "Your surprise RSVP'd: 'Arriving Feb 20, 8 PM sharp.'",
+            "A digital origami of love, slowly unfolding.",
+            "The countdown's favorite song: 'I Will Wait' by Mumford & Sons.",
+            "In a sea of ordinary pages, this one is extraordinary.",
+            "A surprise marinated in 19 years of friendship.",
+            "The locked page is holding its breath. So should you.",
+            "Between the first quote and the last: a sea of anticipation.",
+            "Your patience is the canvas. The reveal is the masterpiece.",
+            "A digital time machine, set to Feb 20, 8 PM.",
+            "The mystery deepens. The excitement intensifies.",
+            "A countdown dressed in its finest pixels.",
+            "Your surprise has butterflies. That's how excited it is.",
+            "Between the lock and the key: pure, beautiful tension.",
+            "This page whispers secrets to those who listen.",
+            "A digital firefly, glowing brighter with every second.",
+            "The locked teaser is writing poetry about you.",
+            "In the grand symphony of surprises, this is the overture.",
+            "A pinch of patience, a world of wonder.",
+            "Your anticipation is the most beautiful part.",
+            "The countdown whispers: 'Trust me.'",
+            "A digital shooting star. Make a wish.",
+            "Between now and Feb 20: a universe of possibilities.",
+            "This page loves you. The teaser loves you more.",
+            "A surprise so sweet, it gave me a toothache.",
+            "The locked page checked the countdown. It smiled.",
+            "Between friends, every moment is a celebration.",
+            "Your patience is part of the present.",
+            "A digital rainbow, appearing after the wait.",
+            "The teaser is tuning its instruments. Concert at 8 PM.",
+            "In the garden of friendship, this countdown is a seed.",
+            "A surprise wrapped in stardust and moonlight.",
+            "The distance between you and the reveal is shrinking.",
+            "This page is a warm cup of anticipation.",
+            "A digital constellation spelling 'patience.'",
+            "Your surprise is stretching. Big entrance coming.",
+            "Between the start and finish: a story worth living.",
+            "The countdown is the opening credits of your birthday movie.",
+            "In the cookbook of celebrations, this is the secret recipe.",
+            "A surprise with perfect comedic timing.",
+            "The blur is a curtain. The show starts Feb 20.",
+            "Between pixel and purpose: pure intention.",
+            "This countdown beats in sync with friendship.",
+            "A digital compass pointing to Feb 20, 8 PM.",
+            "Your surprise is fashionably late. On purpose.",
+            "The anticipation is wearing its Sunday best.",
+            "Between seconds, magic is being woven.",
+            "A love note from the future, sent to the present.",
+            "This page runs on friendship and code.",
+            "A surprise that took 19 years to prepare.",
+            "The locked teaser is doing vocal warm-ups.",
+            "Between hope and reveal: the beauty of waiting.",
+            "Your patience has a fan club. I'm the president.",
+            "A digital bridge between now and the best moment ever.",
+            "The countdown is the elevator music of excitement.",
+            "In the museum of friendships, ours gets its own wing.",
+            "A surprise so legendary, it got its own pre-teaser.",
+            "The blur is the wrapping paper of a visual gift.",
+            "Between laughter and tears of joy: this countdown.",
+            "This page is the calm before the celebration storm.",
+            "A digital phoenix rising on Feb 20.",
+            "Your surprise rehearsed all day. It's ready.",
+            "The anticipation is a garden we planted together.",
+            "Between you and the locked teaser: beautiful tension.",
+            "A countdown that doubles as a love letter.",
+            "This page breathes excitement.",
+            "A surprise wearing a countdown as a necklace.",
+            "The blur whispered: 'You'll love what I'm hiding.'",
+            "Between the first second and the last: infinite joy.",
+            "Your patience is the key to the kingdom.",
+            "A digital warm hug before the real celebration.",
+            "The locked page rehearsed its reveal a hundred times.",
+            "Between hearts and pixels: our friendship.",
+            "This page holds more secrets than Area 51.",
+            "A surprise cooked at the perfect temperature: low and slow.",
+            "The countdown's autobiography: 'Journey to Joy.'",
+            "In the algebra of love, patience = reward².",
+            "A surprise marinated in care and seasoned with love.",
+            "The blur is temporary. The joy is permanent.",
+            "Between question marks and exclamation points: this wait.",
+            "Your surprise is meditating. Finding its inner peace.",
+            "A digital lantern lighting the path to Feb 20.",
+            "This countdown is the bridge to something spectacular.",
+            "A surprise that believes in perfect timing.",
+            "The locked page sends a virtual high-five.",
+            "Between anticipation and realization: pure bliss.",
+            "Your patience will echo through the halls of joy.",
+            "A digital seed planted today, blooming on Feb 20.",
+            "The countdown is the prelude to the symphony of love.",
+            "In the dictionary of awesome, see: this surprise.",
+            "A surprise that stayed up all night planning itself.",
+            "The blur is flirting with you. It'll reveal itself soon.",
+            "Between the clock and the heart: a connection.",
+            "This page is a digital hug that lasts until Feb 20.",
+            "A surprise with a PhD in making people smile.",
+            "The anticipation is the spark. The reveal is the fireworks.",
+            "Your surprise consulted the stars. They approved.",
+            "Between doubt and certainty: trust the countdown.",
+            "A digital constellation of friendship and celebration.",
+            "The locked page is confident. It knows its worth.",
+            "Between the tap and the reveal: a universe.",
+            "This countdown is handcrafted with love.",
+            "A surprise that even surprises itself.",
+            "The blur is a cocoon. A butterfly emerges Feb 20.",
+            "Between patience and reward: the sweetest journey.",
+            "Your surprise wrote a thank-you note to your patience.",
+            "A digital tapestry woven with threads of friendship.",
+            "The countdown learned to count just for you.",
+            "In the library of life, this chapter is bookmarked.",
+            "A surprise polished until it shines like the stars.",
+            "The locked page is blushing. It has secrets.",
+            "Between the beginning and the end: magic.",
+            "This page is the outstretched hand of adventure.",
+            "A surprise that passed its surprise exam with flying colors.",
+            "The anticipation is a melody waiting for its chorus.",
+            "Your surprise is charging at 99%. Almost there.",
+            "Between heartbeats and pixels: our celebration.",
+            "A digital promise sealed with friendship.",
+            "The countdown is the opening act. The teaser is the headliner.",
+            "In the physics of friendship, joy has no limits.",
+            "A surprise so bright, you'll need emotional sunglasses.",
+            "The blur is a blanket. Feb 20 lifts it gently.",
+            "Between whispers and shouts: this exciting journey.",
+            "Your patience is legendary. This surprise matches it.",
+            "A digital snowflake: unique, beautiful, worth the wait.",
+            "The locked page is rehearsing its 'ta-da!'",
+            "Between silence and celebration: this very moment.",
+            "This countdown has its own theme song.",
+            "A surprise that aged like fine digital wine.",
+            "The anticipation is a rollercoaster of emotions.",
+            "Your surprise just checked the countdown. It's excited!",
+            "Between the lock and the laugh: patience.",
+            "A digital paperplane flying toward Feb 20.",
+            "In the economy of joy, this surprise is a jackpot.",
+            "A surprise that practiced its smile in front of the mirror.",
+            "The blur is a puzzle. Time is the last piece.",
+            "Between wonder and knowing: the beauty of suspense.",
+            "This page is silently applauding your patience.",
+            "A digital moonbeam guiding you to Feb 20.",
+            "The countdown is the drumstick. The reveal is the beat.",
+            "Between friendship and celebration: the sweetest link.",
+            "Your surprise packed its bags. Arriving right on schedule.",
+            "A digital love song without words.",
+            "The locked page sent you a wink via this quote.",
+            "Between pixels and emotions: this celebration.",
+            "This countdown is the red thread of destiny.",
+            "A surprise wearing a tiara of anticipation.",
+            "The blur is smiling. It knows you'll love what's beneath.",
+            "Between the first glance and the full picture: wonder.",
+            "Your patience is a superpower in this story.",
+            "A digital candle lit for your celebration.",
+            "The anticipation is a river flowing to an ocean of joy.",
+            "In the cookbook of surprises, this one has 19 ingredients.",
+            "A surprise that aced the test of perfect timing.",
+            "The locked page gave the countdown a pep talk.",
+            "Between seconds and smiles: our connection.",
+            "This page is the north star of your birthday adventure.",
+            "A digital wish upon a countdown star.",
+            "The blur is a love letter written in watercolor.",
+            "Between mystery and magic: this page.",
+            "Your surprise double-checked everything. It's ready.",
+            "A digital ribbon tying together 19 years.",
+            "The countdown is a tightrope walk to happiness.",
+            "Between one quote and the next: anticipation.",
+            "This page is the heartbeat of a coming celebration.",
+            "A surprise sculpted from pure friendship.",
+            "The anticipation is doing push-ups. Getting stronger.",
+            "Your surprise learned a magic trick. Appears Feb 20.",
+            "A digital bridge from today to tomorrow's joy.",
+            "The locked page wrote you a poem. You'll read it soon.",
+            "Between the blur and the bloom: time.",
+            "This countdown is the prologue of your birthday novel.",
+            "A surprise that practiced its grand entrance 100 times.",
+            "The blur is the bow. The memory is the arrow. Aim: your heart.",
+            "Between you and joy: just a few more ticks.",
+            "This page holds more love than it can display.",
+            "A digital spark in the darkness of waiting.",
+            "The countdown kissed each second goodbye, for you.",
+            "Between now and Feb 20: an adventure in patience.",
+            "Your surprise just smiled. It can't wait either.",
+            "A digital fortune cookie: good things await.",
+            "The locked page exhaled. It's been holding its breath.",
+            "Between one heartbeat and the next: anticipation.",
+            "This page is the opening scene of a beautiful movie.",
+            "A surprise so good, it surprised itself.",
+            "The anticipation is the ink. The reveal is the masterpiece.",
+            "Your patience is the runway. The surprise is about to take off.",
+            "A digital star chart leading to Feb 20.",
+            "The countdown is the inhale. The reveal is the exhale.",
+            "Between the question and the answer: beauty.",
+            "This page is a garden of patience blooming with love.",
+            "A surprise wrapped in the fabric of time.",
+            "The blur is the shell. The pearl is revealed Feb 20.",
+            "Between the first countdown and zero: a lifetime of love.",
+            "Your surprise is applauding your patience right now.",
+            "A digital mosaic of friendship and anticipation.",
+            "The locked page is the opening act of something legendary.",
+            "Between the tease and the truth: pure joy.",
+            "This countdown is a compass. North: celebration.",
+            "A surprise forged in the fires of friendship.",
+            "The anticipation is a garden path to paradise.",
+            "Your surprise just winked. Did you feel it?",
+            "A digital hourglass turning friendship into celebration.",
+            "The blur will lift like morning fog. Beautiful day ahead.",
+            "Between patience and payoff: this beautiful countdown.",
+            "This page is the overture to your birthday symphony.",
+            "A surprise that sparkles like stars on a clear night.",
+            "The locked page is glowing with excitement.",
+            "Between heartstrings and pixels: this moment.",
+            "Your wonderful wait makes the wonderful reveal even more so.",
+            "A digital meteor shower of friendship and love.",
+            "The countdown is a staircase. Each step: closer to joy.",
+            "Between the seed and the flower: your patience.",
+            "This page is a digital embrace from across the miles.",
+            "A surprise that consulted every star in the sky.",
+            "The anticipation is a melody composed just for you.",
+            "Your surprise is backstage, getting ready for the spotlight.",
+            "A digital promise kept: something amazing is coming.",
+            "The blur fades a little more with every passing hour.",
+            "Between the mystery and the reveal: the sweetest journey.",
+            "This countdown is the heartbeat of our friendship.",
+            "A surprise that traveled through time to reach you perfectly.",
+            "The locked page is counting down too. We're in this together.",
+            "Between you, me, and this page: pure magic.",
+            "This is the whisper. The shout comes Feb 20.",
+            "A digital lantern in the tunnel of anticipation.",
+            "Your surprise graduated top of its class. Major: Making You Smile.",
+            "Between the tease and the treasure: one beautiful countdown.",
+            "This page is the warm-up act. The headliner is coming.",
+            "A surprise so sweet, it gave the countdown cavities.",
+            "The anticipation is the runway. Destination: happiness.",
+            "Your patience wrote a bestseller. Title: Worth It.",
+            "A digital fingerprint of our friendship on this page.",
+            "The locked page just high-fived the countdown.",
+            "Between the first pixel and the last: a story of love.",
+            "This countdown is the compass needle pointing to joy.",
+            "A surprise wearing friendship as its crown.",
+            "The blur is temporary shelter for permanent memories.",
+            "Between the anticipation and the celebration: gratitude.",
+            "This page is a time capsule of excitement.",
+            "A digital ripple in the pond of your birthday week.",
+            "Your surprise cleared its throat. Speech incoming on Feb 20.",
+            "Between the clock and the calendar: our countdown.",
+            "The anticipation is the wings. The reveal is the flight.",
+            "A surprise hand-delivered by the universe itself.",
+            "This locked page is the envelope. The letter awaits.",
+            "Between patience and paradise: just a few more moments.",
+            "Your surprise adjusted its tie. It wants to look perfect.",
+            "A digital sunrise on the horizon of Feb 20.",
+            "The countdown is the fuse. The reveal is the celebration explosion.",
+            "Between whispers of the past and shouts of the future: now.",
+            "This page is proof that good things are coming.",
+            "A surprise that believes you deserve the world.",
+            "The anticipation is the seasoning. The surprise is the feast.",
+            "Your patience is writing its own success story.",
+            "A digital wish floating toward Feb 20.",
+            "The locked page gave me permission to say: it's worth every second.",
+            "Between dreams and reality: this countdown.",
+            "This page is a digital standing ovation for your patience.",
+            "A surprise that set its alarm for Feb 20, 8 PM.",
+            "The blur is a veil over a masterpiece.",
+            "Between the unknown and the unforgettable: right here.",
+            "Your surprise is the pot of gold. This countdown is the rainbow.",
+            "A digital toast to friendship, patience, and love.",
+            "The anticipation is planting seeds of joy everywhere.",
+            "This countdown is the key that becomes available at 8 PM.",
+            "A surprise so epic, legends will be written about it.",
+            "Between the start of this quote and the end: a world of love.",
+            "The locked page requested one thing: your trust.",
+            "Your patience is the hero of this story.",
+            "A digital whisper growing into a celebration roar.",
+            "The countdown is the bridge. Cross it on Feb 20 at 8 PM.",
+            "This page believes in you. The surprise does too.",
+            "A friendship celebrated in code, felt in the heart.",
+            "Between the blur and the birthday: one incredible journey.",
+            "The anticipation just leveled up. Boss battle: patience.",
+            "Your surprise is dressed and ready. Are you?",
+            "A digital gem hidden in the cave of time.",
+            "The locked page nods knowingly. Soon.",
+            "Between anticipation and applause: one beautiful moment.",
+            "This page is the calm eye of the excitement hurricane.",
+            "A surprise humming with the frequency of friendship.",
+            "The countdown is the poetry. The reveal is the publishing.",
+            "Between the mystery photo and the full picture: time and love.",
+            "Your patience painted a masterpiece. The reveal frames it.",
+            "A digital aurora borealis of friendship and celebration.",
+            "The anticipation is the deep breath before the dive.",
+            "In 19 chapters of life, this one shines the brightest.",
+            "A surprise that's been dreaming of this moment.",
+            "The locked page is quietly confident. It has reason to be.",
+            "Between the digital and the emotional: this celebration.",
+            "This countdown is a love poem, one second at a time."
+        ];
+
+        // ═══════════════════════════════════════════
+        //  QUOTE ROTATOR
+        // ═══════════════════════════════════════════
+        let lastQuoteIdx = -1;
+        function showRandomQuote() {
+            const el = document.getElementById('quoteText');
+            el.classList.add('fading');
+            setTimeout(() => {
+                let idx;
+                do { idx = Math.floor(Math.random() * quotes.length); } while (idx === lastQuoteIdx);
+                lastQuoteIdx = idx;
+                el.textContent = '"' + quotes[idx] + '"';
+                el.classList.remove('fading');
+            }, 400);
+        }
+        showRandomQuote();
+        setInterval(showRandomQuote, 6000);
+
+        // ═══════════════════════════════════════════
+        //  DYNAMIC TITLE TAB
+        // ═══════════════════════════════════════════
+        const titles = ['??? — Something is Coming', '👀 Are you ready?', '🔒 Teaser Locked...', '✨ Patience...'];
+        let ti = 0;
+        setInterval(() => { ti = (ti + 1) % titles.length; document.title = titles[ti]; }, 4000);
+    </script>
+</body>
+
+</html>
