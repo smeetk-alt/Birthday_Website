@@ -936,18 +936,33 @@
         // ═══════════════════════════════════════════
         const unlockDate = new Date("2026-02-20T20:00:00+05:30").getTime();
 
-        // Specific fragments for the original 2pm-8pm block (preserved)
-        const specificFragments = {
-            14: "The first shimmer of light. 19 years of being a masterpiece.",
-            15: "Every laugh we shared is a pixel in this story.",
-            16: "Did you notice the color shifting? The magic is brewing.",
-            17: "A whisper from the future: You aren't ready for the 20th.",
-            18: "Friendship isn't 9 to 5. It's 24/7. But 6 PM is special.",
-            19: "The sun sets, but the hype only rises.",
-            20: "Final Fragment: Rest well, for the reveal grows closer."
+        // 24 Hours of Messages: Birthday, Bond, and Personal Feelings
+        const fragments = {
+            0: "Midnight thoughts: The universe decided 19 years ago to create a masterpiece.",
+            1: "1 AM silence, but my excitement for your day is loud.",
+            2: "2 AM. Counting stars, and every one of them shines for you.",
+            3: "3 AM whispers. The best stories are the ones we're yet to write.",
+            4: "4 AM. The world sleeps, but our bond never takes a break.",
+            5: "5 AM. A new day dawning, bringing us closer to the celebration.",
+            6: "6 AM. Rise and shine! The countdown to 19 continues.",
+            7: "7 AM. Coffee in hand, thinking about how lucky I am to have you.",
+            8: "8 AM. Another hour down. The big 1-9 is approaching fast.",
+            9: "9 AM. Good morning to the person who makes life brighter.",
+            10: "10 AM. Sending you virtual hugs and a whole lot of hype.",
+            11: "11 AM. Remember that time we couldn't stop laughing? Core memory.",
+            12: "12 PM. Halfway through the day. The suspense is real, isn't it?",
+            13: "1 PM. Lunchtime thought: You deserve the world and more.",
+            14: "2 PM. The first shimmer of celebration. You are a masterpiece.",
+            15: "3 PM. Every laugh we shared is a pixel in this story.",
+            16: "4 PM. Did you notice the color shifting? The magic is brewing.",
+            17: "5 PM. A whisper from the future: You aren't ready for the 20th.",
+            18: "6 PM. Friendship isn't 9 to 5. It's 24/7. Always here for you.",
+            19: "7 PM. The sun sets, but the hype only rises.",
+            20: "8 PM. Rest well, knowing you are deeply loved and cherished.",
+            21: "9 PM. The night is young, and our memories are timeless.",
+            22: "10 PM. As the day ends, the excitement for Feb 20 only grows.",
+            23: "11 PM. One more hour closer to the magic. Sweet dreams, bestie."
         };
-
-        const fragments = {};
         let slotsInitialized = false;
 
         function initPulseSlots() {
@@ -958,13 +973,6 @@
             container.innerHTML = '';
 
             for (let h = 0; h < 24; h++) {
-                // Populate fragments
-                if (specificFragments[h]) {
-                    fragments[h] = specificFragments[h];
-                } else {
-                    fragments[h] = `Pulse Hour ${h}: The magic is building...`;
-                }
-
                 const slot = document.createElement('div');
                 slot.className = 'slot';
                 slot.id = `slot-${h}`;
