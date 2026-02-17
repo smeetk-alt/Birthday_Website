@@ -11,17 +11,28 @@
         rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #05050a;
-            --text-primary: #f0f0f5;
-            --text-secondary: #b8b8d0;
-            --text-muted: #5a5a78;
-            --accent-1: #f472b6;
-            --accent-2: #c084fc;
-            --accent-3: #818cf8;
-            --accent-4: #22d3ee;
-            --accent-gradient: linear-gradient(135deg, #f472b6, #c084fc, #818cf8);
-            --accent-gradient-wide: linear-gradient(135deg, #fb923c, #f472b6, #c084fc, #818cf8, #22d3ee);
-            --border-color: rgba(192, 132, 252, 0.12);
+            /* ULTIMATE PREMIUM PALETTE */
+            --bg-dark: #020204;
+            --text-primary: #F8F6F2;
+            --text-secondary: #C4A7C7;
+            --text-muted: #5a4a5e;
+
+            /* Gold + Wine + Midnight */
+            --wine-red: #900C3F;
+            --deep-maroon: #4a0404;
+            --dark-prussian: #0B1A3B;
+            --lily-soft: #E6E6FA;
+            --accent-gold: #C9A84C;
+
+            --accent-1: #900C3F;
+            --accent-2: #581845;
+            --accent-3: #0B1A3B;
+            --accent-4: #f8f5f2;
+
+            --accent-gradient: linear-gradient(135deg, #C9A84C, #900C3F, #581845, #0B1A3B);
+            --accent-gradient-wide: linear-gradient(135deg, #E8C96E, #C9A84C, #900C3F, #581845, #0B1A3B);
+
+            --border-color: rgba(201, 168, 76, 0.2);
             --radius-lg: 32px;
             --radius-md: 20px;
         }
@@ -56,19 +67,316 @@
             inset: 0;
             z-index: 0;
             background:
-                radial-gradient(ellipse 500px 500px at 15% 25%, rgba(244, 114, 182, 0.06), transparent),
-                radial-gradient(ellipse 400px 400px at 85% 15%, rgba(129, 140, 248, 0.05), transparent),
-                radial-gradient(ellipse 600px 600px at 50% 70%, rgba(192, 132, 252, 0.04), transparent);
+                radial-gradient(ellipse 500px 500px at 15% 25%, rgba(201, 168, 76, 0.06), transparent),
+                radial-gradient(ellipse 400px 400px at 85% 15%, rgba(11, 26, 59, 0.12), transparent),
+                radial-gradient(ellipse 600px 600px at 50% 70%, rgba(144, 12, 63, 0.06), transparent);
             pointer-events: none;
         }
 
-        /* SCANLINES */
+        /* DYNAMIC BACKGROUND & SPOTLIGHT */
+        body {
+            background-color: var(--bg-dark);
+            background-image:
+                radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(201, 168, 76, 0.08), transparent 30%),
+                radial-gradient(circle at 80% 20%, rgba(11, 26, 59, 0.3), transparent 40%),
+                radial-gradient(circle at 20% 80%, rgba(144, 12, 63, 0.15), transparent 40%);
+            transition: background 0.2s ease;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* ═══ CINEMATIC INTRO ═══ */
+        .cinema-intro {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1.2s ease, transform 1.2s ease;
+        }
+
+        .cinema-intro.fade-out {
+            opacity: 0;
+            transform: scale(1.1);
+            pointer-events: none;
+        }
+
+        .cinema-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.5rem, 5vw, 3rem);
+            color: rgba(248, 245, 242, 0);
+            text-align: center;
+            transition: color 1.5s ease;
+            line-height: 1.6;
+        }
+
+        .cinema-text.visible {
+            color: rgba(248, 245, 242, 0.9);
+        }
+
+        .cinema-text.dim {
+            color: rgba(248, 245, 242, 0.15);
+        }
+
+        .cinema-skip {
+            position: absolute;
+            bottom: 40px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .cinema-skip:hover {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* ═══ CANVAS STARFIELD ═══ */
+        #starfield {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ═══ HOLD-TO-PEEK MECHANIC ═══ */
+        .peek-instruction {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: -15px;
+            opacity: 0;
+            animation: fadeInUp 1.5s ease 0.5s forwards;
+        }
+
+        .peek-ring {
+            position: absolute;
+            inset: -4px;
+            border-radius: var(--radius-lg);
+            border: 3px solid transparent;
+            border-top-color: var(--accent-1);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .photo-frame.peeking .peek-ring {
+            opacity: 1;
+            animation: peekSpin 1s linear infinite;
+        }
+
+        .photo-frame.peeking img {
+            filter: blur(0px) saturate(1) brightness(0.85) !important;
+            transform: scale(1.05) !important;
+        }
+
+        @keyframes peekSpin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ═══ HEARTBEAT COUNTDOWN ═══ */
+        .countdown-card {
+            animation: fadeInUp 1.5s ease 0.6s backwards, heartbeat 2s ease-in-out infinite 3s;
+        }
+
+        @keyframes heartbeat {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            3% {
+                transform: scale(1.02);
+            }
+
+            6% {
+                transform: scale(1);
+            }
+
+            9% {
+                transform: scale(1.015);
+            }
+
+            12% {
+                transform: scale(1);
+            }
+        }
+
+        /* ═══ MAGNETIC HOVER ═══ */
+        .teaser-btn {
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* ═══ TYPEWRITER CURSOR ═══ */
+        .quote-text::after {
+            content: '|';
+            animation: blink-cursor 0.8s step-end infinite;
+            color: var(--accent-1);
+            font-style: normal;
+        }
+
+        @keyframes blink-cursor {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* ═══ SECRET MESSAGE BAR ═══ */
+        .secret-decoder {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(3, 3, 5, 0.95);
+            border-top: 1px solid var(--border-color);
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transform: translateY(100%);
+            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+            backdrop-filter: blur(20px);
+        }
+
+        .secret-decoder.revealed {
+            transform: translateY(0);
+        }
+
+        .decoder-text {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .decoder-chars {
+            display: flex;
+            gap: 3px;
+        }
+
+        .decoder-char {
+            display: inline-block;
+            width: 18px;
+            height: 24px;
+            line-height: 24px;
+            text-align: center;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            color: var(--text-muted);
+            transition: all 0.4s ease;
+        }
+
+        .decoder-char.unlocked {
+            background: var(--accent-gradient);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 0 8px rgba(144, 12, 63, 0.4);
+        }
+
+        /* ═══ CLICK RIPPLE EFFECT ═══ */
+        .click-ripple {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--accent-1);
+            border-radius: 50%;
+            opacity: 1;
+            animation: ripple-out 0.6s ease-out forwards;
+        }
+
+        @keyframes ripple-out {
+            to {
+                width: 100px;
+                height: 100px;
+                margin: -50px 0 0 -50px;
+                opacity: 0;
+                border-width: 1px;
+            }
+        }
+
+        /* ═══ PROGRESS RING ON PHOTO ═══ */
+        .progress-ring-container {
+            position: absolute;
+            inset: -8px;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .progress-ring-container svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.05);
+            stroke-width: 2;
+        }
+
+        .progress-ring-fill {
+            fill: none;
+            stroke: url(#progressGrad);
+            stroke-width: 2;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s ease;
+        }
+
+        /* SCANLINES - REFINED */
         .scanlines {
             position: fixed;
             inset: 0;
-            z-index: 999;
+            z-index: 900;
             pointer-events: none;
-            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.03) 2px, rgba(0, 0, 0, 0.03) 4px);
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.15) 50%, rgba(0, 0, 0, 0.15));
+            background-size: 100% 4px;
+            animation: scanlineMove 0.4s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes scanlineMove {
+            0% {
+                background-position: 0 0;
+            }
+
+            100% {
+                background-position: 0 4px;
+            }
         }
 
         /* PARTICLES */
@@ -89,29 +397,32 @@
         .particle.p1 {
             width: 4px;
             height: 4px;
-            background: rgba(244, 114, 182, 0.4);
-            box-shadow: 0 0 8px rgba(244, 114, 182, 0.2);
+            background: rgba(201, 168, 76, 0.5);
+            /* Gold */
+            box-shadow: 0 0 10px rgba(201, 168, 76, 0.7);
         }
 
         .particle.p2 {
             width: 3px;
             height: 3px;
-            background: rgba(192, 132, 252, 0.4);
-            box-shadow: 0 0 8px rgba(192, 132, 252, 0.2);
+            background: rgba(144, 12, 63, 0.5);
+            /* Wine */
+            box-shadow: 0 0 10px rgba(144, 12, 63, 0.7);
         }
 
         .particle.p3 {
             width: 2px;
             height: 2px;
-            background: rgba(34, 211, 238, 0.4);
-            box-shadow: 0 0 8px rgba(34, 211, 238, 0.2);
+            background: rgba(248, 245, 242, 0.5);
+            /* Lily White */
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
         }
 
         @keyframes floatP {
 
             0%,
             100% {
-                transform: translateY(100vh) translateX(0);
+                transform: translateY(100vh) translateX(0) scale(1);
                 opacity: 0;
             }
 
@@ -124,7 +435,7 @@
             }
 
             100% {
-                transform: translateY(-100px) translateX(60px);
+                transform: translateY(-10vh) translateX(50px) scale(0.5);
                 opacity: 0;
             }
         }
@@ -239,7 +550,7 @@
             position: relative;
             cursor: pointer;
             animation: fadeInUp 1.5s ease 0.3s backwards;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(192, 132, 252, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(88, 24, 69, 0.15);
         }
 
         .photo-frame img {
@@ -400,7 +711,7 @@
             border-left: 3px solid transparent;
             border-image: var(--accent-gradient) 1;
             padding: 16px 16px 16px 20px;
-            background: linear-gradient(90deg, rgba(192, 132, 252, 0.04), transparent);
+            background: linear-gradient(90deg, rgba(88, 24, 69, 0.08), transparent);
             border-radius: 0 12px 12px 0;
             text-align: left;
             width: 100%;
@@ -463,12 +774,12 @@
 
             0%,
             100% {
-                border-color: rgba(192, 132, 252, 0.1);
+                border-color: rgba(88, 24, 69, 0.15);
                 color: var(--text-muted);
             }
 
             50% {
-                border-color: rgba(192, 132, 252, 0.35);
+                border-color: rgba(88, 24, 69, 0.4);
                 color: var(--text-secondary);
             }
         }
@@ -500,24 +811,40 @@
             background: var(--accent-gradient);
             color: #fff;
             border-color: transparent;
-            box-shadow: 0 8px 30px rgba(192, 132, 252, 0.35);
+            box-shadow: 0 8px 30px rgba(88, 24, 69, 0.35);
             animation: unlockPulse 2s ease-in-out infinite;
         }
 
         .teaser-btn.unlocked:hover {
             transform: translateY(-3px) scale(1.03);
-            box-shadow: 0 14px 45px rgba(192, 132, 252, 0.5);
+            box-shadow: 0 14px 45px rgba(88, 24, 69, 0.5);
         }
 
         @keyframes unlockPulse {
 
             0%,
             100% {
-                box-shadow: 0 8px 30px rgba(192, 132, 252, 0.35);
+                box-shadow: 0 8px 30px rgba(88, 24, 69, 0.35);
             }
 
             50% {
-                box-shadow: 0 8px 50px rgba(244, 114, 182, 0.45);
+                box-shadow: 0 8px 50px rgba(144, 12, 63, 0.5);
+            }
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
             }
         }
 
@@ -647,7 +974,7 @@
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(192, 132, 252, 0.4);
+            text-shadow: 0 0 20px rgba(88, 24, 69, 0.6);
             opacity: 0;
             transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
         }
@@ -762,7 +1089,7 @@
         .slot.unlocked {
             background: var(--accent-gradient);
             color: white;
-            box-shadow: 0 4px 12px rgba(192, 132, 252, 0.3);
+            box-shadow: 0 4px 12px rgba(88, 24, 69, 0.35);
             cursor: pointer;
         }
 
@@ -812,10 +1139,24 @@
 </head>
 
 <body>
+    <!-- ═══ CINEMATIC INTRO ═══ -->
+    <div class="cinema-intro" id="cinemaIntro">
+        <div class="cinema-text" id="cinemaText"></div>
+        <div class="cinema-skip" onclick="skipIntro()">Skip · Press any key</div>
+    </div>
+
+    <!-- ═══ CANVAS STARFIELD ═══ -->
+    <canvas id="starfield"></canvas>
+
     <div class="scanlines"></div>
-    <div class="particles" id="particles"></div>
     <div class="flash-overlay" id="flashOverlay"></div>
     <div id="easterEggMsg" class="easter-egg-msg">19 clicks for 19 years 💫</div>
+
+    <!-- ═══ SECRET DECODER BAR ═══ -->
+    <div class="secret-decoder" id="secretDecoder">
+        <span class="decoder-text">Secret:</span>
+        <div class="decoder-chars" id="decoderChars"></div>
+    </div>
 
     <div class="main-wrapper">
         <!-- GLITCH TITLE -->
@@ -823,10 +1164,25 @@
             <span>Something is Coming...</span>
         </h1>
 
-        <!-- MYSTERY PHOTO -->
-        <div class="photo-frame" id="photoFrame" onclick="swapPhoto()">
+        <!-- MYSTERY PHOTO (HOLD TO PEEK) -->
+        <div class="photo-frame" id="photoFrame">
+            <div class="peek-ring"></div>
+            <div class="progress-ring-container">
+                <svg viewBox="0 0 296 296">
+                    <defs>
+                        <linearGradient id="progressGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#900C3F" />
+                            <stop offset="100%" stop-color="#581845" />
+                        </linearGradient>
+                    </defs>
+                    <circle class="progress-ring-bg" cx="148" cy="148" r="145" />
+                    <circle class="progress-ring-fill" id="progressRing" cx="148" cy="148" r="145"
+                        stroke-dasharray="911" stroke-dashoffset="911" />
+                </svg>
+            </div>
             <img id="mysteryPhoto" src="1.jpeg" alt="???">
         </div>
+        <div class="peek-instruction">Hold to peek · Click to swap 📸</div>
 
         <!-- COUNTDOWN TO TEASER UNLOCK -->
         <div class="countdown-card">
@@ -892,28 +1248,144 @@
 
     <script>
         // ═══════════════════════════════════════════
-        //  PARTICLES
+        //  1. CINEMATIC INTRO SEQUENCE
         // ═══════════════════════════════════════════
-        const pc = document.getElementById('particles');
-        const cls = ['p1', 'p2', 'p3'];
-        for (let i = 0; i < 25; i++) {
-            const p = document.createElement('div');
-            p.className = 'particle ' + cls[Math.floor(Math.random() * cls.length)];
-            p.style.left = Math.random() * 100 + '%';
-            p.style.animationDelay = Math.random() * 18 + 's';
-            p.style.animationDuration = (12 + Math.random() * 12) + 's';
-            pc.appendChild(p);
+        const introLines = [
+            "In a world full of ordinary...",
+            "Someone extraordinary turns 19.",
+            "This is her story.",
+            "Are you ready?"
+        ];
+        let introIndex = 0;
+        let introSkipped = false;
+        const cinemaText = document.getElementById('cinemaText');
+        const cinemaIntro = document.getElementById('cinemaIntro');
+
+        function playIntroLine() {
+            if (introSkipped) return;
+            if (introIndex >= introLines.length) {
+                skipIntro();
+                return;
+            }
+            cinemaText.textContent = introLines[introIndex];
+            cinemaText.className = 'cinema-text visible';
+            setTimeout(() => {
+                cinemaText.className = 'cinema-text dim';
+                setTimeout(() => {
+                    introIndex++;
+                    playIntroLine();
+                }, 600);
+            }, 2000);
         }
+        // Start intro after a beat
+        setTimeout(playIntroLine, 800);
+
+        function skipIntro() {
+            if (introSkipped) return;
+            introSkipped = true;
+            cinemaIntro.classList.add('fade-out');
+            setTimeout(() => cinemaIntro.style.display = 'none', 1300);
+        }
+        // Skip on any key
+        document.addEventListener('keydown', skipIntro, { once: true });
 
         // ═══════════════════════════════════════════
-        //  PHOTO RANDOMIZER
+        //  2. CANVAS STARFIELD (GPU-accelerated)
+        // ═══════════════════════════════════════════
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        const stars = [];
+        const STAR_COUNT = 200;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Create stars
+        for (let i = 0; i < STAR_COUNT; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                z: Math.random() * 1000,
+                ox: Math.random() * canvas.width,  // original x
+                oy: Math.random() * canvas.height,  // original y
+                size: Math.random() * 2 + 0.5,
+                color: ['rgba(144,12,63,', 'rgba(88,24,69,', 'rgba(248,245,242,'][Math.floor(Math.random() * 3)]
+            });
+        }
+
+        function animateStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const cx = mouseX / canvas.width - 0.5;
+            const cy = mouseY / canvas.height - 0.5;
+
+            for (const s of stars) {
+                s.z -= 0.3;
+                if (s.z <= 0) { s.z = 1000; s.ox = Math.random() * canvas.width; s.oy = Math.random() * canvas.height; }
+
+                const factor = 1000 / s.z;
+                const sx = (s.ox - canvas.width / 2) * factor + canvas.width / 2 + cx * factor * 20;
+                const sy = (s.oy - canvas.height / 2) * factor + canvas.height / 2 + cy * factor * 20;
+                const sz = s.size * factor * 0.3;
+                const alpha = Math.min(1, (1000 - s.z) / 500);
+
+                ctx.beginPath();
+                ctx.arc(sx, sy, Math.max(sz, 0.5), 0, Math.PI * 2);
+                ctx.fillStyle = s.color + (alpha * 0.6) + ')';
+                ctx.fill();
+            }
+            requestAnimationFrame(animateStars);
+        }
+        animateStars();
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            // Spotlight
+            document.body.style.setProperty('--mouse-x', `${(e.clientX / window.innerWidth) * 100}%`);
+            document.body.style.setProperty('--mouse-y', `${(e.clientY / window.innerHeight) * 100}%`);
+        });
+
+        // ═══════════════════════════════════════════
+        //  3. HOLD-TO-PEEK PHOTO MECHANIC
         // ═══════════════════════════════════════════
         const totalPhotos = 14;
         let currentPhoto = Math.floor(Math.random() * totalPhotos) + 1;
         document.getElementById('mysteryPhoto').src = currentPhoto + '.jpeg';
 
+        const photoFrame = document.getElementById('photoFrame');
+        let peekTimer = null;
+        let isPeeking = false;
+        let peekStartTime = 0;
+
+        function startPeek() {
+            isPeeking = true;
+            peekStartTime = Date.now();
+            photoFrame.classList.add('peeking');
+        }
+        function endPeek() {
+            if (!isPeeking) return;
+            isPeeking = false;
+            photoFrame.classList.remove('peeking');
+            const duration = Date.now() - peekStartTime;
+            if (duration < 300) {
+                // Short click = swap photo
+                swapPhoto();
+            }
+        }
+        photoFrame.addEventListener('mousedown', startPeek);
+        photoFrame.addEventListener('mouseup', endPeek);
+        photoFrame.addEventListener('mouseleave', endPeek);
+        photoFrame.addEventListener('touchstart', (e) => { e.preventDefault(); startPeek(); }, { passive: false });
+        photoFrame.addEventListener('touchend', endPeek);
+
         function swapPhoto() {
-            const frame = document.getElementById('photoFrame');
+            const frame = photoFrame;
             const img = document.getElementById('mysteryPhoto');
             const flash = document.getElementById('flashOverlay');
             frame.classList.add('swapping');
@@ -928,8 +1400,75 @@
             }, 350);
         }
 
-        // Auto-swap every 8 seconds
-        setInterval(swapPhoto, 8000);
+        // Auto-swap every 10 seconds
+        setInterval(swapPhoto, 10000);
+
+        // ═══════════════════════════════════════════
+        //  4. PROGRESS RING (% to unlock)
+        // ═══════════════════════════════════════════
+        const progressRing = document.getElementById('progressRing');
+        const RING_CIRCUMFERENCE = 911; // 2 * PI * 145
+
+        function updateProgressRing(percent) {
+            const offset = RING_CIRCUMFERENCE - (percent / 100) * RING_CIRCUMFERENCE;
+            progressRing.setAttribute('stroke-dashoffset', offset);
+        }
+
+        // ═══════════════════════════════════════════
+        //  5. CLICK RIPPLE EFFECT (everywhere)
+        // ═══════════════════════════════════════════
+        document.addEventListener('click', (e) => {
+            const ripple = document.createElement('div');
+            ripple.className = 'click-ripple';
+            ripple.style.left = e.clientX + 'px';
+            ripple.style.top = e.clientY + 'px';
+            document.body.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
+        });
+
+        // ═══════════════════════════════════════════
+        //  6. SECRET MESSAGE DECODER
+        // ═══════════════════════════════════════════
+        const secretMessage = "HAPPY 19TH";
+        const decoderContainer = document.getElementById('decoderChars');
+        const decoderBar = document.getElementById('secretDecoder');
+        let decoderRevealed = 0;
+
+        // Build decoder chars
+        for (const ch of secretMessage) {
+            const el = document.createElement('span');
+            el.className = 'decoder-char';
+            el.textContent = ch === ' ' ? ' ' : '?';
+            el.dataset.char = ch;
+            if (ch === ' ') { el.style.border = 'none'; el.style.background = 'none'; }
+            decoderContainer.appendChild(el);
+        }
+
+        function revealNextDecoderChar() {
+            const chars = decoderContainer.querySelectorAll('.decoder-char:not(.unlocked)');
+            // Find next non-space char
+            for (const el of chars) {
+                if (el.dataset.char === ' ') { el.classList.add('unlocked'); continue; }
+                el.textContent = el.dataset.char;
+                el.classList.add('unlocked');
+                decoderRevealed++;
+                break;
+            }
+        }
+
+        // ═══════════════════════════════════════════
+        //  7. MAGNETIC HOVER ON TEASER BUTTON
+        // ═══════════════════════════════════════════
+        const teaserBtn = document.getElementById('teaserBtn');
+        teaserBtn.addEventListener('mousemove', (e) => {
+            const rect = teaserBtn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            teaserBtn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
+        });
+        teaserBtn.addEventListener('mouseleave', () => {
+            teaserBtn.style.transform = '';
+        });
 
         // ═══════════════════════════════════════════
         //  PULSE & EVOLUTION LOGIC
@@ -1074,6 +1613,12 @@
             const intensity = Math.max(0, 1 - (totalRemaining / 84));
             document.body.style.filter = `hue-rotate(${intensity * 45}deg) saturate(${0.8 + intensity * 0.4})`;
 
+            // Update progress ring (how close to unlock)
+            const totalDuration = 84 * 60 * 60 * 1000; // ~84 hours total
+            const elapsed = totalDuration - dist;
+            const progressPercent = Math.min(100, Math.max(0, (elapsed / totalDuration) * 100));
+            updateProgressRing(progressPercent);
+
             if (dist > 0) {
                 const d = Math.floor(dist / (1000 * 60 * 60 * 24));
                 const h = Math.floor((dist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -1108,6 +1653,10 @@
             const container = document.getElementById('pulseContainer');
             container.style.transform = "scale(1.05)";
             setTimeout(() => container.style.transform = "", 1000);
+
+            // Reveal a decoder character on each hourly pulse!
+            revealNextDecoderChar();
+            decoderBar.classList.add('revealed');
         }
         checkUnlock();
         setInterval(checkUnlock, 1000);
@@ -1119,11 +1668,32 @@
             } else {
                 clickCount++;
                 const btn = document.getElementById('teaserBtn');
-                btn.style.animation = 'none';
-                btn.offsetHeight;
-                btn.style.animation = '';
-                btn.style.borderColor = 'rgba(244,114,182,0.5)';
+
+                // Shake animation using Web Animations API
+                btn.animate([
+                    { transform: 'translateX(0)' },
+                    { transform: 'translateX(-8px) rotate(-1deg)' },
+                    { transform: 'translateX(8px) rotate(1deg)' },
+                    { transform: 'translateX(-5px) rotate(-0.5deg)' },
+                    { transform: 'translateX(5px) rotate(0.5deg)' },
+                    { transform: 'translateX(0) rotate(0)' }
+                ], {
+                    duration: 500,
+                    easing: 'ease-in-out'
+                });
+
+                btn.style.borderColor = 'rgba(144, 12, 63, 0.5)';
                 setTimeout(() => btn.style.borderColor = '', 800);
+
+                // Show secret decoder bar after 3 clicks
+                if (clickCount >= 3 && !decoderBar.classList.contains('revealed')) {
+                    decoderBar.classList.add('revealed');
+                }
+
+                // Reveal a decoder char every 2 clicks
+                if (clickCount % 2 === 0) {
+                    revealNextDecoderChar();
+                }
 
                 if (clickCount === 19) {
                     triggerEasterEgg();
@@ -1163,6 +1733,53 @@
                 clickCount = 0; // Reset
             }, 4000);
         }
+
+        // ═══════════════════════════════════════════
+        //  TYPEWRITER QUOTE ROTATOR
+        // ═══════════════════════════════════════════
+        let lastQuoteIdx = -1;
+        let typewriterTimeout = null;
+
+        function typewriterQuote(text, el, charIndex = 0) {
+            if (charIndex === 0) el.textContent = '';
+            if (charIndex >= text.length) {
+                // Wait then start next quote
+                typewriterTimeout = setTimeout(showRandomQuote, 4000);
+                return;
+            }
+            el.textContent += text[charIndex];
+            const delay = text[charIndex] === '.' || text[charIndex] === ',' ? 120 : 35;
+            typewriterTimeout = setTimeout(() => typewriterQuote(text, el, charIndex + 1), delay);
+        }
+
+        function showRandomQuote() {
+            if (typewriterTimeout) clearTimeout(typewriterTimeout);
+            const el = document.getElementById('quoteText');
+            el.classList.add('fading');
+            setTimeout(() => {
+                let idx;
+                do { idx = Math.floor(Math.random() * quotes.length); } while (idx === lastQuoteIdx);
+                lastQuoteIdx = idx;
+                el.classList.remove('fading');
+                typewriterQuote('"' + quotes[idx] + '"', el);
+            }, 400);
+        }
+        // showRandomQuote called after quotes array is defined below
+
+        // 3. Dynamic Title (Cycling Words)
+        const titleSpan = document.querySelector('.glitch-title span');
+        const hypeWords = ["Something is Coming...", "A Legend Turns 19", "The Queen Arrives", "February 21st", "Are You Ready?"];
+        let wordIndex = 0;
+
+        setInterval(() => {
+            wordIndex = (wordIndex + 1) % hypeWords.length;
+            titleSpan.style.opacity = '0';
+            setTimeout(() => {
+                titleSpan.textContent = hypeWords[wordIndex];
+                document.querySelector('.glitch-title').setAttribute('data-text', hypeWords[wordIndex]);
+                titleSpan.style.opacity = '1';
+            }, 200);
+        }, 5000);
 
         // ═══════════════════════════════════════════
         //  1000 QUOTES BANK
@@ -1778,24 +2395,8 @@
             "This countdown is a love poem, one second at a time."
         ];
 
-        // ═══════════════════════════════════════════
-        //  QUOTE ROTATOR
-        // ═══════════════════════════════════════════
-        let lastQuoteIdx = -1;
-        function showRandomQuote() {
-            const el = document.getElementById('quoteText');
-            el.classList.add('fading');
-            setTimeout(() => {
-                let idx;
-                do { idx = Math.floor(Math.random() * quotes.length); } while (idx === lastQuoteIdx);
-                lastQuoteIdx = idx;
-                el.textContent = '"' + quotes[idx] + '"';
-                el.classList.remove('fading');
-            }, 400);
-        }
+        // Now that quotes are defined, start the typewriter
         showRandomQuote();
-        setInterval(showRandomQuote, 6000);
-
         // ═══════════════════════════════════════════
         //  DYNAMIC TITLE TAB
         // ═══════════════════════════════════════════

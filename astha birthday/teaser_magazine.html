@@ -15,30 +15,31 @@
            DESIGN TOKENS (matching index_magazine.html)
         ═══════════════════════════════════════════ */
         :root {
-            --bg-dark: #08080e;
-            --bg-card: rgba(255, 255, 255, 0.04);
-            --bg-glass: rgba(255, 255, 255, 0.06);
-            --text-primary: #f0f0f5;
-            --text-secondary: #b8b8d0;
-            --text-muted: #7a7a98;
-            --accent-1: #f472b6;
-            --accent-2: #c084fc;
-            --accent-3: #818cf8;
-            --accent-4: #22d3ee;
-            --accent-5: #fb923c;
-            --accent-gradient: linear-gradient(135deg, #f472b6, #c084fc, #818cf8);
-            --accent-gradient-wide: linear-gradient(135deg, #fb923c, #f472b6, #c084fc, #818cf8, #22d3ee);
-            --accent-glow: rgba(192, 132, 252, 0.35);
-            --glow-pink: rgba(244, 114, 182, 0.15);
-            --glow-purple: rgba(192, 132, 252, 0.12);
-            --glow-blue: rgba(129, 140, 248, 0.12);
-            --gold: #fbbf24;
-            --border: rgba(255, 255, 255, 0.1);
-            --border-color: rgba(192, 132, 252, 0.15);
+            --bg-dark: #020204;
+            --bg-card: rgba(255, 255, 255, 0.025);
+            --bg-glass: rgba(255, 255, 255, 0.04);
+            --text-primary: #F8F6F2;
+            --text-secondary: #C4A7C7;
+            --text-muted: #5a4a5e;
+            --accent-1: #900C3F;
+            --accent-2: #581845;
+            --accent-3: #0B1A3B;
+            --accent-4: #f8f5f2;
+            --accent-5: #720e1e;
+            --accent-gold: #C9A84C;
+            --accent-gradient: linear-gradient(135deg, #C9A84C, #900C3F, #581845, #0B1A3B);
+            --accent-gradient-wide: linear-gradient(135deg, #E8C96E, #C9A84C, #900C3F, #581845, #0B1A3B);
+            --accent-glow: rgba(201, 168, 76, 0.25);
+            --glow-pink: rgba(144, 12, 63, 0.12);
+            --glow-purple: rgba(88, 24, 69, 0.1);
+            --glow-blue: rgba(11, 26, 59, 0.1);
+            --gold: #C9A84C;
+            --border: rgba(201, 168, 76, 0.1);
+            --border-color: rgba(201, 168, 76, 0.15);
             --radius-sm: 12px;
             --radius-md: 20px;
             --radius-lg: 32px;
-            --transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * {
@@ -72,11 +73,11 @@
             inset: 0;
             z-index: -2;
             background:
-                radial-gradient(ellipse 600px 600px at 10% 20%, rgba(244, 114, 182, 0.08), transparent),
-                radial-gradient(ellipse 500px 500px at 80% 10%, rgba(129, 140, 248, 0.07), transparent),
-                radial-gradient(ellipse 700px 700px at 60% 60%, rgba(192, 132, 252, 0.06), transparent),
-                radial-gradient(ellipse 400px 400px at 30% 80%, rgba(34, 211, 238, 0.05), transparent),
-                radial-gradient(ellipse 500px 500px at 90% 90%, rgba(251, 146, 60, 0.04), transparent);
+                radial-gradient(ellipse 600px 600px at 10% 20%, rgba(201, 168, 76, 0.06), transparent),
+                radial-gradient(ellipse 500px 500px at 80% 10%, rgba(144, 12, 63, 0.05), transparent),
+                radial-gradient(ellipse 700px 700px at 60% 60%, rgba(88, 24, 69, 0.04), transparent),
+                radial-gradient(ellipse 400px 400px at 30% 80%, rgba(11, 26, 59, 0.06), transparent),
+                radial-gradient(ellipse 500px 500px at 90% 90%, rgba(201, 168, 76, 0.03), transparent);
             pointer-events: none;
         }
 
@@ -114,22 +115,22 @@
         .particle.pink {
             width: 5px;
             height: 5px;
-            background: rgba(244, 114, 182, 0.5);
-            box-shadow: 0 0 10px rgba(249, 77, 166, 0.3);
+            background: rgba(201, 168, 76, 0.5);
+            box-shadow: 0 0 10px rgba(201, 168, 76, 0.3);
         }
 
         .particle.purple {
             width: 4px;
             height: 4px;
-            background: rgba(192, 132, 252, 0.5);
-            box-shadow: 0 0 10px rgba(136, 37, 236, 0.3);
+            background: rgba(144, 12, 63, 0.5);
+            box-shadow: 0 0 10px rgba(144, 12, 63, 0.3);
         }
 
         .particle.cyan {
             width: 3px;
             height: 3px;
-            background: rgba(34, 211, 238, 0.5);
-            box-shadow: 0 0 10px rgba(34, 211, 238, 0.3);
+            background: rgba(184, 57, 91, 0.4);
+            box-shadow: 0 0 10px rgba(184, 57, 91, 0.3);
         }
 
         @keyframes float-particle {
@@ -663,13 +664,13 @@
 
     <!-- Ambient Orbs -->
     <div class="ambient-orb"
-        style="width: 350px; height: 350px; background: rgba(244, 114, 182, 0.1); top: 10%; left: -100px; animation: float-slow 12s ease-in-out infinite alternate;">
+        style="width: 350px; height: 350px; background: rgba(201, 168, 76, 0.08); top: 10%; left: -100px; animation: float-slow 12s ease-in-out infinite alternate;">
     </div>
     <div class="ambient-orb"
-        style="width: 300px; height: 300px; background: rgba(192, 132, 252, 0.08); bottom: 10%; right: -80px; animation: float-slow 15s ease-in-out infinite alternate-reverse;">
+        style="width: 300px; height: 300px; background: rgba(144, 12, 63, 0.06); bottom: 10%; right: -80px; animation: float-slow 15s ease-in-out infinite alternate-reverse;">
     </div>
     <div class="ambient-orb"
-        style="width: 250px; height: 250px; background: rgba(34, 211, 238, 0.06); top: 50%; left: 60%; animation: float-slow 10s ease-in-out infinite alternate;">
+        style="width: 250px; height: 250px; background: rgba(11, 26, 59, 0.08); top: 50%; left: 60%; animation: float-slow 10s ease-in-out infinite alternate;">
     </div>
 
     <!-- ═══════════════════════════════════════════
