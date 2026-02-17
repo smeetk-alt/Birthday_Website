@@ -621,7 +621,128 @@
             background: var(--accent-1);
             box-shadow: 0 0 10px var(--accent-1);
         }
+
+        /* HOURLY PULSE UI */
+        .pulse-container {
+            width: 100%;
+            margin-top: 15px;
+            text-align: center;
+            animation: fadeInUp 1.5s ease 0.6s backwards;
+        }
+
+        .pulse-header {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: #4ade80;
+            border-radius: 50%;
+            display: none;
+            box-shadow: 0 0 10px #4ade80;
+        }
+
+        .pulse-header.active .pulse-dot {
+            display: block;
+            animation: pulse-ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+
+        @keyframes pulse-ping {
+
+            75%,
+            100% {
+                transform: scale(3);
+                opacity: 0;
+            }
+        }
+
+        .pulse-slots {
+            display: flex;
+            justify-content: space-between;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 12px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .slot {
+            flex: 1;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+            color: var(--text-muted);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .slot.unlocked {
+            background: var(--accent-gradient);
+            color: white;
+            box-shadow: 0 4px 12px rgba(192, 132, 252, 0.3);
+            cursor: pointer;
+        }
+
+        .slot.current {
+            border: 2px solid var(--accent-4);
+            animation: slotGlow 2s infinite;
+        }
+
+        @keyframes slotGlow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 5px var(--accent-4);
+            }
+
+            50% {
+                box-shadow: 0 0 15px var(--accent-4);
+            }
+        }
+
+        .slot-popup {
+            position: absolute;
+            bottom: 45px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-dark);
+            border: 1px solid var(--accent-2);
+            padding: 10px;
+            width: 150px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            pointer-events: none;
+            opacity: 0;
+            transition: 0.3s;
+            z-index: 100;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            text-transform: none;
+            letter-spacing: normal;
+        }
+
+        .slot.unlocked:hover .slot-popup {
+            opacity: 1;
+            bottom: 40px;
+        }
     </style>
+
 </head>
 
 <body>
@@ -665,7 +786,39 @@
                     <div class="cd-lbl">Secs</div>
                 </div>
             </div>
-            <div class="unlock-label">Feb 20 · 8:00 PM</div>
+
+            <!-- HOURLY PULSE TRACKER -->
+            <div class="pulse-container" id="pulseContainer">
+                <div class="pulse-header" id="pulseHeader">
+                    <div class="pulse-dot"></div>
+                    <span id="pulseStatus">Hourly Fragments (2PM - 8PM)</span>
+                </div>
+                <div class="pulse-slots">
+                    <div class="slot" id="slot-14" onclick="viewFragment(14)">2P<div class="slot-popup" id="pop-14">
+                            Locked</div>
+                    </div>
+                    <div class="slot" id="slot-15" onclick="viewFragment(15)">3P<div class="slot-popup" id="pop-15">
+                            Locked</div>
+                    </div>
+                    <div class="slot" id="slot-16" onclick="viewFragment(16)">4P<div class="slot-popup" id="pop-16">
+                            Locked</div>
+                    </div>
+                    <div class="slot" id="slot-17" onclick="viewFragment(17)">5P<div class="slot-popup" id="pop-17">
+                            Locked</div>
+                    </div>
+                    <div class="slot" id="slot-18" onclick="viewFragment(18)">6P<div class="slot-popup" id="pop-18">
+                            Locked</div>
+                    </div>
+                    <div class="slot" id="slot-19" onclick="viewFragment(19)">7P<div class="slot-popup" id="pop-19">
+                            Locked</div>
+                    </div>
+                    <div class="slot" id="slot-20" onclick="viewFragment(20)">8P<div class="slot-popup" id="pop-20">
+                            Locked</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="unlock-label">Final Reveal: Feb 20 · 8:00 PM</div>
         </div>
 
         <!-- RANDOM QUOTE -->
@@ -733,13 +886,93 @@
         setInterval(swapPhoto, 8000);
 
         // ═══════════════════════════════════════════
-        //  COUNTDOWN TO FEB 20, 8 PM IST
+        //  PULSE & EVOLUTION LOGIC
         // ═══════════════════════════════════════════
         const unlockDate = new Date("2026-02-20T20:00:00+05:30").getTime();
+        const fragments = {
+            14: "The first shimmer of light. 19 years of being a masterpiece.",
+            15: "Every laugh we shared is a pixel in this story.",
+            16: "Did you notice the color shifting? The magic is brewing.",
+            17: "A whisper from the future: You aren't ready for the 20th.",
+            18: "Friendship isn't 9 to 5. It's 24/7. But 6 PM is special.",
+            19: "The sun sets, but the hype only rises.",
+            20: "Final Fragment: Rest well, for the reveal grows closer."
+        };
 
+        function updatePulse() {
+            const now = new Date();
+            const hour = now.getHours();
+            const date = now.getDate();
+            const month = now.getMonth(); // 1 = Feb
+
+            // Only active between Feb 17 and Feb 20
+            const isActivePeriod = (month === 1 && date >= 17 && date <= 20);
+            const header = document.getElementById('pulseHeader');
+            const status = document.getElementById('pulseStatus');
+
+            if (isActivePeriod && hour >= 14 && hour <= 20) {
+                header.classList.add('active');
+                status.textContent = "Pulse Active: Fragment Unlocked";
+            } else {
+                header.classList.remove('active');
+                status.textContent = "Next Pulse Starts at 2:00 PM";
+            }
+
+            // Update individual slots
+            for (let h = 14; h <= 20; h++) {
+                const slot = document.getElementById(`slot-${h}`);
+                const pop = document.getElementById(`pop-${h}`);
+                if (!slot || !pop) continue;
+
+                if (isActivePeriod && hour > h) {
+                    slot.classList.add('unlocked');
+                    slot.classList.remove('current');
+                    pop.textContent = fragments[h];
+                } else if (isActivePeriod && hour === h) {
+                    slot.classList.add('unlocked', 'current');
+                    pop.textContent = fragments[h];
+                } else {
+                    slot.classList.remove('unlocked', 'current');
+                    pop.textContent = "Locked until " + (h > 12 ? h - 12 + " PM" : h + " AM");
+                }
+            }
+        }
+
+        function viewFragment(h) {
+            const now = new Date();
+            const date = now.getDate();
+            if (now.getHours() >= h && date >= 17) {
+                const qb = document.getElementById('quoteText');
+                qb.textContent = "\"" + fragments[h] + "\"";
+                qb.style.color = "var(--accent-4)";
+                setTimeout(() => qb.style.color = "", 3000);
+            }
+        }
+
+        // ═══════════════════════════════════════════
+        //  COUNTDOWN TO FEB 20, 8 PM IST
+        // ═══════════════════════════════════════════
+        let lastCheckedHour = new Date().getHours();
         function checkUnlock() {
-            const now = Date.now();
-            const dist = unlockDate - now;
+            const now = new Date();
+            const currentHour = now.getHours();
+            const dist = unlockDate - now.getTime();
+
+            updatePulse();
+
+            // Notify if a new hour strikes between 2PM and 8PM
+            if (currentHour !== lastCheckedHour) {
+                if (currentHour >= 14 && currentHour <= 20) {
+                    triggerPulseStrike();
+                }
+                lastCheckedHour = currentHour;
+            }
+
+            // Background Evolution based on time
+            const totalRemaining = dist / (1000 * 60 * 60);
+            const intensity = Math.max(0, 1 - (totalRemaining / 84));
+            document.body.style.filter = `hue-rotate(${intensity * 45}deg) saturate(${0.8 + intensity * 0.4})`;
+
             if (dist > 0) {
                 const d = Math.floor(dist / (1000 * 60 * 60 * 24));
                 const h = Math.floor((dist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -759,6 +992,21 @@
                 document.getElementById('btnText').textContent = 'View the Teaser';
                 btn.querySelector('.lock-icon').textContent = '🔓';
             }
+        }
+
+        function triggerPulseStrike() {
+            const flash = document.getElementById('flashOverlay');
+            flash.style.background = "var(--accent-2)";
+            flash.classList.add('active');
+            setTimeout(() => {
+                flash.classList.remove('active');
+                setTimeout(() => flash.style.background = "", 200);
+            }, 500);
+
+            // Temporary high glow for the slots
+            const container = document.getElementById('pulseContainer');
+            container.style.transform = "scale(1.05)";
+            setTimeout(() => container.style.transform = "", 1000);
         }
         checkUnlock();
         setInterval(checkUnlock, 1000);
@@ -781,6 +1029,7 @@
                 }
             }
         }
+
 
         function triggerEasterEgg() {
             const msg = document.getElementById('easterEggMsg');
