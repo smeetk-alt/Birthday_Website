@@ -152,6 +152,7 @@
             text-transform: uppercase;
             background: var(--accent-gradient);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 20px;
         }
@@ -192,6 +193,7 @@
             font-weight: 700;
             background: var(--accent-gradient);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
@@ -308,6 +310,7 @@
             letter-spacing: -0.5px;
             background: var(--accent-gradient);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
@@ -375,6 +378,7 @@
             text-transform: uppercase;
             background: var(--accent-gradient-wide);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             border: 1px solid rgba(192, 132, 252, 0.25);
             border-radius: 50px;
@@ -395,6 +399,7 @@
         .hero-title .highlight {
             background: var(--accent-gradient-wide);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
@@ -499,6 +504,7 @@
             text-transform: uppercase;
             background: var(--accent-gradient-wide);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 12px;
         }
@@ -612,6 +618,7 @@
             text-transform: uppercase;
             background: var(--accent-gradient-wide);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 16px;
         }
@@ -624,6 +631,7 @@
             margin-bottom: 20px;
             background: linear-gradient(135deg, var(--text-primary) 40%, var(--accent-2));
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
@@ -797,6 +805,7 @@
             margin-bottom: 6px;
             background: var(--accent-gradient);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
@@ -874,6 +883,7 @@
             text-transform: uppercase;
             background: var(--accent-gradient-wide);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 12px;
             display: inline-block;
@@ -887,6 +897,7 @@
             line-height: 1.3;
             background: linear-gradient(135deg, var(--text-primary) 50%, var(--accent-1));
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
@@ -947,6 +958,7 @@
         .article-side-card:hover .article-side-text h4 {
             background: var(--accent-gradient);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
@@ -1230,6 +1242,7 @@
             font-weight: 800;
             background: var(--accent-gradient-wide);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 12px;
         }
@@ -1342,22 +1355,33 @@
         }
 
         @media (max-width: 600px) {
+            .hero-title {
+                font-size: clamp(2.5rem, 9vw, 3.5rem);
+                line-height: 1.1;
+            }
+
+            .hero-subtitle {
+                font-size: 0.95rem;
+                padding: 0 10px;
+            }
+
             .gallery-grid {
                 grid-template-columns: 1fr 1fr;
-                gap: 12px;
+                gap: 10px;
             }
 
             .lock-card {
-                padding: 30px 24px;
+                width: 95%;
+                padding: 30px 20px;
             }
 
             .lock-card .title {
-                font-size: 2.2rem;
+                font-size: 2rem;
             }
 
             .countdown-modern .cd-unit {
-                padding: 8px 10px;
-                min-width: 50px;
+                padding: 8px 6px;
+                min-width: 45px;
             }
 
             .countdown-modern .cd-num {
@@ -1365,7 +1389,25 @@
             }
 
             .puzzle-section {
-                padding: 40px 20px;
+                padding: 30px 15px;
+            }
+
+            .puzzle-cell,
+            .puzzle-input {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+
+            .editorial-img-number {
+                font-size: 3rem;
+                top: 10px;
+                left: 10px;
+            }
+
+            .section-header {
+                padding-top: 50px;
+                margin-bottom: 30px;
             }
         }
 
