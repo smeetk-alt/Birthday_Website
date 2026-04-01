@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAYATRIFLIX | The 19th Chapter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@100;300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        /* ═══════════════ BASE ═══════════════ */
+        :root {
+            --red: #E50914;
+            --black: #141414;
+            --dark: #000;
+            --text: #fff;
+            --subtext: #a3a3a3;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--dark);
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+        }
+        body.no-scroll { overflow: hidden; }
+
+        /* ═══════════════ INTRO OVERLAY ═══════════════ */
+        #intro {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        #intro.exit {
+            animation: introExit 1.2s cubic-bezier(0.7,0,0.3,1) forwards;
+        }
+        @keyframes introExit {
+            0%   { opacity: 1; }
+            60%  { opacity: 1; }
+            100% { opacity: 0; pointer-events: none; }
+        }
+        .intro-click-hint {
+            position: absolute;
+            bottom: 10%;
+            font-size: 0.75rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.35);
+            animation: hintPulse 2s ease-in-out infinite;
+        }
+        @keyframes hintPulse {
+            0%,100% { opacity: 0.2; }
+            50%      { opacity: 0.7; }
+        }
+
+        /* ─── SVG N ─── */
+        #n-wrap {
+            opacity: 0;
+            filter: drop-shadow(0 0 60px rgba(229,9,20,0.6));
+        }
+        #n-wrap.appear {
+            animation: nAppear 0.9s cubic-bezier(0.16,1,0.3,1) forwards;
+        }
+        @keyframes nAppear {
+            0%   { opacity:0; transform: scale(0.3); }
+            100% { opacity:1; transform: scale(1); }
+        }
+        #n-wrap.zoom {
+            animation: nAppear 0.9s cubic-bezier(0.16,1,0.3,1) forwards,
+                       nZoom 1.4s cubic-bezier(0.7,0,0.3,1) 1.8s forwards;
+        }
+        @keyframes nZoom {
+            0%   { transform: scale(1); opacity:1; }
+            60%  { transform: scale(8); opacity:1; }
+            100% { transform: scale(16); opacity:0; }
+        }
+
+        /* Color ribbon sweep */
+        #color-sweep {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg,
+                transparent 0%,
+                rgba(255,80,30,0.35) 10%,
+                rgba(255,200,50,0.25) 25%,
+                rgba(80,255,140,0.2) 40%,
+                rgba(60,140,255,0.25) 55%,
+                rgba(160,60,255,0.2) 70%,
+                rgba(255,60,120,0.3) 85%,
+                transparent 100%
+            );
+            mix-blend-mode: screen;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0;
+        }
+        #color-sweep.active {
+            animation: sweepRun 2s ease 0.4s forwards;
+        }
+        @keyframes sweepRun {
+            0%   { opacity:0; transform: translateY(120%); }
+            25%  { opacity:1; }
+            75%  { opacity:1; }
+            100% { opacity:0; transform: translateY(-120%); }
+        }
+
+        /* ═══════════════ NAVBAR ═══════════════ */
+        #nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 18px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+            transition: background 0.4s;
+        }
+        #nav.scrolled {
+            background: rgba(20,20,20,0.97);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.6);
+        }
+        .nav-logo {
+            font-family: 'Bebas Neue';
+            color: var(--red);
+            font-size: 2.2rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            user-select: none;
+        }
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: rgba(255,255,255,0.75);
+        }
+        .nav-links span { cursor: pointer; transition: color 0.2s; }
+        .nav-links span:hover { color: #fff; }
+
+        /* ═══════════════ HERO / BILLBOARD ═══════════════ */
+        .hero {
+            position: relative;
+            height: 95vh;
+            min-height: 600px;
+            background: #000;
+            overflow: hidden;
+        }
+        .hero-video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.55;
+        }
+        .hero-vignette {
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(75deg, #141414 20%, transparent 65%),
+                linear-gradient(to top, #141414 5%, transparent 40%),
+                linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 25%);
+            z-index: 2;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 0 5% 130px;
+            max-width: 650px;
+        }
+        .hero-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            font-size: 0.8rem;
+            letter-spacing: 4px;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+        .hero-badge .n-letter {
+            color: var(--red);
+            font-size: 1.6rem;
+            font-family: 'Bebas Neue';
+            line-height: 1;
+        }
+        .hero-title {
+            font-family: 'Bebas Neue';
+            font-size: clamp(4.5rem, 10vw, 8rem);
+            line-height: 0.85;
+            text-shadow: 2px 4px 30px rgba(0,0,0,0.6);
+            margin-bottom: 18px;
+        }
+        .hero-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 22px;
+        }
+        .match-score { color: #46d369; }
+        .year-tag, .rating-tag, .hd-tag {
+            color: rgba(255,255,255,0.7);
+            border: 1px solid rgba(255,255,255,0.4);
+            padding: 1px 6px;
+            border-radius: 2px;
+            font-size: 0.8rem;
+        }
+        .hero-desc {
+            font-size: 1.1rem;
+            font-weight: 300;
+            line-height: 1.55;
+            color: rgba(255,255,255,0.85);
+            margin-bottom: 28px;
+        }
+        .hero-btns { display: flex; gap: 14px; }
+        .hbtn {
+            padding: 12px 32px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 4px;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.25s;
+            font-family: 'Outfit', sans-serif;
+        }
+        .hbtn-play { background: #fff; color: #000; }
+        .hbtn-play:hover { background: rgba(255,255,255,0.75); }
+        .hbtn-info { background: rgba(109,109,110,0.65); color: #fff; backdrop-filter: blur(8px); }
+        .hbtn-info:hover { background: rgba(109,109,110,0.4); }
+
+        /* ═══════════════ ROWS ═══════════════ */
+        .rows-wrap {
+            position: relative;
+            z-index: 20;
+            margin-top: -90px;
+            padding-bottom: 80px;
+        }
+        .row-section {
+            padding: 0 5%;
+            margin-bottom: 50px;
+            position: relative;
+        }
+        .row-header {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: #e5e5e5;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+        }
+        .row-header .see-all {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #46d369;
+            cursor: pointer;
+            letter-spacing: 1px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .row-section:hover .see-all { opacity: 1; }
+
+        /* Scroll rail */
+        .row-rail {
+            position: relative;
+        }
+        .row-scroll {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding: 30px 2px 40px;
+            scrollbar-width: none;
+        }
+        .row-scroll::-webkit-scrollbar { display: none; }
+
+        /* Pagination arrows */
+        .row-arrow {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 60px;
+            background: rgba(20,20,20,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 50;
+            opacity: 0;
+            transition: opacity 0.3s, background 0.3s;
+        }
+        .row-rail:hover .row-arrow { opacity: 1; }
+        .row-arrow:hover { background: rgba(20,20,20,0.85); }
+        .row-arrow.left { left: 0; border-radius: 0 4px 4px 0; }
+        .row-arrow.right { right: 0; border-radius: 4px 0 0 4px; }
+
+        /* ═══════════════ MEDIA CARD ═══════════════ */
+        .card-wrap {
+            position: relative;
+            flex-shrink: 0;
+        }
+        .card {
+            width: 260px;
+            aspect-ratio: 16/9;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            background: #222;
+            transition: none;
+        }
+        .card img, .card video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #000;
+            display: block;
+        }
+        /* Progress bar (for "Continue Watching" row) */
+        .progress-bar-wrap {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: rgba(255,255,255,0.2);
+            z-index: 5;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--red);
+        }
+
+        /* ═══════════════ HOVER POPUP ═══════════════ */
+        .card-popup {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 320px;
+            background: #181818;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.9);
+            z-index: 500;
+            pointer-events: none;
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.85);
+            transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.33,1,0.68,1);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        /* Position adjustments for first/last cards */
+        .card-wrap.first-card .card-popup { left: 20%; transform: translate(-20%, -50%) scale(0.85); }
+        .card-wrap.last-card  .card-popup { left: 80%; transform: translate(-80%, -50%) scale(0.85); }
+        .card-wrap.first-card.hovered .card-popup { transform: translate(-20%, -50%) scale(1); }
+        .card-wrap.last-card.hovered  .card-popup { transform: translate(-80%, -50%) scale(1); }
+
+        .card-wrap.hovered .card-popup {
+            opacity: 1;
+            pointer-events: all;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        .card-wrap.hovered .card {
+            border-radius: 4px 4px 0 0;
+        }
+
+        /* Top media area of popup */
+        .popup-media {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+            position: relative;
+            overflow: hidden;
+        }
+        .popup-media img, .popup-media video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #000;
+        }
+        .popup-media-gradient {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background: linear-gradient(transparent, #181818);
+        }
+
+        /* Popup body */
+        .popup-body {
+            padding: 14px 16px 18px;
+        }
+        .popup-btns {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        .pbtn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .pbtn-play { background: #fff; color: #000; font-size: 1rem; }
+        .pbtn-play:hover { background: rgba(255,255,255,0.75); }
+        .pbtn-add  { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.5); font-size: 1rem; }
+        .pbtn-add:hover { border-color: #fff; }
+        .pbtn-like { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.5); font-size: 0.85rem; }
+        .pbtn-expand { margin-left: auto; background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.5); }
+        .pbtn-expand:hover { border-color: #fff; }
+
+        .popup-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        .pmatch { color: #46d369; font-weight: 700; }
+        .pmeta-tag {
+            border: 1px solid rgba(255,255,255,0.4);
+            padding: 0px 5px;
+            border-radius: 2px;
+            color: rgba(255,255,255,0.7);
+        }
+        .popup-message {
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: rgba(255,255,255,0.85);
+            font-style: italic;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+        .popup-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .popup-tag {
+            font-size: 0.72rem;
+            color: rgba(255,255,255,0.55);
+            background: rgba(255,255,255,0.07);
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
+
+        /* ═══════════════ DETAIL MODAL ═══════════════ */
+        #modal {
+            position: fixed;
+            inset: 0;
+            z-index: 9000;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(12px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        #modal.open { display: flex; }
+        .modal-box {
+            background: #181818;
+            width: 92%;
+            max-width: 860px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 30px 100px rgba(0,0,0,1);
+            position: relative;
+            animation: modalPop 0.4s cubic-bezier(0.33,1,0.68,1);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        @keyframes modalPop {
+            from { transform: scale(0.8); opacity: 0; }
+            to   { transform: scale(1);   opacity: 1; }
+        }
+        .modal-hero {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+            position: relative;
+        }
+        .modal-hero video, .modal-hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #000;
+        }
+        .modal-hero-gradient {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40%;
+            background: linear-gradient(transparent, #181818);
+            pointer-events: none;
+        }
+        .modal-close {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            width: 36px;
+            height: 36px;
+            background: #181818;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: background 0.2s;
+        }
+        .modal-close:hover { background: #333; }
+        .modal-body {
+            padding: 24px 32px 40px;
+        }
+        .modal-title {
+            font-family: 'Bebas Neue';
+            font-size: 3.5rem;
+            margin-bottom: 12px;
+        }
+        .modal-meta-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+        .modal-desc {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: rgba(255,255,255,0.8);
+            font-weight: 300;
+        }
+
+        /* ═══════════════ UTILS ═══════════════ */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body class="no-scroll">
+
+<audio id="tudum" src="../Netflix Intro Sound Effect - sound effects.mp3" preload="auto"></audio>
+<audio id="bgmusic" src="../birthday-song.mp3" loop preload="auto"></audio>
+
+<!-- ══════════ INTRO ══════════ -->
+<div id="intro" onclick="startIntro()">
+    <div id="color-sweep"></div>
+    <svg id="n-wrap" width="160" height="430" viewBox="0 0 111 300" xmlns="http://www.w3.org/2000/svg" style="position:relative;z-index:2;">
+        <defs>
+            <linearGradient id="lG" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%"  stop-color="#a00610"/>
+                <stop offset="50%" stop-color="#e50914"/>
+                <stop offset="100%" stop-color="#a00610"/>
+            </linearGradient>
+            <linearGradient id="rG" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%"  stop-color="#8b050d"/>
+                <stop offset="50%" stop-color="#d40812"/>
+                <stop offset="100%" stop-color="#8b050d"/>
+            </linearGradient>
+            <linearGradient id="dG" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%"  stop-color="#e50914"/>
+                <stop offset="25%" stop-color="#ff4444"/>
+                <stop offset="50%" stop-color="#c0070f"/>
+                <stop offset="75%" stop-color="#ff3030"/>
+                <stop offset="100%" stop-color="#e50914"/>
+            </linearGradient>
+            <linearGradient id="gloss" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%"  stop-color="rgba(255,255,255,0)"  stop-opacity="0"/>
+                <stop offset="35%" stop-color="rgba(255,255,255,0.22)" stop-opacity="0.22"/>
+                <stop offset="100%" stop-color="rgba(255,255,255,0)" stop-opacity="0"/>
+            </linearGradient>
+            <filter id="shadow">
+                <feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#000" flood-opacity="0.6"/>
+            </filter>
+        </defs>
+        <!-- Left pillar -->
+        <rect x="0" y="0" width="30" height="300" rx="2" fill="url(#lG)" filter="url(#shadow)"/>
+        <rect x="5" y="0" width="8" height="300" rx="1" fill="rgba(255,255,255,0.09)"/>
+        <!-- Diagonal ribbon -->
+        <polygon points="0,0 30,0 111,300 81,300" fill="url(#dG)" filter="url(#shadow)"/>
+        <polygon points="10,0 22,0 103,300 91,300" fill="url(#gloss)"/>
+        <!-- Right pillar -->
+        <rect x="81" y="0" width="30" height="300" rx="2" fill="url(#rG)" filter="url(#shadow)"/>
+        <rect x="86" y="0" width="8" height="300" rx="1" fill="rgba(255,255,255,0.07)"/>
+    </svg>
+    <div class="intro-click-hint">Click anywhere to begin</div>
+</div>
+
+<!-- ══════════ NAVBAR ══════════ -->
+<nav id="nav">
+    <div class="nav-logo">GAYATRIFLIX</div>
+    <div class="nav-links">
+        <span>Home</span>
+        <span>TV Shows</span>
+        <span>My List</span>
+        <span>New &amp; Popular</span>
+    </div>
+</nav>
+
+<!-- ══════════ MAIN UI ══════════ -->
+<div id="main-ui" style="opacity:0; transition: opacity 1.2s ease;">
+
+    <!-- HERO BILLBOARD -->
+    <section class="hero">
+        <video class="hero-video" src="VIDEO 1.mp4" autoplay muted loop playsinline id="hero-vid"></video>
+        <div class="hero-vignette"></div>
+        <div class="hero-content">
+            <div class="hero-badge"><span class="n-letter">N</span> S E R I E S</div>
+            <h1 class="hero-title">GAYATRI<br>SEASON 19</h1>
+            <div class="hero-meta">
+                <span class="match-score">99% Match</span>
+                <span class="year-tag">2026</span>
+                <span class="rating-tag">TV-19</span>
+                <span class="hd-tag">HD</span>
+            </div>
+            <p class="hero-desc">The highly anticipated nineteenth chapter. A masterpiece of joy, grace, and limitless potential. Stream the birthday special exclusively on GayatriFlix.</p>
+            <div class="hero-btns">
+                <button class="hbtn hbtn-play" onclick="openModal('VIDEO 1.mp4','video','GAYATRI: SEASON 19','Stream in HD','The premiere episode of the most-anticipated original series on GayatriFlix.')">▶ Play</button>
+                <button class="hbtn hbtn-info" onclick="openModal('IMAGE 1.jpeg','image','More Info','Story so far...','19 years in the making. Every chapter more legendary than the last.')">ⓘ More Info</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ ROWS ══════════ -->
+    <div class="rows-wrap">
+
+        <!-- ROW 1: Continue Watching -->
+        <div class="row-section">
+            <div class="row-header">
+                Continue Watching for Gayatri
+                <span class="see-all">Explore All</span>
+            </div>
+            <div class="row-rail">
+                <div class="row-arrow left" onclick="scrollRow('row1', -900)">&#8249;</div>
+                <div class="row-scroll" id="row1"></div>
+                <div class="row-arrow right" onclick="scrollRow('row1', 900)">&#8250;</div>
+            </div>
+        </div>
+
+        <!-- ROW 2: Trending This Year -->
+        <div class="row-section">
+            <div class="row-header">
+                Trending This Year
+                <span class="see-all">Explore All</span>
+            </div>
+            <div class="row-rail">
+                <div class="row-arrow left" onclick="scrollRow('row2', -900)">&#8249;</div>
+                <div class="row-scroll" id="row2"></div>
+                <div class="row-arrow right" onclick="scrollRow('row2', 900)">&#8250;</div>
+            </div>
+        </div>
+
+        <!-- ROW 3: Iconic Moments -->
+        <div class="row-section">
+            <div class="row-header">
+                Iconic Moments: Season 18→19
+                <span class="see-all">Explore All</span>
+            </div>
+            <div class="row-rail">
+                <div class="row-arrow left" onclick="scrollRow('row3', -900)">&#8249;</div>
+                <div class="row-scroll" id="row3"></div>
+                <div class="row-arrow right" onclick="scrollRow('row3', 900)">&#8250;</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ══════════ DETAIL MODAL ══════════ -->
+<div id="modal" onclick="closeModal()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+        <div class="modal-close" onclick="closeModal()">✕</div>
+        <div class="modal-hero">
+            <video id="modal-video" style="width:100%;height:100%;object-fit:contain;background:#000;display:none;" controls></video>
+            <img id="modal-img" style="width:100%;height:100%;object-fit:contain;background:#000;display:none;">
+            <div class="modal-hero-gradient"></div>
+        </div>
+        <div class="modal-body">
+            <div class="modal-meta-row">
+                <span class="match-score" id="modal-match">99% Match</span>
+                <span class="year-tag">2026</span>
+                <span class="rating-tag">TV-19</span>
+                <span class="hd-tag">HD</span>
+            </div>
+            <h2 class="modal-title" id="modal-title"></h2>
+            <p class="modal-desc" id="modal-desc"></p>
+        </div>
+    </div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+// DATA: Edit your personalized content here
+// ══════════════════════════════════════
+const CONTENT = {
+    row1: [
+        {
+            type: 'img', src: 'IMAGE 1.jpeg',
+            title: 'Style Icon', match: '99%', year: '2025',
+            message: 'Effortless. Iconic. Completely her.',
+            tags: ['Main Character Energy', 'Iconic', 'HD'],
+            progress: 92
+        },
+        {
+            type: 'img', src: 'IMAGE 2.jpeg',
+            title: 'Pure Radiance', match: '98%', year: '2024',
+            message: 'This is what 19 years of perfection looks like.',
+            tags: ['Wholesome', 'Aesthetic', 'Timeless'],
+            progress: 78
+        },
+        {
+            type: 'img', src: 'IMAGE 3.jpeg',
+            title: 'The Serenity Chapter', match: '97%', year: '2025',
+            message: 'The calm before the legendary season finale.',
+            tags: ['Chill', 'Cinematic', 'HD'],
+            progress: 55
+        },
+        {
+            type: 'img', src: 'IMAGE 4.jpeg',
+            title: 'Main Character', match: '100%', year: '2025',
+            message: 'Every scene written for her. Every frame perfect.',
+            tags: ['Boss Energy', 'Iconic', 'Trending'],
+            progress: 88
+        }
+    ],
+    row2: [
+        {
+            type: 'vid', src: 'VIDEO 1.mp4', thumb: 'IMAGE 1.jpeg',
+            title: 'The Premiere', match: '99%', year: '2026',
+            message: 'Season 19 opens with the most stunning episode yet.',
+            tags: ['New Release', 'Top Rated', 'HD']
+        },
+        {
+            type: 'vid', src: 'VIDEO 2.mp4', thumb: 'IMAGE 2.jpeg',
+            title: 'Behind The Scenes', match: '97%', year: '2025',
+            message: 'The raw, unfiltered magic you weren\'t supposed to see.',
+            tags: ['Exclusive', 'Chaotic', 'Must Watch']
+        },
+        {
+            type: 'vid', src: 'VIDEO 3.mp4', thumb: 'IMAGE 3.jpeg',
+            title: 'The Director\'s Cut', match: '98%', year: '2025',
+            message: 'More depth, more laughs, more of everything we love.',
+            tags: ['Extended', 'Fan Favourite', 'HD']
+        },
+        {
+            type: 'vid', src: 'VIDEO 4.mp4', thumb: 'IMAGE 4.jpeg',
+            title: 'Legacy Reel', match: '100%', year: '2026',
+            message: 'A cinematic anthology of every legendary moment.',
+            tags: ['Gold Rated', 'Must Watch', 'HD']
+        }
+    ],
+    row3: [
+        {
+            type: 'img', src: 'IMAGE 5.jpeg',
+            title: 'Chapter Origin', match: '96%', year: '2023',
+            message: 'Where it all started. The origin story of a legend.',
+            tags: ['Classic', 'Foundation', 'Storytelling']
+        },
+        {
+            type: 'img', src: 'IMAGE 6.jpeg',
+            title: 'The Spotlight', match: '97%', year: '2024',
+            message: 'When the whole world stops and the spotlight finds you.',
+            tags: ['Glow Up', 'Cinematic', 'Iconic']
+        },
+        {
+            type: 'img', src: 'IMAGE 7.jpeg',
+            title: 'Season Finale', match: '99%', year: '2025',
+            message: 'The finale that made Season 18 unforgettable. Forever.',
+            tags: ['Emotional', 'Timeless', 'Gold Rated']
+        }
+    ]
+};
+
+// ══════════════════════════════════════
+// INTRO ANIMATION
+// ══════════════════════════════════════
+let introStarted = false;
+function startIntro() {
+    if (introStarted) return;
+    introStarted = true;
+
+    const nWrap  = document.getElementById('n-wrap');
+    const sweep  = document.getElementById('color-sweep');
+    const sound  = document.getElementById('tudum');
+
+    // Phase 1: N appears
+    nWrap.classList.add('appear');
+    sweep.classList.add('active');
+
+    // Play TUDUM
+    sound.currentTime = 0;
+    sound.play().catch(() => {});
+
+    // Phase 2: Zoom
+    setTimeout(() => {
+        nWrap.classList.remove('appear');
+        nWrap.classList.add('zoom');
+    }, 1000);
+
+    // Phase 3: Reveal main content
+    setTimeout(() => {
+        const intro = document.getElementById('intro');
+        intro.classList.add('exit');
+
+        const mainUI = document.getElementById('main-ui');
+        mainUI.style.display = 'block';
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                mainUI.style.opacity = '1';
+                document.body.classList.remove('no-scroll');
+            });
+        });
+
+        // Fade in background music
+        const music = document.getElementById('bgmusic');
+        music.volume = 0;
+        music.play().catch(() => {});
+        let v = 0;
+        const fi = setInterval(() => {
+            v = Math.min(v + 0.02, 0.25);
+            music.volume = v;
+            if (v >= 0.25) clearInterval(fi);
+        }, 120);
+
+        setTimeout(() => { intro.style.display = 'none'; }, 1200);
+    }, 3400);
+}
+
+// ══════════════════════════════════════
+// BUILD ROWS
+// ══════════════════════════════════════
+function buildRows() {
+    for (const [rowId, items] of Object.entries(CONTENT)) {
+        const container = document.getElementById(rowId);
+        const hasProgress = rowId === 'row1';
+
+        items.forEach((item, idx) => {
+            // Wrapper for positioning popup correctly at edges
+            const wrap = document.createElement('div');
+            wrap.className = 'card-wrap';
+            if (idx === 0) wrap.classList.add('first-card');
+            if (idx === items.length - 1) wrap.classList.add('last-card');
+
+            // Main visible card
+            const card = document.createElement('div');
+            card.className = 'card';
+
+            if (item.type === 'vid') {
+                // Videos: show video directly (no thumb overlay)
+                const vid = document.createElement('video');
+                vid.src = item.src;
+                vid.muted = true;
+                vid.loop = true;
+                vid.preload = 'metadata';
+                vid.playsInline = true;
+                card.appendChild(vid);
+            } else {
+                const img = document.createElement('img');
+                img.src = item.src;
+                img.alt = item.title;
+                img.style.objectPosition = (idx < 2) ? 'center 20%' : 'center center';
+                card.appendChild(img);
+            }
+
+            // Progress bar (Continue Watching row only)
+            if (hasProgress) {
+                const pwrap = document.createElement('div');
+                pwrap.className = 'progress-bar-wrap';
+                const pfill = document.createElement('div');
+                pfill.className = 'progress-bar-fill';
+                pfill.style.width = item.progress + '%';
+                pwrap.appendChild(pfill);
+                card.appendChild(pwrap);
+            }
+
+            // ── POPUP ──
+            const popup = document.createElement('div');
+            popup.className = 'card-popup';
+            popup.innerHTML = `
+                <div class="popup-media">
+                    ${item.type === 'vid'
+                        ? `<video src="${item.src}" muted loop playsinline preload="metadata" style="width:100%;height:100%;object-fit:contain;background:#000;"></video>`
+                        : `<img src="${item.src}" alt="${item.title}" style="object-position:${(idx<2&&rowId==='row1')?'center 20%':'center center'}">`
+                    }
+                    <div class="popup-media-gradient"></div>
+                </div>
+                <div class="popup-body">
+                    <div class="popup-btns">
+                        <button class="pbtn pbtn-play" onclick="openModal('${item.src}','${item.type}','${item.title}','${item.match} Match','${item.message}')">▶</button>
+                        <button class="pbtn pbtn-add">＋</button>
+                        <button class="pbtn pbtn-like">👍</button>
+                        <button class="pbtn pbtn-expand" onclick="openModal('${item.src}','${item.type}','${item.title}','${item.match} Match','${item.message}')">⌄</button>
+                    </div>
+                    <div class="popup-meta">
+                        <span class="pmatch">${item.match} Match</span>
+                        <span class="pmeta-tag">${item.year}</span>
+                        <span class="pmeta-tag">HD</span>
+                        <span class="pmeta-tag">TV-19</span>
+                    </div>
+                    <div class="popup-message">"${item.message}"</div>
+                    <div class="popup-tags">${item.tags.map(t => `<span class="popup-tag">${t}</span>`).join('')}</div>
+                </div>
+            `;
+
+            wrap.appendChild(card);
+            wrap.appendChild(popup);
+            container.appendChild(wrap);
+
+            // ── HOVER LOGIC ──
+            let hoverTimer = null;
+            wrap.addEventListener('mouseenter', () => {
+                hoverTimer = setTimeout(() => {
+                    wrap.classList.add('hovered');
+                    // Play video in popup if applicable
+                    const popVid = popup.querySelector('video');
+                    if (popVid) popVid.play().catch(() => {});
+                }, 400);
+            });
+            wrap.addEventListener('mouseleave', () => {
+                clearTimeout(hoverTimer);
+                wrap.classList.remove('hovered');
+                const popVid = popup.querySelector('video');
+                if (popVid) { popVid.pause(); }
+            });
+
+            // Click card to open modal
+            card.addEventListener('click', () => {
+                openModal(item.src, item.type, item.title, item.match + ' Match', item.message);
+            });
+        });
+    }
+}
+
+// ══════════════════════════════════════
+// MODAL
+// ══════════════════════════════════════
+function openModal(src, type, title, match, desc) {
+    const modal = document.getElementById('modal');
+    const video = document.getElementById('modal-video');
+    const img   = document.getElementById('modal-img');
+
+    document.getElementById('modal-title').innerText = title;
+    document.getElementById('modal-desc').innerText  = desc || '';
+    document.getElementById('modal-match').innerText = match || '99% Match';
+
+    if (type === 'video' || src.endsWith('.mp4')) {
+        video.style.display = 'block';
+        img.style.display   = 'none';
+        video.src = src;
+        video.play();
+        if (src.endsWith('.mp4')) confetti({ particleCount: 60, spread: 60, origin: { y: 0.3 }, colors: ['#E50914','#fff'] });
+    } else {
+        img.style.display   = 'block';
+        video.style.display = 'none';
+        img.src = src;
+        confetti({ particleCount: 80, spread: 70, origin: { y: 0.5 }, colors: ['#E50914','#fff','#46d369'] });
+    }
+
+    modal.classList.add('open');
+    document.body.classList.add('no-scroll');
+}
+
+function closeModal() {
+    const modal = document.getElementById('modal');
+    const video = document.getElementById('modal-video');
+    modal.classList.remove('open');
+    video.pause();
+    video.src = '';
+    document.body.classList.remove('no-scroll');
+}
+
+// ══════════════════════════════════════
+// ROW PAGINATION
+// ══════════════════════════════════════
+function scrollRow(id, amount) {
+    document.getElementById(id).scrollBy({ left: amount, behavior: 'smooth' });
+}
+
+// ══════════════════════════════════════
+// NAVBAR SCROLL
+// ══════════════════════════════════════
+window.addEventListener('scroll', () => {
+    const nav = document.getElementById('nav');
+    if (window.scrollY > 60) nav.classList.add('scrolled');
+    else nav.classList.remove('scrolled');
+});
+
+// ══════════════════════════════════════
+// LOGO CONFETTI
+// ══════════════════════════════════════
+document.querySelector('.nav-logo').addEventListener('mouseenter', () => {
+    confetti({ particleCount: 35, spread: 300, velocity: 25, origin: { x: 0.08, y: 0.05 }, colors: ['#E50914','#fff'] });
+});
+
+// Init
+document.getElementById('main-ui').style.display = 'none';
+buildRows();
+</script>
+</body>
+</html>

@@ -195,7 +195,207 @@
             margin-left: 10px;
         }
 
-        /* ROWS */
+        /* TABS */
+        .tabs-container {
+            margin: 30px 4% 0;
+        }
+
+        .tab-bar {
+            display: flex;
+            gap: 0;
+            border-bottom: 2px solid #333;
+            margin-bottom: 0;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: #808080;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            padding: 14px 32px;
+            cursor: pointer;
+            position: relative;
+            letter-spacing: 0.5px;
+            transition: color 0.3s;
+        }
+
+        .tab-btn:hover {
+            color: #ccc;
+        }
+
+        .tab-btn.active {
+            color: #fff;
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--netflix-red);
+            border-radius: 2px 2px 0 0;
+            animation: tabSlide 0.3s ease-out;
+        }
+
+        @keyframes tabSlide {
+            from { transform: scaleX(0); }
+            to { transform: scaleX(1); }
+        }
+
+        .tab-panel {
+            display: none;
+            padding: 25px 0 40px;
+            animation: fadeInTab 0.45s ease;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        @keyframes fadeInTab {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* VIDEO CARDS */
+        .video-row {
+            display: flex;
+            overflow-x: auto;
+            gap: 16px;
+            padding: 10px 0 20px;
+            scroll-behavior: smooth;
+        }
+
+        .video-row::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .video-row::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 4px;
+        }
+
+        .video-card {
+            position: relative;
+            min-width: 290px;
+            max-width: 290px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #1a1a1a;
+            cursor: pointer;
+            transition: transform 0.4s cubic-bezier(.25,.8,.25,1), box-shadow 0.4s;
+            flex-shrink: 0;
+        }
+
+        .video-card:hover {
+            transform: scale(1.08);
+            z-index: 10;
+            box-shadow: 0 12px 40px rgba(229, 9, 20, 0.35);
+        }
+
+        .video-thumb {
+            position: relative;
+            width: 100%;
+            height: 165px;
+            overflow: hidden;
+        }
+
+        .video-thumb video,
+        .video-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .video-thumb .poster-img {
+            position: absolute;
+            inset: 0;
+            transition: opacity 0.5s ease;
+            z-index: 2;
+        }
+
+        .video-card:hover .poster-img {
+            opacity: 0;
+        }
+
+        .video-thumb video {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+        }
+
+        .play-badge {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: var(--netflix-red);
+            color: white;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 3px;
+            z-index: 5;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        }
+
+        .duration-badge {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: #ddd;
+            font-size: 0.72rem;
+            padding: 2px 7px;
+            border-radius: 3px;
+            z-index: 5;
+        }
+
+        .video-info {
+            padding: 14px 16px 18px;
+        }
+
+        .video-info h3 {
+            margin: 0 0 6px;
+            font-family: 'Bebas Neue';
+            font-size: 1.35rem;
+            letter-spacing: 1px;
+            color: #fff;
+        }
+
+        .video-info p {
+            margin: 0;
+            font-size: 0.82rem;
+            color: #999;
+            line-height: 1.45;
+        }
+
+        .video-info .meta-tags {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .meta-tag {
+            background: rgba(229, 9, 20, 0.15);
+            border: 1px solid rgba(229, 9, 20, 0.3);
+            color: #e50914;
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 3px;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+        }
+
+        /* ROWS (fallback for any old rows) */
         .row {
             margin: 20px 0 20px 4%;
         }
@@ -266,6 +466,12 @@
             height: 400px;
             background-size: cover;
             background-position: center;
+        }
+
+        .preview-hero video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .preview-body {
@@ -348,20 +554,31 @@
             </div>
         </div>
 
-        <div class="row">
-            <h2>Trending Now</h2>
-            <div class="row-posters" id="trend-row"></div>
-        </div>
+        <!-- TABBED VIDEO SECTION -->
+        <div class="tabs-container">
+            <div class="tab-bar">
+                <button class="tab-btn active" data-tab="picks" onclick="switchTab('picks')">Top Picks for Kashvi</button>
+                <button class="tab-btn" data-tab="trending" onclick="switchTab('trending')">Trending Now</button>
+            </div>
 
-        <div class="row">
-            <h2>Top Picks for Kashvi</h2>
-            <div class="row-posters" id="picks-row"></div>
+            <!-- TAB 1: Top Picks -->
+            <div class="tab-panel active" id="panel-picks">
+                <div class="video-row" id="picks-row"></div>
+            </div>
+
+            <!-- TAB 2: Trending Now -->
+            <div class="tab-panel" id="panel-trending">
+                <div class="video-row" id="trend-row"></div>
+            </div>
         </div>
     </div>
 
+    <!-- VIDEO PREVIEW MODAL -->
     <div id="preview-modal" class="modal-overlay" onclick="closeModal()">
         <div class="preview-box" onclick="event.stopPropagation()">
-            <div class="preview-hero" id="p-img"></div>
+            <div class="preview-hero" id="p-img">
+                <video id="p-video" muted loop playsinline></video>
+            </div>
             <div class="preview-body">
                 <h1 id="p-title" style="font-family: 'Bebas Neue'; font-size: 3.5rem; margin: 0;"></h1>
                 <p id="p-desc" style="font-size: 1.1rem; color: #ccc; line-height: 1.6;"></p>
@@ -395,32 +612,99 @@
     </div>
 
     <script>
-        const gallery = [
-            { img: "1.jpeg", title: "The Beginning", desc: "A heartwarming pilot episode introducing our main character." },
-            { img: "2.jpeg", title: "The Scientist", desc: "Laboratory drama and high-stakes exams. Rated 10/10 for brainpower." },
-            { img: "6.jpeg", title: "Future Gaze", desc: "A cinematic look toward the next exciting season of life." },
-            { img: "7.jpeg", title: "Duo Dynamics", desc: "Co-starring the best friends. Laughter and secrets abound." },
-            { img: "8.jpeg", title: "The Support", desc: "A story of reliability, resilience, and unconditional love." },
-            { img: "9.jpeg", title: "Pure Joy", desc: "The episode where everything goes right. A fan favorite." },
-            { img: "10.jpeg", title: "Elegance", desc: "Grace under pressure. A stunning mid-season portrait." }
+        // ========== VIDEO DATA ==========
+        // REPLACE the video filenames below with your actual video files!
+        // Just drop your .mp4 files in the same folder and update the 'video' field.
+
+        const topPicks = [
+            { video: "video1.mp4", poster: "1.jpeg", title: "The Beginning", desc: "A heartwarming pilot episode introducing our main character.", duration: "3:24", tags: ["Original", "Heartfelt"] },
+            { video: "video2.mp4", poster: "2.jpeg", title: "The Scientist", desc: "Laboratory drama and high-stakes exams. Rated 10/10 for brainpower.", duration: "2:15", tags: ["Drama", "Iconic"] },
+            { video: "video3.mp4", poster: "7.jpeg", title: "Duo Dynamics", desc: "Co-starring the best friends. Laughter and secrets abound.", duration: "4:02", tags: ["Comedy", "BFF"] },
+            { video: "video4.mp4", poster: "9.jpeg", title: "Pure Joy", desc: "The episode where everything goes right. A fan favorite.", duration: "1:58", tags: ["Feel-Good", "Top Rated"] }
         ];
 
-        // 1. Setup Rows
-        const tr = document.getElementById('trend-row');
-        const pr = document.getElementById('picks-row');
-        gallery.forEach((item, i) => {
-            const card = `<div class="poster-wrapper" onclick="openPreview(${i})"><img src="${item.img}"></div>`;
-            tr.innerHTML += card;
-            pr.innerHTML += card;
+        const trendingNow = [
+            { video: "video5.mp4", poster: "6.jpeg", title: "Future Gaze", desc: "A cinematic look toward the next exciting season of life.", duration: "2:40", tags: ["Cinematic", "New"] },
+            { video: "video6.mp4", poster: "8.jpeg", title: "The Support", desc: "A story of reliability, resilience, and unconditional love.", duration: "3:10", tags: ["Emotional", "Family"] },
+            { video: "video7.mp4", poster: "10.jpeg", title: "Elegance", desc: "Grace under pressure. A stunning mid-season portrait.", duration: "2:55", tags: ["Trending", "Stunning"] }
+        ];
+
+        // ========== BUILD VIDEO CARDS ==========
+        function buildVideoCard(item, index, tabKey) {
+            const tagsHTML = item.tags.map(t => `<span class="meta-tag">${t}</span>`).join('');
+            return `
+                <div class="video-card" 
+                     onmouseenter="hoverPlay(this)" 
+                     onmouseleave="hoverPause(this)" 
+                     onclick="openPreview('${tabKey}', ${index})">
+                    <div class="video-thumb">
+                        <img class="poster-img" src="${item.poster}" alt="${item.title}">
+                        <video src="${item.video}" muted loop playsinline preload="metadata"></video>
+                        <div class="play-badge">▶ Preview</div>
+                        <div class="duration-badge">${item.duration}</div>
+                    </div>
+                    <div class="video-info">
+                        <h3>${item.title}</h3>
+                        <p>${item.desc}</p>
+                        <div class="meta-tags">${tagsHTML}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Populate rows
+        const picksRow = document.getElementById('picks-row');
+        const trendRow = document.getElementById('trend-row');
+
+        topPicks.forEach((item, i) => {
+            picksRow.innerHTML += buildVideoCard(item, i, 'picks');
         });
 
-        // 2. Navbar Scroll Effect
+        trendingNow.forEach((item, i) => {
+            trendRow.innerHTML += buildVideoCard(item, i, 'trending');
+        });
+
+        // ========== HOVER AUTO-PLAY ==========
+        function hoverPlay(card) {
+            const video = card.querySelector('video');
+            if (video) {
+                video.currentTime = 0;
+                video.play().catch(() => {});
+            }
+        }
+
+        function hoverPause(card) {
+            const video = card.querySelector('video');
+            if (video) {
+                video.pause();
+                video.currentTime = 0;
+            }
+        }
+
+        // ========== TAB SWITCHING ==========
+        function switchTab(tabKey) {
+            // Update buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.tab-btn[data-tab="${tabKey}"]`).classList.add('active');
+
+            // Update panels
+            document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+            document.getElementById(`panel-${tabKey}`).classList.add('active');
+
+            // Pause all videos when switching
+            document.querySelectorAll('.video-card video').forEach(v => {
+                v.pause();
+                v.currentTime = 0;
+            });
+        }
+
+        // ========== NAVBAR SCROLL EFFECT ==========
         window.onscroll = () => {
             if (window.scrollY > 60) document.getElementById('navbar').classList.add('header-solid');
             else document.getElementById('navbar').classList.remove('header-solid');
         };
 
-        // 3. Login Logic
+        // ========== LOGIN LOGIC ==========
         document.getElementById('kashvi-profile').onclick = () => {
             document.getElementById('kashvi-profile').style.display = 'none';
             document.getElementById('pin-ui').style.display = 'block';
@@ -434,7 +718,6 @@
             document.getElementById('profile-gate').style.display = 'none';
             document.getElementById('tudum-intro').style.display = 'flex';
 
-            // Play Netflix Sound
             const tudum = new Audio('Netflix Intro Sound Effect - sound effects.mp3');
             tudum.play();
 
@@ -443,7 +726,6 @@
                 document.getElementById('main-browse').style.display = 'block';
                 setTimeout(() => document.getElementById('main-browse').style.opacity = 1, 50);
 
-                // Fade in Background Birthday Music
                 const bg = document.getElementById('bgMusic');
                 bg.volume = 0;
                 bg.play();
@@ -455,15 +737,29 @@
             }, 1600);
         }
 
-        // 4. Modal Controls
-        function openPreview(i) {
-            document.getElementById('p-img').style.backgroundImage = `url(${gallery[i].img})`;
-            document.getElementById('p-title').innerText = gallery[i].title;
-            document.getElementById('p-desc').innerText = gallery[i].desc;
+        // ========== PREVIEW MODAL ==========
+        function openPreview(tabKey, index) {
+            const data = tabKey === 'picks' ? topPicks : trendingNow;
+            const item = data[index];
+
+            // Set video in the preview hero
+            const previewVideo = document.getElementById('p-video');
+            previewVideo.src = item.video;
+            previewVideo.play().catch(() => {});
+
+            document.getElementById('p-img').style.backgroundImage = `url(${item.poster})`;
+            document.getElementById('p-title').innerText = item.title;
+            document.getElementById('p-desc').innerText = item.desc;
             document.getElementById('preview-modal').style.display = 'flex';
         }
 
         function closeModal() {
+            // Pause preview video when closing
+            const previewVideo = document.getElementById('p-video');
+            if (previewVideo) {
+                previewVideo.pause();
+                previewVideo.src = '';
+            }
             document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
         }
 
@@ -488,4 +784,4 @@
     </script>
 </body>
 
-</html>44
+</html>

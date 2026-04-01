@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viewer Advisory | GayatriFlix</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: #000; 
+            color: #fff; 
+            font-family: 'Outfit', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .warning-container {
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 2s ease forwards 0.5s;
+        }
+        .rating-box {
+            display: inline-block;
+            border: 3px solid #fff;
+            padding: 10px 30px;
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 40px;
+            letter-spacing: 2px;
+            border-radius: 4px;
+        }
+        .warning-text {
+            font-size: 1.5rem;
+            line-height: 1.6;
+            color: #ccc;
+            margin-bottom: 50px;
+        }
+        .highlight {
+            color: #E50914;
+            font-weight: 700;
+        }
+        .proceed-btn {
+            background: #E50914;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .proceed-btn:hover {
+            background: #f40612;
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(229, 9, 20, 0.4);
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="warning-container">
+        <div class="rating-box">TV-19</div>
+        <p class="warning-text">
+            The following presentation is a <span class="highlight">GAYATRIFLIX ORIGINAL</span>.<br><br>
+            It has been rated TV-19 for intense scenes of glamour, main character energy, 
+            excessive joy, and unforgettable memories.<br><br>
+            Viewer discretion is advised as this masterpiece may cause overwhelming awe.
+        </p>
+        <button class="proceed-btn" onclick="window.location.href='teaser.html'">I Am Ready</button>
+    </div>
+</body>
+</html>
