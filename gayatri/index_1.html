@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAYATRI | Exhibit 19</title>
+    <!-- High-end elegant fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0d0d0d;
+            --text-main: #f5f5f0;
+            --text-muted: #888;
+            --accent: #d4af37; /* Gold */
+            --ease: cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none !important; /* Custom cursor everywhere */
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ═══ CUSTOM CURSOR ═══ */
+        .cursor-dot, .cursor-circle {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 99999;
+            pointer-events: none;
+        }
+
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent);
+            transition: width 0.3s, height 0.3s, opacity 0.3s;
+        }
+
+        .cursor-circle {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            transition: width 0.4s var(--ease), height 0.4s var(--ease), border-color 0.4s, background-color 0.4s;
+        }
+
+        body.hover-img .cursor-circle {
+            width: 80px;
+            height: 80px;
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(2px);
+            border-color: transparent;
+        }
+
+        body.hover-img .cursor-dot {
+            opacity: 0;
+        }
+
+        /* ═══ NOISE OVERLAY ═══ */
+        .noise-layer {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            opacity: 0.15;
+            pointer-events: none;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* ═══ HEADER ═══ */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 30px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            mix-blend-mode: difference;
+        }
+
+        .brand {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .exhibit-tag {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* ═══ HERO SECTION ═══ */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(4rem, 12vw, 10rem);
+            font-weight: 700;
+            font-style: italic;
+            line-height: 0.9;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            opacity: 0;
+            color: #ffffff;
+            transform: translateY(50px);
+            animation: fadeUp 1.5s var(--ease) forwards 0.5s;
+            text-shadow:
+                0 0 60px rgba(212, 175, 55, 0.2),
+                0 2px 4px rgba(0, 0, 0, 0.9);
+        }
+
+        .hero .subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 300;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            opacity: 0;
+            animation: fadeUp 1.5s var(--ease) forwards 1s;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            animation: fadeUp 1s var(--ease) forwards 2s;
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 40px;
+            background: var(--text-muted);
+            margin-top: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .scroll-line::after {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            animation: scrollLineDrop 2s infinite ease-in-out;
+        }
+
+        @keyframes scrollLineDrop {
+            0% { top: -100%; }
+            50%, 100% { top: 100%; }
+        }
+
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ═══ GALLERY EXHIBIT SECTIONS ═══ */
+        .exhibit-section {
+            padding: 100px 5vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .art-card {
+            display: flex;
+            align-items: center;
+            gap: 5vw;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .art-card.reverse {
+            flex-direction: row-reverse;
+        }
+
+        .art-image-wrap {
+            flex: 1.2;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1.2s var(--ease), transform 1.2s var(--ease);
+        }
+
+        .art-image-wrap.reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .art-image {
+            width: 100%;
+            height: 80vh;
+            object-fit: cover;
+            object-position: center;
+            transform: scale(1.08);
+            transition: transform 1.2s var(--ease), filter 0.8s;
+            filter: grayscale(100%);
+        }
+
+        .art-image-wrap.reveal .art-image {
+            transform: scale(1);
+        }
+
+        .art-image-wrap:hover .art-image {
+            transform: scale(1.05);
+            filter: grayscale(0%); /* Reveal color on hover */
+        }
+
+        .art-details {
+            flex: 1;
+            padding: 40px;
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: opacity 1s var(--ease), transform 1s var(--ease);
+            transition-delay: 0.4s;
+        }
+
+        .art-card.reverse .art-details {
+            transform: translateX(30px);
+        }
+
+        .art-details.reveal {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .art-index {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 3rem;
+            color: var(--accent);
+            opacity: 0.5;
+            margin-bottom: 20px;
+        }
+
+        .art-title {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 2.5rem;
+            font-weight: 400;
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        .art-desc {
+            font-size: 1rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+            font-weight: 300;
+        }
+
+        /* ═══ INTERACTIVE SCRATCH-OFF SECTION ═══ */
+        .interactive-section {
+            padding: 150px 5vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #111;
+        }
+
+        .scratch-title {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 3rem;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .scratch-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            aspect-ratio: 16/9;
+            background: #1c1c1c;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* The hidden image revealed by scratching */
+        .scratch-bg-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            z-index: 0;
+        }
+
+        /* The canvas covering the image */
+        #scratch-canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        /* The hidden message — sits on top of the image, below the canvas */
+        .secret-message {
+            position: absolute;
+            z-index: 1;
+            text-align: center;
+            pointer-events: none;
+            padding: 40px;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.15);
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .secret-message.visible {
+            opacity: 1;
+        }
+
+        .secret-message h2 {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .secret-message p {
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        /* Instruct text above canvas */
+        .scratch-instruction {
+            position: absolute;
+            z-index: 10;
+            pointer-events: none;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            font-size: 1rem;
+            color: #fff;
+            mix-blend-mode: difference;
+            animation: pulse 2s infinite;
+            transition: opacity 0.4s ease;
+        }
+
+        /* Kill animation AND hide — needed because CSS animations override inline opacity */
+        .scratch-instruction.hidden {
+            animation: none !important;
+            opacity: 0 !important;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* ═══ RESPONSIVE ═══ */
+        @media (max-width: 900px) {
+            .art-card, .art-card.reverse {
+                flex-direction: column;
+            }
+            .art-image {
+                height: 50vh;
+            }
+            header {
+                padding: 20px;
+            }
+        }
+
+        /* ═══ TIME LOCK OVERLAY ═══ */
+        #gate-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 99000;
+            background: var(--bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px;
+            opacity: 0;
+            pointer-events: none;
+            transition: none;
+        }
+        #gate-overlay.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .gate-monogram {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(4rem, 12vw, 8rem);
+            font-weight: 700;
+            font-style: italic;
+            color: var(--accent);
+            text-shadow: 0 0 80px rgba(212,175,55,0.25);
+            margin-bottom: 8px;
+            animation: gatePulse 3s ease-in-out infinite;
+        }
+        @keyframes gatePulse {
+            0%,100% { opacity: 0.8; transform: scale(1); }
+            50%      { opacity: 1;   transform: scale(1.02); }
+        }
+        .gate-rule {
+            width: 60px; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            margin: 10px auto 24px;
+        }
+        .gate-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6rem;
+            font-weight: 600;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+        .gate-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.6rem, 5vw, 2.8rem);
+            font-weight: 700;
+            font-style: italic;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+        .gate-subtitle {
+            font-family: 'Bodoni Moda', serif;
+            font-style: italic;
+            font-size: 1rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            max-width: 440px;
+            margin-bottom: 44px;
+        }
+        .gate-countdown {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-bottom: 32px;
+        }
+        .gate-cd-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(212,175,55,0.04);
+            border: 1px solid rgba(212,175,55,0.2);
+            padding: 14px 12px;
+            border-radius: 4px;
+            min-width: 72px;
+        }
+        .gate-cd-num {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            line-height: 1;
+        }
+        .gate-cd-lbl {
+            font-size: 0.5rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+        .gate-hint {
+            font-size: 0.6rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(136,136,136,0.4);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ═══ TIME LOCK / SESSION GATE OVERLAY ═══ -->
+    <div id="gate-overlay">
+        <div class="gate-monogram">G</div>
+        <div class="gate-rule"></div>
+        <div class="gate-label">Exhibit No. 19 &nbsp;·&nbsp; Access Restricted</div>
+        <h2 class="gate-title">The Archive is not yet open.</h2>
+        <p class="gate-subtitle">
+            This exhibit opens on a very specific day.<br>
+            Every great story has a right moment to begin.<br>
+            That moment is almost here.
+        </p>
+        <div class="gate-countdown">
+            <div class="gate-cd-box"><span class="gate-cd-num" id="g-d">00</span><span class="gate-cd-lbl">Days</span></div>
+            <div class="gate-cd-box"><span class="gate-cd-num" id="g-h">00</span><span class="gate-cd-lbl">Hours</span></div>
+            <div class="gate-cd-box"><span class="gate-cd-num" id="g-m">00</span><span class="gate-cd-lbl">Mins</span></div>
+            <div class="gate-cd-box"><span class="gate-cd-num" id="g-s">00</span><span class="gate-cd-lbl">Secs</span></div>
+        </div>
+        <div class="gate-hint">Return when the time is right</div>
+    </div>
+
+    <div class="noise-layer"></div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-circle" id="cursor-circle"></div>
+
+    <header>
+        <div class="brand">GAYATRI</div>
+        <div class="exhibit-tag">Exhibit No. 19</div>
+    </header>
+
+    <section class="hero">
+        <h1>NINETEEN</h1>
+        <div class="subtitle">An Immersive Retrospective Archive</div>
+        <div class="scroll-indicator">
+            Scroll to Explore
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- Art Exhibits — 10 chapters, all assets used -->
+
+    <!-- 01 -->
+    <section class="exhibit-section">
+        <div class="art-card">
+            <div class="art-image-wrap observer-target hover-target">
+                <img src="IMAGE 2.jpeg" alt="Exhibit 1" class="art-image">
+            </div>
+            <div class="art-details observer-target">
+                <div class="art-index">01</div>
+                <h2 class="art-title">The Foundation</h2>
+                <p class="art-desc">
+                    Every timeless masterpiece begins with a foundation that refuses to crack. Nineteen years of quiet resilience, of choosing grace over bitterness, of showing up even when it's hard — that is the architecture of a truly remarkable person. It's not just about growing older. It's about the slow, deliberate art of becoming more entirely yourself, shedding what doesn't fit and stepping into everything that does. She has always known, even when the world tried to convince her otherwise, that she was built for something greater. This chapter is proof of that.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 02 -->
+    <section class="exhibit-section">
+        <div class="art-card reverse">
+            <div class="art-image-wrap observer-target hover-target">
+                <img src="IMAGE 3.jpeg" alt="Exhibit 2" class="art-image">
+            </div>
+            <div class="art-details observer-target">
+                <div class="art-index">02</div>
+                <h2 class="art-title">The Masterpiece</h2>
+                <p class="art-desc">
+                    While some spend entire lifetimes searching for aesthetics, she inherently defines it without even trying. From late-night philosophical conversations that unfold into something unexpectedly profound, to the kind of effortless charisma that could light up the dullest of rooms — her presence is never background noise. She is the centrepiece. A living, breathing canvas painted with equal strokes of chaos, warmth, spontaneity, and an almost terrifying level of beauty. The kind of person who turns every ordinary moment into a story worth telling.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 03 — Video -->
+    <section class="exhibit-section">
+        <div class="art-card">
+            <div class="art-image-wrap observer-target hover-target">
+                <video src="VIDEO 4.mp4" autoplay loop muted playsinline class="art-image" style="object-position: center;"></video>
+            </div>
+            <div class="art-details observer-target">
+                <div class="art-index">03</div>
+                <h2 class="art-title">Poetry in Motion</h2>
+                <p class="art-desc">
+                    Still frames can only hold so much of the truth — they freeze a single breath in a story that never actually stops moving. When you watch her in motion, you understand what all those words about "presence" really mean. There's a rhythm to the way she carries herself, an unhurried confidence that doesn't need to perform loudly because it already commands everything in the room. This is what effortless looks like when it isn't pretending. This is the kind of energy that stays with you long after the moment has passed, replaying itself in your mind like a favourite verse.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 04 -->
+    <section class="exhibit-section">
+        <div class="art-card reverse">
+            <div class="art-image-wrap observer-target hover-target">
+                <img src="IMAGE 4.jpeg" alt="Exhibit 4" class="art-image">
+            </div>
+            <div class="art-details observer-target">
+                <div class="art-index">04</div>
+                <h2 class="art-title">The Radiance</h2>
+                <p class="art-desc">
+                    It is one thing to stand in the light. It is an entirely different, rarer thing to be the source of it — to generate warmth that other people instinctively gravitate toward without quite knowing why. Her radiance isn't manufactured by the right outfit or the right angle; it's structural, baked into who she fundamentally is. The way she laughs, the way she looks at people like they genuinely matter, the way her eyes hold entire conversations before her mouth even opens — it all adds up to something that the world doesn't have a singular word for. Art comes close. So does home.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 05 — Video -->
+    <section class="exhibit-section">
+        <div class="art-card">
+            <div class="art-image-wrap observer-target hover-target">
+                <video src="VIDEO 1.mp4" autoplay loop muted playsinline class="art-image" style="object-position: center;"></video>
+            </div>
+            <div class="art-details observer-target">
+                <div class="art-index">05</div>
+                <h2 class="art-title">The Director's Vision</h2>
+                <p class="art-desc">
+                    Every glance is a decision. Every laugh, a director's cut. Every small, seemingly throwaway moment of brilliance — none of it is accidental. It is the natural output of a life being lived with genuine intention and uncompromising soul. She doesn't move through the world carelessly; she curates it, shapes it, leaves her fingerprints all over the scenes she walks through. This is what it looks like when someone refuses to be a supporting character in their own story. This is main character energy in its most honest, most powerful form.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 06 -->
+    <section class="exhibit-section">
+        <div class="art-card reverse">
+            <div class="art-image-wrap observer-target hover-target">
+                <img src="IMAGE 5.jpeg" alt="Exhibit 6" class="art-image">
+            </div>
+            <div class="art-details observer-target">
+                <div class="art-index">06</div>
+                <h2 class="art-title">The Archives</h2>
+                <p class="art-desc">
+                    Every defining era leaves behind its own archive — photographs, feelings, inside jokes that will never fully translate to an outsider, songs that belonged entirely to a specific afternoon, conversations that changed the shape of things afterward. These are hers. Collected proof that the years leading to nineteen were not just passing time, but building material. The foundation being quietly poured, floor by floor, for something extraordinary. You don't glance back at the archives to dwell — you glance back to remember exactly how far you've already walked.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 07 -->
+    <section class="exhibit-section">
+        <div class="art-card">
+            <div class="art-image-wrap observer-target hover-target">
+                <img src="IMAGE 6.jpeg" alt="Exhibit 7" class="art-image">
+            </div>
+            <div class="art-details observer-target">
+                <div class="art-index">07</div>
+                <h2 class="art-title">Timeless</h2>
+                <p class="art-desc">
+                    Most things are designed for an era. They arrive, peak, and quietly fade into whatever comes next. And then there are the rare exceptions — the ones that exist outside of trends and timelines, the ones that somehow manage to grow more compelling with every passing year. She belongs to the second category. Her style isn't borrowed from a moment; it invents one. Her spirit isn't shaped by the room she's in; it shapes the room around her. Nineteen is not a ceiling. It is the beginning of the most iconic phase yet.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 08 — Video -->
+    <section class="exhibit-section">
+        <div class="art-card reverse">
+            <div class="art-image-wrap observer-target hover-target">
+                <video src="VIDEO 2.mp4" autoplay loop muted playsinline class="art-image" style="object-position: center;"></video>
+            </div>
+            <div class="art-details observer-target">
+                <div class="art-index">08</div>
+                <h2 class="art-title">Unscripted</h2>
+                <p class="art-desc">
+                    The best moments are always the ones nobody planned. The ones that arrive sideways, quietly, without any announcement — and somehow manage to be exactly what was needed. She has always had an extraordinary ability to find magic in the unscripted; to laugh the hardest at the things that weren't supposed to be funny, to turn the detours into the most memorable parts of any story. There is a freedom to watching someone who genuinely isn't performing — who simply exists fully, loudly, and without apology. That is what this chapter captures. The real, unedited version. The best one.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 09 — Video -->
+    <section class="exhibit-section">
+        <div class="art-card">
+            <div class="art-image-wrap observer-target hover-target">
+                <video src="VIDEO 3.mp4" autoplay loop muted playsinline class="art-image" style="object-position: center;"></video>
+            </div>
+            <div class="art-details observer-target">
+                <div class="art-index">09</div>
+                <h2 class="art-title">The Energy</h2>
+                <p class="art-desc">
+                    You either have it or you don't — and she has always, unmistakably, had it. There is a particular kind of electricity that certain people carry with them, an invisible current that changes the temperature of a room the moment they enter it. It's not loud. It doesn't announce itself with a fanfare. It simply settles in and makes everything around it a little more alive. Watching this is not watching a performance. It is watching something completely natural — the kind of energy that other people spend years trying to manufacture, handed out here like it costs nothing at all.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 10 -->
+    <section class="exhibit-section">
+        <div class="art-card reverse">
+            <div class="art-image-wrap observer-target hover-target">
+                <img src="IMAGE 7.jpeg" alt="Exhibit 10" class="art-image">
+            </div>
+            <div class="art-details observer-target">
+                <div class="art-index">10</div>
+                <h2 class="art-title">Chapter Nineteen</h2>
+                <p class="art-desc">
+                    Every great story has a chapter that changes everything — the turning point, the hinge, the moment you look back on and say: that was where it all shifted. This is that chapter. Not the ending of something, but the most electric beginning yet. Nineteen carries with it the weight of everything already built and the freedom of everything still unrealised. It is the year where the girl who survived every hard thing steps fully into the woman who was always waiting on the other side of it. Here's to her. Here's to this. Here's to everything that comes next.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SCRATCH-OFF INTERACTION -->
+    <section class="interactive-section">
+        <h2 class="scratch-title">The Director's Note</h2>
+        <div class="scratch-container">
+
+            <!-- Revealed image underneath -->
+            <img src="IMAGE 8.jpeg" alt="Secret" class="scratch-bg-img">
+
+            <!-- Message on top of image, below canvas -->
+            <div class="secret-message" id="secret-message">
+                <h2>Happy 19th Birthday! 🧿</h2>
+                <p>Behind the aesthetics, the fashion, and the perfection,<br>lies the best soul I have ever known.<br>Thank you for existing, and thank you for being you.<br>Here's to a lifetime of iconic moments together.</p>
+            </div>
+
+            <!-- Canvas that will be scratched away (sits on top) -->
+            <canvas id="scratch-canvas"></canvas>
+            <div class="scratch-instruction" id="scratch-instruction">Use Cursor to Scratch &amp; Reveal</div>
+        </div>
+    </section>
+
+    <footer style="text-align: center; padding: 50px; color: var(--text-muted); font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase;">
+        Curated with love • All Rights Reserved © 2026
+    </footer>
+
+    <script>
+        // ═══════════════════════════════════════
+        // GATE CHECK — session token + time lock
+        // ═══════════════════════════════════════
+        const UNLOCK_DATE = new Date('2026-04-30T00:00:00').getTime();
+        const urlParams   = new URLSearchParams(window.location.search);
+        const isBypass    = urlParams.get('admin') === 'true';
+        let hasToken      = sessionStorage.getItem('gayatri_main_gate') === '1' || isBypass;
+        let isUnlocked    = Date.now() >= UNLOCK_DATE || isBypass;
+        const gateOverlay = document.getElementById('gate-overlay');
+
+        // Hidden entry: Double click the G monogram to enter password
+        const monogram = document.querySelector('.gate-monogram');
+        monogram.style.pointerEvents = 'all'; // Ensure it can be clicked
+        monogram.style.cursor = 'pointer';
+        monogram.addEventListener('dblclick', () => {
+            const pass = prompt('Enter Archive Passcode:');
+            if (pass === '19' || pass === 'admin' || pass === 'gayatri') {
+                sessionStorage.setItem('gayatri_main_gate', '1');
+                hasToken = true;
+                isUnlocked = true;
+                gateOverlay.classList.remove('show');
+            } else if (pass !== null) {
+                alert('Access Denied.');
+            }
+        });
+
+        if (!hasToken || !isUnlocked) {
+            // Show the gate overlay locked screen
+            gateOverlay.classList.add('show');
+            function updateGateCountdown() {
+                const diff = UNLOCK_DATE - Date.now();
+                if (diff <= 0 && hasToken) { gateOverlay.classList.remove('show'); return; }
+                
+                // Avoid negative numbers just in case
+                const safeDiff = diff > 0 ? diff : 0;
+                document.getElementById('g-d').innerText = String(Math.floor(safeDiff / 86400000)).padStart(2,'0');
+                document.getElementById('g-h').innerText = String(Math.floor(safeDiff % 86400000 / 3600000)).padStart(2,'0');
+                document.getElementById('g-m').innerText = String(Math.floor(safeDiff % 3600000 / 60000)).padStart(2,'0');
+                document.getElementById('g-s').innerText = String(Math.floor(safeDiff % 60000 / 1000)).padStart(2,'0');
+            }
+            setInterval(updateGateCountdown, 1000);
+            updateGateCountdown();
+        }
+        // else: token present + date unlocked → proceeds normally
+
+        // ═══ CUSTOM CURSOR LOGIC ═══
+        const dot = document.getElementById('cursor-dot');
+        const circle = document.getElementById('cursor-circle');
+        
+        let mouseX = 0, mouseY = 0;
+        let circleX = 0, circleY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            
+            // Dot follows instantly
+            dot.style.left = mouseX + 'px';
+            dot.style.top = mouseY + 'px';
+        });
+
+        // Smooth follow for the cursor circle
+        function renderCursor() {
+            circleX += (mouseX - circleX) * 0.15;
+            circleY += (mouseY - circleY) * 0.15;
+            circle.style.left = circleX + 'px';
+            circle.style.top = circleY + 'px';
+            requestAnimationFrame(renderCursor);
+        }
+        renderCursor();
+
+        // Cursor hover states for images
+        document.querySelectorAll('.hover-target, #scratch-canvas').forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('hover-img'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('hover-img'));
+        });
+
+        // ═══ SCROLL REVEAL (INTERSECTION OBSERVER) ═══
+        const observerOptions = {
+            threshold: 0.2, // Trigger when 20% visible
+            rootMargin: "0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('reveal');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.observer-target').forEach(el => {
+            observer.observe(el);
+        });
+
+        // ═══ INTERACTIVE HTML5 CANVAS SCRATCH-OFF ═══
+        const canvas = document.getElementById('scratch-canvas');
+        const ctx = canvas.getContext('2d');
+        const instruction = document.getElementById('scratch-instruction');
+        const secretMsg = document.getElementById('secret-message');
+        
+        let isDrawing = false;
+        let scratchedPercent = 0;
+        let revealTriggered = false;
+
+        // Resize canvas to fit container
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+            fillScratchLayer();
+        }
+
+        function fillScratchLayer() {
+            // Fill with solid dark color
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.fillStyle = '#1c1c1c';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Add subtle CLASSIFIED text texture
+            ctx.font = "18px Inter";
+            ctx.fillStyle = "rgba(255,255,255,0.04)";
+            for (let i = 0; i < canvas.width; i += 110) {
+                for (let j = 0; j < canvas.height; j += 50) {
+                    ctx.fillText("CLASSIFIED", i, j);
+                }
+            }
+        }
+
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Get pointer position relative to canvas
+        function getPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            if (e.touches) {
+                return {
+                    x: (e.touches[0].clientX - rect.left) * scaleX,
+                    y: (e.touches[0].clientY - rect.top) * scaleY
+                };
+            }
+            return {
+                x: (e.clientX - rect.left) * scaleX,
+                y: (e.clientY - rect.top) * scaleY
+            };
+        }
+
+        function doScratch(e) {
+            if (!isDrawing) return;
+            const pos = getPos(e);
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath();
+            ctx.arc(pos.x, pos.y, 55, 0, Math.PI * 2);
+            ctx.fill();
+            checkReveal();
+        }
+
+        function checkReveal() {
+            if (revealTriggered) return;
+            // Sample pixels to estimate scratched area
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            let transparent = 0;
+            const total = imageData.data.length / 4;
+            for (let i = 3; i < imageData.data.length; i += 4) {
+                if (imageData.data[i] < 128) transparent++;
+            }
+            const pct = (transparent / total) * 100;
+            if (pct > 40) {
+                revealTriggered = true;
+                // Fade out the whole canvas and reveal message
+                canvas.style.transition = 'opacity 1s ease';
+                canvas.style.opacity = '0';
+                secretMsg.classList.add('visible');
+                instruction.classList.add('hidden');
+            }
+        }
+
+        function startScratch(e) {
+            isDrawing = true;
+            instruction.classList.add('hidden');
+            doScratch(e);
+        }
+
+        function endScratch() { isDrawing = false; }
+
+        // Mouse events
+        canvas.addEventListener('mousedown', startScratch);
+        canvas.addEventListener('mouseup', endScratch);
+        canvas.addEventListener('mousemove', doScratch);
+        canvas.addEventListener('mouseleave', endScratch);
+
+        // Touch events
+        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startScratch(e); });
+        canvas.addEventListener('touchend', endScratch);
+        canvas.addEventListener('touchmove', (e) => { e.preventDefault(); doScratch(e); });
+
+    </script>
+</body>
+
+</html>
