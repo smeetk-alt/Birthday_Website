@@ -3,757 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Something Awaits</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>GayatriFlix | A Global Launch Event</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@100;300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        :root {
-            --bg: #0d0d0d;
-            --text-main: #f5f5f0;
-            --text-muted: #888;
-            --accent: #d4af37;
-            --accent-dim: rgba(212, 175, 55, 0.15);
-            --accent-glow: rgba(212, 175, 55, 0.3);
-            --border: rgba(212, 175, 55, 0.2);
-            --ease: cubic-bezier(0.25, 1, 0.5, 1);
-            --spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: var(--bg);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
+            background: #000;
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
             overflow: hidden;
             display: flex;
-            justify-content: center;
             align-items: center;
-            height: 100vh;
-            user-select: none;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* ═══ NOISE TEXTURE ═══ */
-        .noise-layer {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            opacity: 0.12;
-            pointer-events: none;
-            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-        }
-
-        /* ═══ CUSTOM CURSOR ═══ */
-        .cursor-dot, .cursor-circle {
-            position: fixed;
-            top: 0; left: 0;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-            z-index: 99999;
-            pointer-events: none;
-        }
-        .cursor-dot {
-            width: 8px; height: 8px;
-            background: var(--accent);
-            transition: width 0.3s, height 0.3s, opacity 0.3s;
-        }
-        .cursor-circle {
-            width: 40px; height: 40px;
-            border: 1px solid rgba(255,255,255,0.3);
-            transition: width 0.4s var(--ease), height 0.4s var(--ease), border-color 0.4s;
-        }
-        body.hovering .cursor-circle {
-            width: 70px; height: 70px;
-            border-color: var(--accent);
-            background: rgba(212,175,55,0.06);
-        }
-
-        /* ═══ MONOGRAM INTRO ═══ */
-        #intro-overlay {
-            position: fixed;
-            inset: 0;
-            background: #000;
-            z-index: 9000;
-            display: flex;
-            flex-direction: column;
             justify-content: center;
-            align-items: center;
-            gap: 16px;
-            animation: introFadeOut 0.8s ease 3.2s forwards;
+            min-height: 100vh;
         }
-
-        .monogram {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(5rem, 18vw, 12rem);
-            font-weight: 700;
-            font-style: italic;
-            color: var(--accent);
-            opacity: 0;
-            transform: scale(0.7);
-            animation: monogramIn 2.5s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
-            text-shadow:
-                0 0 80px rgba(212, 175, 55, 0.6),
-                0 0 160px rgba(212, 175, 55, 0.2);
-            letter-spacing: -4px;
+        
+        .n-logo {
+            font-family: 'Bebas Neue';
+            font-size: 8rem;
+            color: #E50914;
+            text-shadow: 0 0 50px rgba(229,9,20,0.6);
+            margin-bottom: -10px;
         }
-
-        .intro-rule {
-            width: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
-            animation: ruleExpand 1.2s var(--ease) 1s forwards;
-        }
-
-        .intro-label {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.65rem;
-            font-weight: 500;
-            letter-spacing: 8px;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            opacity: 0;
-            animation: labelFade 1s ease 1.6s forwards;
-        }
-
-        @keyframes monogramIn {
-            0%   { opacity: 0; transform: scale(0.7); }
-            20%  { opacity: 1; transform: scale(1); }
-            85%  { opacity: 1; transform: scale(1.05); }
-            100% { opacity: 0; transform: scale(20); filter: blur(30px); }
-        }
-        @keyframes ruleExpand { to { width: 200px; } }
-        @keyframes labelFade { to { opacity: 1; } }
-        @keyframes introFadeOut { to { opacity: 0; visibility: hidden; pointer-events: none; } }
-
-        /* ═══ SPARKS CANVAS ═══ */
-        #sparks-canvas {
+        
+        /* Intro Animation Sweep */
+        #color-sweep {
             position: absolute;
             inset: 0;
-            z-index: 0;
+            background: linear-gradient(180deg,
+                transparent 0%,
+                rgba(255,80,30,0.35) 10%,
+                rgba(255,200,50,0.25) 25%,
+                rgba(80,255,140,0.2) 40%,
+                rgba(60,140,255,0.25) 55%,
+                rgba(160,60,255,0.2) 70%,
+                rgba(255,60,120,0.3) 85%,
+                transparent 100%
+            );
+            mix-blend-mode: screen;
             pointer-events: none;
-            opacity: 0.7;
-        }
-
-        /* ═══ AMBIENT GLOW ═══ */
-        .ambient-glow {
-            position: absolute;
-            width: 60vw; height: 60vw;
-            background: radial-gradient(circle, rgba(212,175,55,0.05) 0%, transparent 65%);
-            top: 50%; left: 50%;
-            transform: translate(-50%,-50%);
-            z-index: 0;
-            pointer-events: none;
-            animation: pulseGlow 5s ease-in-out infinite alternate;
-        }
-        @keyframes pulseGlow {
-            from { transform: translate(-50%,-50%) scale(1); opacity: 0.7; }
-            to   { transform: translate(-50%,-50%) scale(1.2); opacity: 1; }
-        }
-
-        /* ═══ HEADER BAR ═══ */
-        header {
-            position: fixed;
-            top: 0; width: 100%;
-            padding: 28px 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100;
+            z-index: 1;
             opacity: 0;
-            animation: uiFadeIn 1s ease 3.8s forwards;
-            mix-blend-mode: difference;
+            animation: sweepRun 2.5s ease 0.5s forwards;
         }
-        .brand {
-            font-family: 'Bodoni Moda', serif;
-            font-size: 1.4rem;
-            font-weight: 700;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-        }
-        .exhibit-tag {
-            font-size: 0.75rem;
-            font-weight: 500;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--text-muted);
+        @keyframes sweepRun {
+            0%   { opacity:0; transform: translateY(120%); }
+            25%  { opacity:1; }
+            75%  { opacity:1; }
+            100% { opacity:0; transform: translateY(-120%); }
         }
 
-        /* ═══ MAIN UI WRAPPER ═══ */
-        .ui-wrapper {
+        .container {
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 2s forwards 0.5s;
             position: relative;
             z-index: 10;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            max-width: 580px;
-            padding: 30px 20px;
-            opacity: 0;
-            animation: uiFadeIn 1.5s ease 3.6s forwards;
         }
-        @keyframes uiFadeIn { to { opacity: 1; } }
-
-        /* ═══ EDITION BADGE ═══ */
-        .edition-badge {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-        .badge-rule { width: 40px; height: 1px; background: var(--border); }
-        .badge-text {
-            font-size: 0.6rem;
-            font-weight: 600;
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            color: var(--accent);
-        }
-
-        /* ═══ MAIN TITLE ═══ */
-        .main-title {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(2.2rem, 8vw, 4rem);
-            font-weight: 700;
-            font-style: italic;
-            text-align: center;
-            color: #fff;
-            line-height: 1.1;
-            margin-bottom: 10px;
-            text-shadow: 0 0 40px rgba(212,175,55,0.15);
-        }
-
-        .main-subtitle {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.7rem;
-            font-weight: 400;
-            letter-spacing: 6px;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            margin-bottom: 40px;
-        }
-
-        /* ═══ TYPEWRITER BOX ═══ */
-        .terminal-box {
-            font-family: 'Inter', monospace;
-            font-size: 0.75rem;
-            font-weight: 300;
-            color: var(--accent);
-            background: rgba(212, 175, 55, 0.04);
-            border-left: 2px solid var(--accent);
-            padding: 12px 18px;
-            width: 100%;
-            margin-bottom: 36px;
-            min-height: 52px;
-            display: flex;
-            align-items: center;
-            letter-spacing: 1px;
-        }
-        .cursor-blink::after {
-            content: '|';
-            animation: blink 1s step-end infinite;
-            margin-left: 3px;
-            color: var(--accent);
-        }
-        @keyframes blink { 50% { opacity: 0; } }
-
-        /* ═══ HOLD-TO-REVEAL RING ═══ */
-        .decrypt-wrapper {
-            position: relative;
-            width: 180px; height: 180px;
-            margin-bottom: 24px;
-            cursor: pointer;
-        }
-
-        .photo-frame {
-            position: absolute;
-            inset: 14px;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            background: #111;
-            box-shadow: 0 0 40px rgba(212,175,55,0.08), 0 10px 30px rgba(0,0,0,0.8);
-            transform: scale(1);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .photo-frame img {
-            width: 100%; height: 100%;
-            object-fit: cover;
-            filter: blur(14px) grayscale(100%) brightness(0.7);
-            transition: filter 0.1s linear;
-        }
-        .decrypt-wrapper:active .photo-frame { transform: scale(0.95); }
-
-        .lock-icon {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 2rem;
-            z-index: 2;
-            transition: opacity 0.3s, transform 0.3s;
-        }
-
-        /* SVG progress ring */
-        .ring-svg {
-            position: absolute;
-            inset: 0;
-            width: 100%; height: 100%;
-            transform: rotate(-90deg);
-            pointer-events: none;
-            z-index: 5;
-        }
-        .ring-bg    { fill: none; stroke: rgba(255,255,255,0.04); stroke-width: 3; }
-        .ring-fill  {
-            fill: none; stroke: var(--accent); stroke-width: 3;
-            stroke-dasharray: 510; stroke-dashoffset: 510;
-            stroke-linecap: round;
-            filter: drop-shadow(0 0 6px var(--accent));
-            transition: stroke-dashoffset 0.1s linear;
-        }
-
-        .access-granted {
-            position: absolute;
-            inset: 0;
-            background: rgba(212, 175, 55, 0.85);
-            z-index: 20;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Bodoni Moda', serif;
+        @keyframes fadeIn { to { opacity: 1; } }
+        
+        .subtitle {
             font-size: 0.8rem;
-            letter-spacing: 5px;
+            letter-spacing: 6px;
+            color: #a3a3a3;
             text-transform: uppercase;
-            color: #0d0d0d;
-            font-weight: 700;
-            clip-path: polygon(0 50%, 100% 50%, 100% 50%, 0 50%);
-            transition: clip-path 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-            pointer-events: none;
-            border-radius: 50%;
+            margin-bottom: 40px;
+            margin-top: 20px;
         }
-        .access-granted.show {
-            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-        }
-
-        /* ═══ INSTRUCTION TEXT ═══ */
-        .instruction {
-            font-size: 0.6rem;
-            font-weight: 500;
-            letter-spacing: 5px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            animation: floatText 2.5s ease-in-out infinite;
-            margin-bottom: 32px;
-            transition: opacity 0.5s;
-        }
-        @keyframes floatText {
-            0%,100% { opacity: 0.4; transform: translateY(0); }
-            50%      { opacity: 1;   transform: translateY(-3px); }
-        }
-        .instruction.hidden { opacity: 0 !important; animation: none !important; }
-
-        /* ═══ COUNTDOWN ═══ */
-        .countdown-row {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 32px;
-            opacity: 0.25;
-            transition: opacity 0.8s;
-        }
-        .countdown-row.active { opacity: 1; }
-        .cd-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background: rgba(212,175,55,0.04);
-            border: 1px solid var(--border);
-            padding: 12px 10px;
-            border-radius: 4px;
-            min-width: 66px;
-        }
-        .cd-num {
-            font-family: 'Bodoni Moda', serif;
-            font-size: 2rem;
-            font-weight: 700;
-            line-height: 1;
-            color: var(--accent);
-        }
-        .cd-lbl {
-            font-size: 0.5rem;
+        .title {
+            font-family: 'Bebas Neue';
+            font-size: 4.5rem;
+            margin-bottom: 20px;
+            color: #fff;
             letter-spacing: 2px;
-            color: var(--text-muted);
-            margin-top: 4px;
-            text-transform: uppercase;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.8);
         }
-
-        /* ═══ PROCEED BUTTON ═══ */
-        .btn-proceed {
-            background: transparent;
-            color: var(--accent);
-            border: 1px solid var(--accent);
-            padding: 16px 48px;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.65rem;
-            font-weight: 600;
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            border-radius: 2px;
+        .date {
+            font-size: 1.2rem;
+            font-weight: 300;
+            color: #E50914;
+            margin-bottom: 40px;
+            letter-spacing: 2px;
+        }
+        .btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.4);
+            color: #fff;
+            padding: 14px 40px;
+            font-family: 'Outfit';
+            font-size: 1.05rem;
+            border-radius: 4px;
             cursor: pointer;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(16px);
-            transition: all 0.5s var(--spring);
-            position: relative;
-            overflow: hidden;
+            transition: 0.3s;
+            backdrop-filter: blur(5px);
         }
-        .btn-proceed::before {
-            content: '';
+        .btn:hover {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
+        }
+        .bg-video {
             position: absolute;
             inset: 0;
-            background: var(--accent);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.4s var(--ease);
-            z-index: -1;
-        }
-        .btn-proceed:hover { color: #0d0d0d; }
-        .btn-proceed:hover::before { transform: scaleX(1); }
-        .btn-proceed.revealed {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        /* ═══ REVEAL CARD (shown after decrypt) ═══ */
-        .reveal-card {
-            position: fixed;
-            inset: 0;
-            z-index: 8000;
-            background: rgba(13,13,13,0.97);
-            backdrop-filter: blur(30px);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 40px;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.8s var(--ease);
-        }
-        .reveal-card.show {
-            opacity: 1;
-            pointer-events: all;
-        }
-        .reveal-card-img {
-            width: auto;
-            height: auto;
-            max-width: min(360px, 85vw);
-            max-height: 50vh;
+            width: 100%; height: 100%;
             object-fit: contain;
             object-position: center;
-            border: 1px solid var(--border);
-            filter: grayscale(30%) brightness(0.85);
-            margin-bottom: 24px;
-            opacity: 0;
-            transform: scale(0.95);
-            transition: opacity 1s var(--ease) 0.4s, transform 1s var(--ease) 0.4s;
+            background: #000;
+            opacity: 0.25;
+            z-index: 1;
         }
-        .reveal-card.show .reveal-card-img { opacity: 1; transform: scale(1); }
-        .reveal-card-line {
-            font-family: 'Bodoni Moda', serif;
-            font-style: italic;
-            font-size: 1.05rem;
-            color: var(--text-muted);
-            line-height: 1.7;
-            max-width: 380px;
-            margin-bottom: 6px;
-            opacity: 0;
-            transition: opacity 0.8s ease 1s;
-        }
-        .reveal-card.show .reveal-card-line { opacity: 1; }
-        .reveal-card-line strong { color: var(--text-main); font-style: normal; }
-        .reveal-card-hint {
-            font-size: 0.55rem;
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            color: rgba(212,175,55,0.45);
-            margin-bottom: 32px;
-            opacity: 0;
-            transition: opacity 0.8s ease 1.4s;
-        }
-        .reveal-card.show .reveal-card-hint { opacity: 1; }
-
-        @media (max-width: 600px) {
-            header { padding: 20px; }
-            .decrypt-wrapper { width: 150px; height: 150px; }
+        .vignette {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle, transparent 20%, #000 85%);
+            z-index: 2;
         }
     </style>
 </head>
 <body>
+    <div id="color-sweep"></div>
+    <video class="bg-video" src="VIDEO 2.mp4" autoplay loop muted playsinline></video>
+    <div class="vignette"></div>
 
-    <div class="noise-layer"></div>
+    <div class="container">
+        <!-- SVG N Logo mimicking Netflix -->
+        <svg width="100" height="268" viewBox="0 0 111 300" xmlns="http://www.w3.org/2000/svg" style="display:inline-block; filter: drop-shadow(0 0 40px rgba(229,9,20,0.6));">
+            <defs>
+                <linearGradient id="lG" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#a00610"/><stop offset="50%" stop-color="#e50914"/><stop offset="100%" stop-color="#a00610"/></linearGradient>
+                <linearGradient id="rG" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#8b050d"/><stop offset="50%" stop-color="#d40812"/><stop offset="100%" stop-color="#8b050d"/></linearGradient>
+                <linearGradient id="dG" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#e50914"/><stop offset="25%" stop-color="#ff4444"/><stop offset="50%" stop-color="#c0070f"/><stop offset="75%" stop-color="#ff3030"/><stop offset="100%" stop-color="#e50914"/></linearGradient>
+                <linearGradient id="gloss" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="rgba(255,255,255,0)" stop-opacity="0"/><stop offset="35%" stop-color="rgba(255,255,255,0.22)" stop-opacity="0.22"/><stop offset="100%" stop-color="rgba(255,255,255,0)" stop-opacity="0"/></linearGradient>
+                <filter id="shadow"><feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#000" flood-opacity="0.6"/></filter>
+            </defs>
+            <rect x="0" y="0" width="30" height="300" rx="2" fill="url(#lG)" filter="url(#shadow)"/>
+            <rect x="5" y="0" width="8" height="300" rx="1" fill="rgba(255,255,255,0.09)"/>
+            <polygon points="0,0 30,0 111,300 81,300" fill="url(#dG)" filter="url(#shadow)"/>
+            <polygon points="10,0 22,0 103,300 91,300" fill="url(#gloss)"/>
+            <rect x="81" y="0" width="30" height="300" rx="2" fill="url(#rG)" filter="url(#shadow)"/>
+            <rect x="86" y="0" width="8" height="300" rx="1" fill="rgba(255,255,255,0.07)"/>
+        </svg>
 
-    <!-- Custom Cursor -->
-    <div class="cursor-dot" id="cursor-dot"></div>
-    <div class="cursor-circle" id="cursor-circle"></div>
-
-    <!-- Monogram Intro -->
-    <div id="intro-overlay">
-        <div class="monogram">G</div>
-        <div class="intro-rule"></div>
-        <div class="intro-label">Exhibit No. 19 — Loading Archive</div>
+        <div class="subtitle">A GayatriFlix Original Event</div>
+        <div class="title">THE 19TH CHAPTER</div>
+        <div class="date">DROPPING WORLDWIDE SOON</div>
+        <button class="btn" onclick="remindMe()">⏰ Set Reminder</button>
     </div>
 
-    <!-- Sparks Canvas -->
-    <canvas id="sparks-canvas"></canvas>
-    <div class="ambient-glow"></div>
-
-    <!-- Access Granted Flash (inside decrypt) — moved inside wrapper below -->
-
-    <!-- Minimal header — no explicit brand until the exhibit begins -->
-    <header>
-        <div class="brand" style="font-size:1rem; opacity:0.5; letter-spacing:6px;">· · ·</div>
-        <div class="exhibit-tag" style="opacity: 0.4;">An Original Production</div>
-    </header>
-
-    <!-- Main Interface -->
-    <div class="ui-wrapper">
-
-        <div class="edition-badge">
-            <div class="badge-rule"></div>
-            <div class="badge-text">Something has been prepared for you</div>
-            <div class="badge-rule"></div>
-        </div>
-
-        <h1 class="main-title">Classified Record</h1>
-        <div class="main-subtitle">Level 1 Access &nbsp;·&nbsp; Identity Verification Required</div>
-
-        <!-- Typewriter -->
-        <div class="terminal-box">
-            <span id="typewriter" class="cursor-blink"></span>
-        </div>
-
-        <!-- Hold-to-Decrypt -->
-        <div class="decrypt-wrapper" id="decrypt-btn">
-            <svg class="ring-svg" viewBox="0 0 100 100">
-                <circle class="ring-bg" cx="50" cy="50" r="46"></circle>
-                <circle class="ring-fill" id="progress-ring" cx="50" cy="50" r="46"></circle>
-            </svg>
-            <div class="photo-frame">
-                <img src="IMAGE 1.jpeg" alt="Subject" id="secret-image">
-                <div class="lock-icon" id="lock-icon">🔒</div>
-            </div>
-            <div class="access-granted" id="access-granted">Verified</div>
-        </div>
-
-        <div class="instruction" id="instruction-text">Hold to Decrypt</div>
-
-        <!-- Countdown -->
-        <div class="countdown-row" id="cd-row">
-            <div class="cd-box"><span class="cd-num" id="cd-d">00</span><span class="cd-lbl">Days</span></div>
-            <div class="cd-box"><span class="cd-num" id="cd-h">00</span><span class="cd-lbl">Hours</span></div>
-            <div class="cd-box"><span class="cd-num" id="cd-m">00</span><span class="cd-lbl">Mins</span></div>
-            <div class="cd-box"><span class="cd-num" id="cd-s">00</span><span class="cd-lbl">Secs</span></div>
-        </div>
-
-        <!-- Proceed -->
-        <button class="btn-proceed" id="proceed-btn" onclick="proceedToTeaser()">
-            Enter &rsaquo;
-        </button>
-
-    </div>
-
-    <!-- Small Reveal Card (shown after decrypt, before proceed button) -->
-    <div class="reveal-card" id="reveal-card">
-        <img src="IMAGE 2.jpeg" alt="glimpse" class="reveal-card-img">
-        <div class="reveal-card-line"><strong>19 chapters. 7 photographs. 4 films.</strong><br>One story — built entirely for you.</div>
-        <div class="reveal-card-hint">Tap below to enter</div>
-        <button class="btn-proceed revealed" style="position:static; visibility:visible; opacity:1; transform:none;" onclick="proceedToTeaser()">
-            Enter &rsaquo;
-        </button>
-    </div>
+    <audio id="tudum" src="../Netflix Intro Sound Effect - sound effects.mp3" preload="auto"></audio>
 
     <script>
-        // ═══ CUSTOM CURSOR ═══
-        const dot    = document.getElementById('cursor-dot');
-        const circle = document.getElementById('cursor-circle');
-        let mouseX = 0, mouseY = 0, cx = 0, cy = 0;
-
-        document.addEventListener('mousemove', e => {
-            mouseX = e.clientX; mouseY = e.clientY;
-            dot.style.left = mouseX + 'px';
-            dot.style.top  = mouseY + 'px';
-        });
-        (function renderCursor() {
-            cx += (mouseX - cx) * 0.15;
-            cy += (mouseY - cy) * 0.15;
-            circle.style.left = cx + 'px';
-            circle.style.top  = cy + 'px';
-            requestAnimationFrame(renderCursor);
-        })();
-
-        document.querySelectorAll('.decrypt-wrapper, .btn-proceed').forEach(el => {
-            el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
-            el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+        // Auto play the TUDUM sound when the page loads
+        window.addEventListener('load', () => {
+            const sound = document.getElementById('tudum');
+            sound.volume = 0.5;
+            setTimeout(() => { sound.play().catch(()=>{}); }, 800);
         });
 
-        // ═══ TYPEWRITER ═══
-        const messages = [
-            "Initialising archive retrieval system...",
-            "Scanning subject files — Classification: LEGENDARY",
-            "WARNING: Extremely high main-character energy detected.",
-            "Cross-referencing Chapter 19 data... [MATCH FOUND]",
-            "Files locked. Manual biometric decryption required."
-        ];
-        let mi = 0, ci = 0;
-        const tw = document.getElementById('typewriter');
-
-        function typeWriter() {
-            if (mi >= messages.length) return;
-            if (ci < messages[mi].length) {
-                tw.textContent += messages[mi].charAt(ci++);
-                setTimeout(typeWriter, Math.random() * 28 + 18);
-            } else {
-                setTimeout(() => { tw.textContent = ''; ci = 0; mi++; typeWriter(); }, 1600);
-            }
-        }
-        setTimeout(typeWriter, 3900);
-
-        // ═══ SPARKS CANVAS ═══
-        const canvas = document.getElementById('sparks-canvas');
-        const ctx    = canvas.getContext('2d');
-        let W, H;
-
-        function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
-        window.addEventListener('resize', resize); resize();
-
-        class Spark {
-            reset() {
-                this.x = Math.random() * W;
-                this.y = H + Math.random() * 80;
-                this.size = Math.random() * 1.8 + 0.4;
-                this.vy = -(Math.random() * 0.8 + 0.3);
-                this.vx = (Math.random() - 0.5) * 0.6;
-                this.opacity = Math.random() * 0.6 + 0.2;
-            }
-            constructor() { this.reset(); }
-            update() {
-                this.y += this.vy; this.x += this.vx; this.opacity -= 0.0015;
-                if (this.y < 0 || this.opacity <= 0) this.reset();
-            }
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(212, 175, 55, ${this.opacity})`;
-                ctx.fill();
-            }
-        }
-
-        const sparks = Array.from({ length: 90 }, () => new Spark());
-        (function animate() {
-            ctx.clearRect(0, 0, W, H);
-            sparks.forEach(s => { s.update(); s.draw(); });
-            requestAnimationFrame(animate);
-        })();
-
-        // ═══ COUNTDOWN ═══
-        const targetDate = new Date('2026-04-30T00:00:00').getTime();
-        function updateCountdown() {
-            const diff = targetDate - Date.now();
-            if (diff > 0) {
-                document.getElementById('cd-d').innerText = String(Math.floor(diff / 86400000)).padStart(2,'0');
-                document.getElementById('cd-h').innerText = String(Math.floor(diff % 86400000 / 3600000)).padStart(2,'0');
-                document.getElementById('cd-m').innerText = String(Math.floor(diff % 3600000 / 60000)).padStart(2,'0');
-                document.getElementById('cd-s').innerText = String(Math.floor(diff % 60000 / 1000)).padStart(2,'0');
-            }
-        }
-        setInterval(updateCountdown, 1000); updateCountdown();
-
-        // ═══ HOLD-TO-DECRYPT ═══
-        const decryptBtn    = document.getElementById('decrypt-btn');
-        const progressRing  = document.getElementById('progress-ring');
-        const secretImage   = document.getElementById('secret-image');
-        const lockIcon      = document.getElementById('lock-icon');
-        const instructText  = document.getElementById('instruction-text');
-        const proceedBtn    = document.getElementById('proceed-btn');
-        const cdRow         = document.getElementById('cd-row');
-        const accessGranted = document.getElementById('access-granted');
-
-        const CIRC = 2 * Math.PI * 46;
-        progressRing.style.strokeDasharray  = `${CIRC} ${CIRC}`;
-        progressRing.style.strokeDashoffset = CIRC;
-
-        let holdTimer = null, progress = 0, isUnlocked = false;
-
-        function updateRing() {
-            progressRing.style.strokeDashoffset = CIRC - (progress / 100) * CIRC;
-            const blur = 14 - (progress / 100) * 14;
-            const gray = 100 - progress;
-            const bright = 0.7 + (progress / 100) * 0.3;
-            secretImage.style.filter = `blur(${blur}px) grayscale(${gray}%) brightness(${bright})`;
-        }
-
-        function startDecrypt() {
-            if (isUnlocked) return;
-            clearInterval(holdTimer);
-            holdTimer = setInterval(() => {
-                progress += 2;
-                if (progress >= 100) { progress = 100; unlockSuccess(); }
-                updateRing();
-            }, 30);
-            instructText.classList.add('hidden');
-            lockIcon.style.transform = 'scale(1.2)';
-        }
-
-        function stopDecrypt() {
-            if (isUnlocked) return;
-            clearInterval(holdTimer);
-            holdTimer = setInterval(() => {
-                progress -= 3;
-                if (progress <= 0) {
-                    progress = 0;
-                    clearInterval(holdTimer);
-                    instructText.classList.remove('hidden');
-                }
-                updateRing();
-            }, 20);
-            lockIcon.style.transform = 'scale(1)';
-        }
-
-        function unlockSuccess() {
-            isUnlocked = true;
-            clearInterval(holdTimer);
-            lockIcon.style.opacity = '0';
-            instructText.classList.add('hidden');
-            progressRing.style.stroke = '#d4af37';
-
-            accessGranted.classList.add('show');
-            setTimeout(() => accessGranted.classList.remove('show'), 700);
-
+        function remindMe() {
+            const btn = document.querySelector('.btn');
+            btn.innerHTML = '✓ Reminder Set';
+            btn.style.background = '#46d369';
+            btn.style.color = '#fff';
+            btn.style.borderColor = '#46d369';
+            
+            try {
+                confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 }, colors: ['#E50914', '#fff', '#46d369'] });
+            } catch(e) {}
+            
             setTimeout(() => {
-                cdRow.classList.add('active');
-                // Show the reveal card instead of just the proceed button
-                document.getElementById('reveal-card').classList.add('show');
-                mi = 999;
-                tw.textContent = 'Archive unlocked. A world awaits.';
-                tw.style.color = '#d4af37';
-            }, 900);
+                window.location.href = 'teaser.html';
+            }, 1000);
         }
-
-        function proceedToTeaser() {
-            // Write session token before navigating
-            sessionStorage.setItem('gayatri_pt_gate', '1');
-            const urlParams = new URLSearchParams(window.location.search);
-            const isBypass  = urlParams.get('admin') === 'true';
-            const q = isBypass ? '?admin=true' : '';
-            window.location.href = 'teaser.html' + q;
-        }
-
-        decryptBtn.addEventListener('mousedown', startDecrypt);
-        decryptBtn.addEventListener('touchstart', e => { e.preventDefault(); startDecrypt(); });
-        window.addEventListener('mouseup', stopDecrypt);
-        window.addEventListener('touchend', stopDecrypt);
     </script>
 </body>
 </html>

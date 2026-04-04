@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GAYATRI | Exhibit 19</title>
     <!-- High-end elegant fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Playfair:opsz,wght@5..1200,300;5..1200,400;5..1200,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0d0d0d;
+            --bg: #141010; /* Deep, subtle warm espresso undertone */
             --text-main: #f5f5f0;
             --text-muted: #888;
             --accent: #d4af37; /* Gold */
@@ -119,10 +119,9 @@
         }
 
         .hero h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(4rem, 12vw, 10rem);
-            font-weight: 700;
-            font-style: italic;
+            font-family: 'Playfair', serif;
+            font-size: clamp(5rem, 15vw, 14rem);
+            font-weight: 300;
             line-height: 0.9;
             letter-spacing: 2px;
             margin-bottom: 20px;
@@ -278,7 +277,9 @@
         }
 
         .art-desc {
-            font-size: 1rem;
+            font-family: 'Bodoni Moda', serif;
+            font-style: italic;
+            font-size: 1.1rem;
             color: var(--text-muted);
             line-height: 1.8;
             font-weight: 300;
@@ -305,8 +306,8 @@
             position: relative;
             width: 100%;
             max-width: 800px;
-            aspect-ratio: 16/9;
-            background: #1c1c1c;
+            aspect-ratio: 3/4;
+            background: #1a1616;
             box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             overflow: hidden;
             display: flex;
@@ -314,14 +315,15 @@
             justify-content: center;
         }
 
-        /* The hidden image revealed by scratching */
         .scratch-bg-img {
             position: absolute;
             inset: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
-            object-position: center;
+            object-position: center 35%;
+            transform: scale(1.35);
+            transform-origin: center 35%;
             z-index: 0;
         }
 
@@ -424,10 +426,9 @@
             pointer-events: all;
         }
         .gate-monogram {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(4rem, 12vw, 8rem);
-            font-weight: 700;
-            font-style: italic;
+            font-family: 'Playfair', serif;
+            font-size: clamp(6rem, 15vw, 10rem);
+            font-weight: 300;
             color: var(--accent);
             text-shadow: 0 0 80px rgba(212,175,55,0.25);
             margin-bottom: 8px;
@@ -452,10 +453,9 @@
             margin-bottom: 40px;
         }
         .gate-title {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(1.6rem, 5vw, 2.8rem);
-            font-weight: 700;
-            font-style: italic;
+            font-family: 'Playfair', serif;
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 300;
             color: #fff;
             margin-bottom: 12px;
         }
@@ -890,7 +890,7 @@
             const pos = getPos(e);
             ctx.globalCompositeOperation = 'destination-out';
             ctx.beginPath();
-            ctx.arc(pos.x, pos.y, 55, 0, Math.PI * 2);
+            ctx.arc(pos.x, pos.y, 150, 0, Math.PI * 2);
             ctx.fill();
             checkReveal();
         }
