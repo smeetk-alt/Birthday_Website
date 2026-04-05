@@ -9,10 +9,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Playfair:opsz,wght@5..1200,300;5..1200,400;5..1200,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #141010; /* Deep, subtle warm espresso undertone */
-            --text-main: #f5f5f0;
-            --text-muted: #888;
-            --accent: #d4af37; /* Gold */
+            --bg: #150f10;
+            --text-main: #fcf8f8;
+            --text-muted: #9e8a8d;
+            --accent: #dfa0a8;
+            --love-rose: rgba(223, 100, 120, 0.35);
+            --love-blush: rgba(255, 180, 190, 0.12);
             --ease: cubic-bezier(0.25, 1, 0.5, 1);
         }
 
@@ -29,6 +31,19 @@
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
+        }
+
+        /* Warm loved vignette — fixed behind everything */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(ellipse 60% 50% at 50% 0%,   rgba(180,50,70,0.10) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 40% at 0% 100%,  rgba(160,40,60,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 40% at 100% 100%,rgba(160,40,60,0.08) 0%, transparent 60%);
         }
 
         /* ═══ CUSTOM CURSOR ═══ */
@@ -97,6 +112,11 @@
             font-weight: 700;
             letter-spacing: 4px;
             text-transform: uppercase;
+            transition: text-shadow 0.4s ease;
+        }
+        .brand:hover {
+            text-shadow: 0 0 30px rgba(223, 140, 160, 0.55),
+                         0 0 8px  rgba(223, 140, 160, 0.3);
         }
 
         .exhibit-tag {
@@ -116,6 +136,31 @@
             align-items: center;
             text-align: center;
             position: relative;
+            /* Warm loved radial glow behind the title */
+            background: radial-gradient(
+                ellipse 80% 60% at 50% 60%,
+                rgba(200, 60, 90, 0.18) 0%,
+                rgba(120, 20, 40, 0.10) 40%,
+                transparent 70%
+            );
+        }
+
+        /* Floating heart-dust particles */
+        .hero-love-particle {
+            position: absolute;
+            width: 4px; height: 4px;
+            border-radius: 50%;
+            background: var(--accent);
+            opacity: 0;
+            pointer-events: none;
+            animation: loveDrift var(--dur, 8s) ease-in-out infinite;
+            animation-delay: var(--delay, 0s);
+        }
+        @keyframes loveDrift {
+            0%   { transform: translateY(0) scale(0.5); opacity: 0; }
+            20%  { opacity: 0.5; }
+            80%  { opacity: 0.3; }
+            100% { transform: translateY(-80px) translateX(var(--dx, 20px)) scale(1.2); opacity: 0; }
         }
 
         .hero h1 {
@@ -126,12 +171,17 @@
             letter-spacing: 2px;
             margin-bottom: 20px;
             opacity: 0;
-            color: #ffffff;
+            color: #fff8f9;
             transform: translateY(50px);
-            animation: fadeUp 1.5s var(--ease) forwards 0.5s;
+            animation: fadeUp 1.5s var(--ease) forwards 0.5s, titleRosePulse 5s ease-in-out infinite 2s;
             text-shadow:
-                0 0 60px rgba(212, 175, 55, 0.2),
+                0 0 80px  rgba(223, 100, 130, 0.55),
+                0 0 160px rgba(180,  50,  80, 0.25),
                 0 2px 4px rgba(0, 0, 0, 0.9);
+        }
+        @keyframes titleRosePulse {
+            0%,100% { text-shadow: 0 0 80px rgba(223,100,130,0.55), 0 0 160px rgba(180,50,80,0.25), 0 2px 4px rgba(0,0,0,0.9); }
+            50%     { text-shadow: 0 0 120px rgba(223,100,130,0.75), 0 0 200px rgba(180,50,80,0.40), 0 2px 4px rgba(0,0,0,0.9); }
         }
 
         .hero .subtitle {
@@ -140,7 +190,7 @@
             font-weight: 300;
             letter-spacing: 8px;
             text-transform: uppercase;
-            color: var(--text-muted);
+            color: #b8929a;
             opacity: 0;
             animation: fadeUp 1.5s var(--ease) forwards 1s;
         }
@@ -162,7 +212,7 @@
         .scroll-line {
             width: 1px;
             height: 40px;
-            background: var(--text-muted);
+            background: rgba(223,160,168,0.3);
             margin-top: 10px;
             overflow: hidden;
             position: relative;
@@ -175,7 +225,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: #fff;
+            background: var(--accent);
             animation: scrollLineDrop 2s infinite ease-in-out;
         }
 
@@ -195,6 +245,15 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
+            position: relative;
+        }
+        /* Alternating warm blush wash on every other exhibit */
+        .exhibit-section:nth-child(even) {
+            background: linear-gradient(135deg,
+                rgba(140, 30, 55, 0.07) 0%,
+                transparent 50%,
+                rgba(100, 20, 40, 0.05) 100%
+            );
         }
 
         .art-card {
@@ -216,6 +275,23 @@
             opacity: 0;
             transform: translateY(40px);
             transition: opacity 1.2s var(--ease), transform 1.2s var(--ease);
+            border-radius: 2px;
+        }
+
+        /* Loved theme: warm rose aura on image hover */
+        .art-image-wrap::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 3px;
+            pointer-events: none;
+            z-index: 5;
+            box-shadow: 0 0 0px 0px rgba(223, 100, 120, 0);
+            transition: box-shadow 0.8s ease;
+        }
+        .art-image-wrap:hover::after {
+            box-shadow: 0 0 50px 10px rgba(223, 100, 120, 0.25),
+                        inset 0 0 30px rgba(223, 100, 120, 0.07);
         }
 
         .art-image-wrap.reveal {
@@ -264,8 +340,9 @@
             font-family: 'Bodoni Moda', serif;
             font-size: 3rem;
             color: var(--accent);
-            opacity: 0.5;
+            opacity: 0.85;
             margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(223,100,130,0.35);
         }
 
         .art-title {
@@ -274,6 +351,12 @@
             font-weight: 400;
             margin-bottom: 20px;
             line-height: 1.1;
+            color: #fff2f4;
+            transition: color 0.5s ease;
+        }
+        .art-image-wrap:hover ~ .art-details .art-title,
+        .art-details:hover .art-title {
+            color: var(--accent);
         }
 
         .art-desc {
@@ -285,6 +368,24 @@
             font-weight: 300;
         }
 
+        /* Section divider — warm rose rule between exhibits */
+        .exhibit-section + .exhibit-section {
+            border-top: 1px solid rgba(223, 160, 168, 0.08);
+        }
+
+        /* Accent number — warmth boost */
+        .art-index {
+            position: relative;
+            display: inline-block;
+        }
+        .art-index::after {
+            content: '';
+            position: absolute;
+            left: 0; bottom: -4px;
+            width: 24px; height: 1px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+        }
+
         /* ═══ INTERACTIVE SCRATCH-OFF SECTION ═══ */
         .interactive-section {
             padding: 150px 5vw;
@@ -292,7 +393,13 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: #111;
+            background: linear-gradient(
+                180deg,
+                #100c0d 0%,
+                rgba(120, 30, 50, 0.25) 40%,
+                rgba(80, 10, 25, 0.15) 70%,
+                #100c0d 100%
+            );
         }
 
         .scratch-title {
@@ -300,6 +407,8 @@
             font-size: 3rem;
             margin-bottom: 40px;
             text-align: center;
+            color: var(--accent);
+            text-shadow: 0 0 40px rgba(223, 100, 130, 0.5);
         }
 
         .scratch-container {
@@ -340,6 +449,7 @@
         /* The hidden message — sits on top of the image, below the canvas */
         .secret-message {
             position: absolute;
+            bottom: 15%; /* Lowered the message */
             z-index: 1;
             text-align: center;
             pointer-events: none;
@@ -359,6 +469,7 @@
             font-size: 2.5rem;
             color: var(--accent);
             margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(223,100,130,0.6);
         }
 
         .secret-message p {
@@ -427,10 +538,11 @@
         }
         .gate-monogram {
             font-family: 'Playfair', serif;
-            font-size: clamp(6rem, 15vw, 10rem);
+            font-size: clamp(8rem, 25vw, 16rem);
+            font-style: italic;
             font-weight: 300;
             color: var(--accent);
-            text-shadow: 0 0 80px rgba(212,175,55,0.25);
+            text-shadow: 0 0 80px rgba(223, 160, 168, 0.25);
             margin-bottom: 8px;
             animation: gatePulse 3s ease-in-out infinite;
         }
@@ -478,8 +590,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            background: rgba(212,175,55,0.04);
-            border: 1px solid rgba(212,175,55,0.2);
+            background: rgba(223, 160, 168, 0.04);
+            border: 1px solid rgba(223, 160, 168, 0.2);
             padding: 14px 12px;
             border-radius: 4px;
             min-width: 72px;
@@ -540,7 +652,7 @@
         <div class="exhibit-tag">Exhibit No. 19</div>
     </header>
 
-    <section class="hero">
+    <section class="hero" id="hero-section">
         <h1>NINETEEN</h1>
         <div class="subtitle">An Immersive Retrospective Archive</div>
         <div class="scroll-indicator">
@@ -731,8 +843,27 @@
         </div>
     </section>
 
-    <footer style="text-align: center; padding: 50px; color: var(--text-muted); font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase;">
-        Curated with love • All Rights Reserved © 2026
+    <footer style="
+        text-align: center;
+        padding: 60px 40px;
+        font-size: 0.75rem;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: #b8929a;
+        border-top: 1px solid rgba(223,160,168,0.15);
+        background: linear-gradient(to bottom, transparent, rgba(120,30,50,0.12));
+        position: relative;
+    ">
+        <div style="
+            font-family: 'Bodoni Moda', serif;
+            font-size: 1.2rem;
+            font-style: italic;
+            color: var(--accent);
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 20px rgba(223,100,130,0.35);
+        ">Curated with love ✦</div>
+        <div>All Rights Reserved &nbsp;·&nbsp; Exhibit No. 19 &nbsp;·&nbsp; © 2026</div>
     </footer>
 
     <script>
@@ -933,6 +1064,29 @@
         canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startScratch(e); });
         canvas.addEventListener('touchend', endScratch);
         canvas.addEventListener('touchmove', (e) => { e.preventDefault(); doScratch(e); });
+
+        // ═══ LOVED THEME: Floating blush particles on hero ═══
+        (function spawnLoveParticles() {
+            const hero = document.getElementById('hero-section');
+            if (!hero) return;
+            const COLORS = ['#dfa0a8', '#e8b4bc', '#f0c8d0', '#c97080'];
+            for (let i = 0; i < 18; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'hero-love-particle';
+                const dur  = (6 + Math.random() * 6).toFixed(1) + 's';
+                const del  = (Math.random() * 8).toFixed(1) + 's';
+                const dx   = ((Math.random() - 0.5) * 60).toFixed(0) + 'px';
+                const size = (2 + Math.random() * 3).toFixed(1) + 'px';
+                dot.style.cssText = `
+                    --dur:${dur}; --delay:${del}; --dx:${dx};
+                    left:${(10 + Math.random() * 80).toFixed(1)}%;
+                    bottom:${(20 + Math.random() * 30).toFixed(1)}%;
+                    width:${size}; height:${size};
+                    background:${COLORS[Math.floor(Math.random()*COLORS.length)]};
+                `;
+                hero.appendChild(dot);
+            }
+        })();
 
     </script>
 </body>

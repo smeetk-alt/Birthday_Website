@@ -10,9 +10,9 @@
         /* ═══════════════ BASE ═══════════════ */
         :root {
             --red: #E50914;
-            --black: #141414;
-            --dark: #000;
-            --text: #fff;
+            --black: #0c0c0c;
+            --dark: #050505;
+            --text: #ffffff;
             --subtext: #a3a3a3;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -172,9 +172,10 @@
             transition: background 0.4s;
         }
         #nav.scrolled {
-            background: rgba(20,20,20,0.97);
-            backdrop-filter: blur(12px);
-            box-shadow: 0 4px 30px rgba(0,0,0,0.6);
+            background: rgba(12,12,12,0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.8);
         }
         .nav-logo {
             font-family: 'Bebas Neue';
@@ -346,18 +347,20 @@
             top: 0;
             bottom: 0;
             width: 60px;
-            background: rgba(20,20,20,0.6);
+            background: rgba(12,12,12,0.4);
+            backdrop-filter: blur(4px);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 2rem;
+            color: #fff;
             cursor: pointer;
             z-index: 50;
             opacity: 0;
-            transition: opacity 0.3s, background 0.3s;
+            transition: opacity 0.4s ease, background 0.4s ease;
         }
         .row-rail:hover .row-arrow { opacity: 1; }
-        .row-arrow:hover { background: rgba(20,20,20,0.85); }
+        .row-arrow:hover { background: rgba(12,12,12,0.8); }
         .row-arrow.left { left: 0; border-radius: 0 4px 4px 0; }
         .row-arrow.right { right: 0; border-radius: 4px 0 0 4px; }
 
@@ -403,17 +406,17 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 320px;
-            background: #181818;
-            border-radius: 6px;
+            width: 340px;
+            background: #141414;
+            border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.9);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.95);
             z-index: 500;
             pointer-events: none;
             opacity: 0;
-            transform: translate(-50%, -50%) scale(0.85);
-            transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.33,1,0.68,1);
-            border: 1px solid rgba(255,255,255,0.08);
+            transform: translate(-50%, -50%) scale(0.95);
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            border: 1px solid rgba(255,255,255,0.1);
         }
         /* Position adjustments for first/last cards */
         .card-wrap.first-card .card-popup { left: 20%; transform: translate(-20%, -50%) scale(0.85); }
@@ -449,8 +452,8 @@
             bottom: 0;
             left: 0;
             right: 0;
-            height: 50px;
-            background: linear-gradient(transparent, #181818);
+            height: 80px;
+            background: linear-gradient(to top, #141414 0%, transparent 100%);
         }
 
         /* Popup body */
@@ -532,17 +535,19 @@
         }
         #modal.open { display: flex; }
         .modal-box {
-            background: #181818;
+            background: #141414;
             width: 92%;
-            max-width: 860px;
-            border-radius: 10px;
+            max-width: 900px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 30px 100px rgba(0,0,0,1);
+            box-shadow: 0 40px 120px rgba(0,0,0,1);
             position: relative;
-            animation: modalPop 0.4s cubic-bezier(0.33,1,0.68,1);
+            animation: modalPop 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
             max-height: 90vh;
-            overflow-y: auto;
+            overflow-y: scroll;
+            scrollbar-width: none;
         }
+        .modal-box::-webkit-scrollbar { display: none; }
         @keyframes modalPop {
             from { transform: scale(0.8); opacity: 0; }
             to   { transform: scale(1);   opacity: 1; }
@@ -611,6 +616,112 @@
 
         /* ═══════════════ UTILS ═══════════════ */
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* ── FILM GRAIN OVERLAY ── */
+        #grain {
+            position: fixed; inset: 0; z-index: 9998;
+            pointer-events: none;
+            opacity: 0.035;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            animation: grainShift 0.15s steps(1) infinite;
+        }
+        @keyframes grainShift {
+            0%   { transform: translate(0,0); }
+            25%  { transform: translate(-2px,1px); }
+            50%  { transform: translate(1px,-2px); }
+            75%  { transform: translate(2px,2px); }
+            100% { transform: translate(-1px,-1px); }
+        }
+
+        /* ── AMBIENT PARTICLE CANVAS ── */
+        #particle-canvas {
+            position: fixed; inset: 0; z-index: 1;
+            pointer-events: none;
+        }
+
+        /* ── HERO AUDIO TOGGLE ── */
+        #audio-toggle {
+            position: absolute;
+            bottom: 130px;
+            right: 5%;
+            z-index: 20;
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.6);
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(6px);
+            color: #fff;
+            font-size: 1.1rem;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        #audio-toggle:hover { border-color: #fff; background: rgba(0,0,0,0.7); }
+
+        /* ── SCROLL REVEAL ROW ── */
+        .row-section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .row-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ── TOP 10 ROW ── */
+        .card-wrap.top10 .card {
+            width: 300px;
+        }
+        .top10-rank {
+            position: absolute;
+            left: -38px;
+            bottom: -18px;
+            font-family: 'Bebas Neue';
+            font-size: 10rem;
+            line-height: 1;
+            color: transparent;
+            -webkit-text-stroke: 4px rgba(255,255,255,0.85);
+            text-shadow: none;
+            user-select: none;
+            pointer-events: none;
+            z-index: 10;
+            filter: drop-shadow(0 4px 20px rgba(0,0,0,0.9));
+        }
+        .card-wrap.top10 {
+            padding-left: 46px;
+        }
+
+        /* ── MODAL UPGRADE ── */
+        .modal-body-grid {
+            display: grid;
+            grid-template-columns: 1fr 280px;
+            gap: 32px;
+            padding: 28px 32px 44px;
+        }
+        .modal-sidebar-label {
+            font-size: 0.72rem;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.4);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        .modal-sidebar-value {
+            font-size: 0.95rem;
+            color: rgba(255,255,255,0.85);
+            margin-bottom: 18px;
+            line-height: 1.4;
+        }
+        .modal-sidebar-value.green { color: #46d369; font-weight: 700; }
+        .modal-tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+        .modal-tag {
+            font-size: 0.72rem;
+            color: rgba(255,255,255,0.6);
+            background: rgba(255,255,255,0.08);
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
     </style>
 </head>
 <body class="no-scroll">
@@ -692,6 +803,9 @@
 </nav>
 
 <!-- ══════════ MAIN UI ══════════ -->
+<canvas id="particle-canvas"></canvas>
+<div id="grain"></div>
+
 <div id="main-ui" style="opacity:0; transition: opacity 1.2s ease;">
 
     <!-- HERO BILLBOARD -->
@@ -713,6 +827,7 @@
                 <button class="hbtn hbtn-info hover-target" onclick="openDirectorsNote()">🔒 Director's Note</button>
             </div>
         </div>
+        <button id="audio-toggle" onclick="toggleHeroAudio()" title="Toggle mute">🔇</button>
     </section>
 
     <!-- ══════════ ROWS ══════════ -->
@@ -744,6 +859,19 @@
             </div>
         </div>
 
+        <!-- ROW 3: Top 10 -->
+        <div class="row-section">
+            <div class="row-header">
+                Top 10 &middot; Most Iconic Moments
+                <span class="see-all">Explore All</span>
+            </div>
+            <div class="row-rail">
+                <div class="row-arrow left" onclick="scrollRow('row3', -900)">&#8249;</div>
+                <div class="row-scroll" id="row3"></div>
+                <div class="row-arrow right" onclick="scrollRow('row3', 900)">&#8250;</div>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -756,15 +884,27 @@
             <img id="modal-img" style="width:100%;height:100%;object-fit:contain;background:#000;display:none;">
             <div class="modal-hero-gradient"></div>
         </div>
-        <div class="modal-body">
-            <div class="modal-meta-row">
-                <span class="match-score" id="modal-match">99% Match</span>
-                <span class="year-tag">2026</span>
-                <span class="rating-tag">TV-19</span>
-                <span class="hd-tag">HD</span>
+        <div class="modal-body-grid">
+            <div>
+                <div class="modal-meta-row">
+                    <span class="match-score" id="modal-match">99% Match</span>
+                    <span class="year-tag">2026</span>
+                    <span class="rating-tag">TV-19</span>
+                    <span class="hd-tag">HD</span>
+                </div>
+                <h2 class="modal-title" id="modal-title"></h2>
+                <p class="modal-desc" id="modal-desc"></p>
             </div>
-            <h2 class="modal-title" id="modal-title"></h2>
-            <p class="modal-desc" id="modal-desc"></p>
+            <div id="modal-sidebar">
+                <div class="modal-sidebar-label">Starring</div>
+                <div class="modal-sidebar-value">Gayatri</div>
+                <div class="modal-sidebar-label">Genre</div>
+                <div class="modal-sidebar-value">Cinematic · Biography · Iconic</div>
+                <div class="modal-sidebar-label">Rating</div>
+                <div class="modal-sidebar-value green" id="modal-rating">99% Match</div>
+                <div class="modal-sidebar-label">Vibes</div>
+                <div class="modal-tag-row" id="modal-tags"></div>
+            </div>
         </div>
     </div>
 </div>
@@ -847,6 +987,16 @@ const CONTENT = {
     ]
 };
 
+const TOP10 = [
+    { type: 'img', src: 'IMAGE 1.jpeg', title: 'The Foundation',    match: '99%',  year: '2026', message: 'Nineteen years of quiet resilience and unbreakable grace.', tags: ['Iconic', 'Gold Rated', 'HD'] },
+    { type: 'img', src: 'IMAGE 4.jpeg', title: 'Main Character',     match: '100%', year: '2025', message: 'Every glance is a decision. Every laugh, a director\'s cut.', tags: ['Boss Energy', 'Trending'] },
+    { type: 'vid', src: 'VIDEO 1.mp4',  title: 'Director\'s Vision', match: '100%', year: '2026', message: 'The raw, unfiltered brilliance of a true protagonist.', tags: ['New Release', 'Top Rated', 'HD'] },
+    { type: 'img', src: 'IMAGE 6.jpeg', title: 'Timeless Glow',      match: '97%',  year: '2024', message: 'She belongs to a rare category — redefining the room.', tags: ['Aesthetic', 'Cinematic'] },
+    { type: 'vid', src: 'VIDEO 4.mp4',  title: 'Poetry in Motion',   match: '100%', year: '2026', message: 'Effortless rhythm made visible.', tags: ['Gold Rated', 'Must Watch', 'HD'] },
+    { type: 'img', src: 'IMAGE 2.jpeg', title: 'Pure Radiance',      match: '98%',  year: '2025', message: 'Being the source of light rather than standing in it.', tags: ['Wholesome', 'Timeless'] },
+    { type: 'vid', src: 'VIDEO 2.mp4',  title: 'Unscripted',         match: '97%',  year: '2025', message: 'The best moments are always the ones nobody planned.', tags: ['Exclusive', 'Must Watch'] }
+];
+
 // ══════════════════════════════════════
 // INTRO ANIMATION
 // ══════════════════════════════════════
@@ -922,6 +1072,19 @@ function openDirectorsNote() {
     } else if (pass !== null) {
         alert('Access Denied. Hint: What season is this?');
     }
+}
+
+// ══════════════════════════════════════
+// HERO AUDIO TOGGLE
+// ══════════════════════════════════════
+let heroMuted = true;
+function toggleHeroAudio() {
+    const vid = document.getElementById('hero-vid');
+    const btn = document.getElementById('audio-toggle');
+    heroMuted = !heroMuted;
+    vid.muted = heroMuted;
+    btn.textContent = heroMuted ? '🔇' : '🔊';
+    btn.style.borderColor = heroMuted ? 'rgba(255,255,255,0.6)' : '#46d369';
 }
 
 // ══════════════════════════════════════
@@ -1029,10 +1192,85 @@ function buildRows() {
     }
 }
 
+function buildTop10Row() {
+    const container = document.getElementById('row3');
+    if (!container) return;
+    TOP10.forEach((item, idx) => {
+        const wrap = document.createElement('div');
+        wrap.className = 'card-wrap top10';
+        if (idx === 0) wrap.classList.add('first-card');
+        if (idx === TOP10.length - 1) wrap.classList.add('last-card');
+
+        const rank = document.createElement('div');
+        rank.className = 'top10-rank';
+        rank.textContent = idx + 1;
+        wrap.appendChild(rank);
+
+        const card = document.createElement('div');
+        card.className = 'card';
+        if (item.type === 'vid') {
+            const vid = document.createElement('video');
+            vid.src = item.src; vid.muted = true; vid.loop = true;
+            vid.preload = 'metadata'; vid.playsInline = true;
+            card.appendChild(vid);
+        } else {
+            const img = document.createElement('img');
+            img.src = item.src; img.alt = item.title;
+            card.appendChild(img);
+        }
+
+        const popup = document.createElement('div');
+        popup.className = 'card-popup';
+        popup.innerHTML = `
+            <div class="popup-media">
+                ${item.type === 'vid'
+                    ? `<video src="${item.src}" muted loop playsinline preload="metadata" style="width:100%;height:100%;object-fit:contain;background:#000;"></video>`
+                    : `<img src="${item.src}" alt="${item.title}">`}
+                <div class="popup-media-gradient"></div>
+            </div>
+            <div class="popup-body">
+                <div class="popup-btns">
+                    <button class="pbtn pbtn-play" onclick="openModal('${item.src}','${item.type}','${item.title}','${item.match} Match','${item.message}')">▶</button>
+                    <button class="pbtn pbtn-add">＋</button>
+                    <button class="pbtn pbtn-like">👍</button>
+                    <button class="pbtn pbtn-expand" onclick="openModal('${item.src}','${item.type}','${item.title}','${item.match} Match','${item.message}')">⌄</button>
+                </div>
+                <div class="popup-meta">
+                    <span class="pmatch">#${idx+1} in GayatriFlix Today</span>
+                    <span class="pmeta-tag">${item.year}</span>
+                    <span class="pmeta-tag">HD</span>
+                </div>
+                <div class="popup-message">"${item.message}"</div>
+                <div class="popup-tags">${item.tags.map(t => `<span class="popup-tag">${t}</span>`).join('')}</div>
+            </div>`;
+
+        wrap.appendChild(card);
+        wrap.appendChild(popup);
+        container.appendChild(wrap);
+
+        let hoverTimer = null;
+        wrap.addEventListener('mouseenter', () => {
+            hoverTimer = setTimeout(() => {
+                wrap.classList.add('hovered');
+                const pv = popup.querySelector('video');
+                if (pv) pv.play().catch(() => {});
+            }, 400);
+        });
+        wrap.addEventListener('mouseleave', () => {
+            clearTimeout(hoverTimer);
+            wrap.classList.remove('hovered');
+            const pv = popup.querySelector('video');
+            if (pv) pv.pause();
+        });
+        card.addEventListener('click', () =>
+            openModal(item.src, item.type, item.title, item.match + ' Match', item.message));
+    });
+}
+
 // ══════════════════════════════════════
 // MODAL
 // ══════════════════════════════════════
-function openModal(src, type, title, match, desc) {
+function openModal(src, type, title, match, desc, tags) {
     const modal = document.getElementById('modal');
     const video = document.getElementById('modal-video');
     const img   = document.getElementById('modal-img');
@@ -1040,6 +1278,9 @@ function openModal(src, type, title, match, desc) {
     document.getElementById('modal-title').innerText = title;
     document.getElementById('modal-desc').innerText  = desc || '';
     document.getElementById('modal-match').innerText = match || '99% Match';
+    document.getElementById('modal-rating').innerText = match || '99% Match';
+    const tagsEl = document.getElementById('modal-tags');
+    tagsEl.innerHTML = (tags || ['Cinematic','Iconic','HD']).map(t => `<span class="modal-tag">${t}</span>`).join('');
 
     if (type === 'video' || src.endsWith('.mp4')) {
         video.style.display = 'block';
@@ -1161,9 +1402,61 @@ if (!hasToken && UNLOCK_DATE > Date.now()) {
     gateOverlay.classList.remove('show');
 }
 
+// ══════════════════════════════════════
+// SCROLL REVEAL
+// ══════════════════════════════════════
+const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); }
+    });
+}, { threshold: 0.1 });
+document.querySelectorAll('.row-section').forEach(el => revealObserver.observe(el));
+
+// ══════════════════════════════════════
+// AMBIENT PARTICLES
+// ══════════════════════════════════════
+(function initParticles() {
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    const particles = [];
+    const COUNT = 45;
+    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    resize();
+    window.addEventListener('resize', resize);
+    for (let i = 0; i < COUNT; i++) {
+        particles.push({
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * window.innerHeight,
+            r: Math.random() * 1.5 + 0.3,
+            vx: (Math.random() - 0.5) * 0.25,
+            vy: (Math.random() - 0.5) * 0.25,
+            alpha: Math.random() * 0.4 + 0.05
+        });
+    }
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(229,9,20,${p.alpha})`;
+            ctx.fill();
+            p.x += p.vx; p.y += p.vy;
+            if (p.x < 0) p.x = canvas.width;
+            if (p.x > canvas.width) p.x = 0;
+            if (p.y < 0) p.y = canvas.height;
+            if (p.y > canvas.height) p.y = 0;
+        });
+        requestAnimationFrame(draw);
+    }
+    draw();
+})();
+
 // Init
 document.getElementById('main-ui').style.display = 'none';
 buildRows();
+buildTop10Row();
+// Re-observe newly added rows after build
+document.querySelectorAll('.row-section').forEach(el => revealObserver.observe(el));
 </script>
 </body>
 </html>
