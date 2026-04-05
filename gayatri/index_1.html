@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GAYATRI | Exhibit 19</title>
     <!-- High-end elegant fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Playfair:opsz,wght@5..1200,300;5..1200,400;5..1200,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Playfair:opsz,wght@5..1200,300;5..1200,400;5..1200,600&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --bg: #150f10;
@@ -22,7 +24,8 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            cursor: none !important; /* Custom cursor everywhere */
+            cursor: none !important;
+            /* Custom cursor everywhere */
         }
 
         body {
@@ -41,13 +44,14 @@
             z-index: 0;
             pointer-events: none;
             background:
-                radial-gradient(ellipse 60% 50% at 50% 0%,   rgba(180,50,70,0.10) 0%, transparent 70%),
-                radial-gradient(ellipse 50% 40% at 0% 100%,  rgba(160,40,60,0.08) 0%, transparent 60%),
-                radial-gradient(ellipse 50% 40% at 100% 100%,rgba(160,40,60,0.08) 0%, transparent 60%);
+                radial-gradient(ellipse 60% 50% at 50% 0%, rgba(180, 50, 70, 0.10) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 40% at 0% 100%, rgba(160, 40, 60, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 40% at 100% 100%, rgba(160, 40, 60, 0.08) 0%, transparent 60%);
         }
 
         /* ═══ CUSTOM CURSOR ═══ */
-        .cursor-dot, .cursor-circle {
+        .cursor-dot,
+        .cursor-circle {
             position: fixed;
             top: 0;
             left: 0;
@@ -114,9 +118,10 @@
             text-transform: uppercase;
             transition: text-shadow 0.4s ease;
         }
+
         .brand:hover {
             text-shadow: 0 0 30px rgba(223, 140, 160, 0.55),
-                         0 0 8px  rgba(223, 140, 160, 0.3);
+                0 0 8px rgba(223, 140, 160, 0.3);
         }
 
         .exhibit-tag {
@@ -137,18 +142,17 @@
             text-align: center;
             position: relative;
             /* Warm loved radial glow behind the title */
-            background: radial-gradient(
-                ellipse 80% 60% at 50% 60%,
-                rgba(200, 60, 90, 0.18) 0%,
-                rgba(120, 20, 40, 0.10) 40%,
-                transparent 70%
-            );
+            background: radial-gradient(ellipse 80% 60% at 50% 60%,
+                    rgba(200, 60, 90, 0.18) 0%,
+                    rgba(120, 20, 40, 0.10) 40%,
+                    transparent 70%);
         }
 
         /* Floating heart-dust particles */
         .hero-love-particle {
             position: absolute;
-            width: 4px; height: 4px;
+            width: 4px;
+            height: 4px;
             border-radius: 50%;
             background: var(--accent);
             opacity: 0;
@@ -156,11 +160,25 @@
             animation: loveDrift var(--dur, 8s) ease-in-out infinite;
             animation-delay: var(--delay, 0s);
         }
+
         @keyframes loveDrift {
-            0%   { transform: translateY(0) scale(0.5); opacity: 0; }
-            20%  { opacity: 0.5; }
-            80%  { opacity: 0.3; }
-            100% { transform: translateY(-80px) translateX(var(--dx, 20px)) scale(1.2); opacity: 0; }
+            0% {
+                transform: translateY(0) scale(0.5);
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 0.5;
+            }
+
+            80% {
+                opacity: 0.3;
+            }
+
+            100% {
+                transform: translateY(-80px) translateX(var(--dx, 20px)) scale(1.2);
+                opacity: 0;
+            }
         }
 
         .hero h1 {
@@ -175,13 +193,21 @@
             transform: translateY(50px);
             animation: fadeUp 1.5s var(--ease) forwards 0.5s, titleRosePulse 5s ease-in-out infinite 2s;
             text-shadow:
-                0 0 80px  rgba(223, 100, 130, 0.55),
-                0 0 160px rgba(180,  50,  80, 0.25),
+                0 0 80px rgba(223, 100, 130, 0.55),
+                0 0 160px rgba(180, 50, 80, 0.25),
                 0 2px 4px rgba(0, 0, 0, 0.9);
         }
+
         @keyframes titleRosePulse {
-            0%,100% { text-shadow: 0 0 80px rgba(223,100,130,0.55), 0 0 160px rgba(180,50,80,0.25), 0 2px 4px rgba(0,0,0,0.9); }
-            50%     { text-shadow: 0 0 120px rgba(223,100,130,0.75), 0 0 200px rgba(180,50,80,0.40), 0 2px 4px rgba(0,0,0,0.9); }
+
+            0%,
+            100% {
+                text-shadow: 0 0 80px rgba(223, 100, 130, 0.55), 0 0 160px rgba(180, 50, 80, 0.25), 0 2px 4px rgba(0, 0, 0, 0.9);
+            }
+
+            50% {
+                text-shadow: 0 0 120px rgba(223, 100, 130, 0.75), 0 0 200px rgba(180, 50, 80, 0.40), 0 2px 4px rgba(0, 0, 0, 0.9);
+            }
         }
 
         .hero .subtitle {
@@ -212,7 +238,7 @@
         .scroll-line {
             width: 1px;
             height: 40px;
-            background: rgba(223,160,168,0.3);
+            background: rgba(223, 160, 168, 0.3);
             margin-top: 10px;
             overflow: hidden;
             position: relative;
@@ -230,12 +256,21 @@
         }
 
         @keyframes scrollLineDrop {
-            0% { top: -100%; }
-            50%, 100% { top: 100%; }
+            0% {
+                top: -100%;
+            }
+
+            50%,
+            100% {
+                top: 100%;
+            }
         }
 
         @keyframes fadeUp {
-            to { opacity: 1; transform: translateY(0); }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* ═══ GALLERY EXHIBIT SECTIONS ═══ */
@@ -247,13 +282,13 @@
             min-height: 100vh;
             position: relative;
         }
+
         /* Alternating warm blush wash on every other exhibit */
         .exhibit-section:nth-child(even) {
             background: linear-gradient(135deg,
-                rgba(140, 30, 55, 0.07) 0%,
-                transparent 50%,
-                rgba(100, 20, 40, 0.05) 100%
-            );
+                    rgba(140, 30, 55, 0.07) 0%,
+                    transparent 50%,
+                    rgba(100, 20, 40, 0.05) 100%);
         }
 
         .art-card {
@@ -289,9 +324,10 @@
             box-shadow: 0 0 0px 0px rgba(223, 100, 120, 0);
             transition: box-shadow 0.8s ease;
         }
+
         .art-image-wrap:hover::after {
             box-shadow: 0 0 50px 10px rgba(223, 100, 120, 0.25),
-                        inset 0 0 30px rgba(223, 100, 120, 0.07);
+                inset 0 0 30px rgba(223, 100, 120, 0.07);
         }
 
         .art-image-wrap.reveal {
@@ -315,7 +351,11 @@
 
         .art-image-wrap:hover .art-image {
             transform: scale(1.05);
-            filter: grayscale(0%); /* Reveal color on hover */
+        }
+
+        .art-image-wrap:hover .art-image,
+        .art-image-wrap.color-revealed .art-image {
+            filter: grayscale(0%);
         }
 
         .art-details {
@@ -342,7 +382,7 @@
             color: var(--accent);
             opacity: 0.85;
             margin-bottom: 20px;
-            text-shadow: 0 0 20px rgba(223,100,130,0.35);
+            text-shadow: 0 0 20px rgba(223, 100, 130, 0.35);
         }
 
         .art-title {
@@ -354,7 +394,8 @@
             color: #fff2f4;
             transition: color 0.5s ease;
         }
-        .art-image-wrap:hover ~ .art-details .art-title,
+
+        .art-image-wrap:hover~.art-details .art-title,
         .art-details:hover .art-title {
             color: var(--accent);
         }
@@ -369,7 +410,7 @@
         }
 
         /* Section divider — warm rose rule between exhibits */
-        .exhibit-section + .exhibit-section {
+        .exhibit-section+.exhibit-section {
             border-top: 1px solid rgba(223, 160, 168, 0.08);
         }
 
@@ -378,11 +419,14 @@
             position: relative;
             display: inline-block;
         }
+
         .art-index::after {
             content: '';
             position: absolute;
-            left: 0; bottom: -4px;
-            width: 24px; height: 1px;
+            left: 0;
+            bottom: -4px;
+            width: 24px;
+            height: 1px;
             background: linear-gradient(90deg, var(--accent), transparent);
         }
 
@@ -393,13 +437,11 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(
-                180deg,
-                #100c0d 0%,
-                rgba(120, 30, 50, 0.25) 40%,
-                rgba(80, 10, 25, 0.15) 70%,
-                #100c0d 100%
-            );
+            background: linear-gradient(180deg,
+                    #100c0d 0%,
+                    rgba(120, 30, 50, 0.25) 40%,
+                    rgba(80, 10, 25, 0.15) 70%,
+                    #100c0d 100%);
         }
 
         .scratch-title {
@@ -417,7 +459,7 @@
             max-width: 800px;
             aspect-ratio: 3/4;
             background: #1a1616;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
             overflow: hidden;
             display: flex;
             align-items: center;
@@ -449,13 +491,14 @@
         /* The hidden message — sits on top of the image, below the canvas */
         .secret-message {
             position: absolute;
-            bottom: 15%; /* Lowered the message */
+            bottom: 13%;
+            /* Lowered the message */
             z-index: 1;
             text-align: center;
             pointer-events: none;
             padding: 40px;
-            background: rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             opacity: 0;
             transition: opacity 1s ease;
         }
@@ -469,7 +512,7 @@
             font-size: 2.5rem;
             color: var(--accent);
             margin-bottom: 10px;
-            text-shadow: 0 0 30px rgba(223,100,130,0.6);
+            text-shadow: 0 0 30px rgba(223, 100, 130, 0.6);
         }
 
         .secret-message p {
@@ -499,18 +542,29 @@
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
+
+            0%,
+            100% {
+                opacity: 0.5;
+            }
+
+            50% {
+                opacity: 1;
+            }
         }
 
         /* ═══ RESPONSIVE ═══ */
         @media (max-width: 900px) {
-            .art-card, .art-card.reverse {
+
+            .art-card,
+            .art-card.reverse {
                 flex-direction: column;
             }
+
             .art-image {
                 height: 50vh;
             }
+
             header {
                 padding: 20px;
             }
@@ -532,10 +586,12 @@
             pointer-events: none;
             transition: none;
         }
+
         #gate-overlay.show {
             opacity: 1;
             pointer-events: all;
         }
+
         .gate-monogram {
             font-family: 'Playfair', serif;
             font-size: clamp(8rem, 25vw, 16rem);
@@ -546,15 +602,28 @@
             margin-bottom: 8px;
             animation: gatePulse 3s ease-in-out infinite;
         }
+
         @keyframes gatePulse {
-            0%,100% { opacity: 0.8; transform: scale(1); }
-            50%      { opacity: 1;   transform: scale(1.02); }
+
+            0%,
+            100% {
+                opacity: 0.8;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.02);
+            }
         }
+
         .gate-rule {
-            width: 60px; height: 1px;
+            width: 60px;
+            height: 1px;
             background: linear-gradient(90deg, transparent, var(--accent), transparent);
             margin: 10px auto 24px;
         }
+
         .gate-label {
             font-family: 'Inter', sans-serif;
             font-size: 0.6rem;
@@ -564,6 +633,7 @@
             color: var(--text-muted);
             margin-bottom: 40px;
         }
+
         .gate-title {
             font-family: 'Playfair', serif;
             font-size: clamp(2rem, 6vw, 4rem);
@@ -571,6 +641,7 @@
             color: #fff;
             margin-bottom: 12px;
         }
+
         .gate-subtitle {
             font-family: 'Bodoni Moda', serif;
             font-style: italic;
@@ -580,12 +651,14 @@
             max-width: 440px;
             margin-bottom: 44px;
         }
+
         .gate-countdown {
             display: flex;
             gap: 16px;
             justify-content: center;
             margin-bottom: 32px;
         }
+
         .gate-cd-box {
             display: flex;
             flex-direction: column;
@@ -596,6 +669,7 @@
             border-radius: 4px;
             min-width: 72px;
         }
+
         .gate-cd-num {
             font-family: 'Bodoni Moda', serif;
             font-size: 2rem;
@@ -603,6 +677,7 @@
             color: var(--accent);
             line-height: 1;
         }
+
         .gate-cd-lbl {
             font-size: 0.5rem;
             letter-spacing: 2px;
@@ -610,11 +685,12 @@
             color: var(--text-muted);
             margin-top: 5px;
         }
+
         .gate-hint {
             font-size: 0.6rem;
             letter-spacing: 3px;
             text-transform: uppercase;
-            color: rgba(136,136,136,0.4);
+            color: rgba(136, 136, 136, 0.4);
         }
     </style>
 </head>
@@ -633,10 +709,14 @@
             That moment is almost here.
         </p>
         <div class="gate-countdown">
-            <div class="gate-cd-box"><span class="gate-cd-num" id="g-d">00</span><span class="gate-cd-lbl">Days</span></div>
-            <div class="gate-cd-box"><span class="gate-cd-num" id="g-h">00</span><span class="gate-cd-lbl">Hours</span></div>
-            <div class="gate-cd-box"><span class="gate-cd-num" id="g-m">00</span><span class="gate-cd-lbl">Mins</span></div>
-            <div class="gate-cd-box"><span class="gate-cd-num" id="g-s">00</span><span class="gate-cd-lbl">Secs</span></div>
+            <div class="gate-cd-box"><span class="gate-cd-num" id="g-d">00</span><span class="gate-cd-lbl">Days</span>
+            </div>
+            <div class="gate-cd-box"><span class="gate-cd-num" id="g-h">00</span><span class="gate-cd-lbl">Hours</span>
+            </div>
+            <div class="gate-cd-box"><span class="gate-cd-num" id="g-m">00</span><span class="gate-cd-lbl">Mins</span>
+            </div>
+            <div class="gate-cd-box"><span class="gate-cd-num" id="g-s">00</span><span class="gate-cd-lbl">Secs</span>
+            </div>
         </div>
         <div class="gate-hint">Return when the time is right</div>
     </div>
@@ -653,7 +733,7 @@
     </header>
 
     <section class="hero" id="hero-section">
-        <h1>NINETEEN</h1>
+        <h1>GAYATRI'S<br>NINETEEN</h1>
         <div class="subtitle">An Immersive Retrospective Archive</div>
         <div class="scroll-indicator">
             Scroll to Explore
@@ -673,7 +753,7 @@
                 <div class="art-index">01</div>
                 <h2 class="art-title">The Foundation</h2>
                 <p class="art-desc">
-                    Every timeless masterpiece begins with a foundation that refuses to crack. Nineteen years of quiet resilience, of choosing grace over bitterness, of showing up even when it's hard — that is the architecture of a truly remarkable person. It's not just about growing older. It's about the slow, deliberate art of becoming more entirely yourself, shedding what doesn't fit and stepping into everything that does. She has always known, even when the world tried to convince her otherwise, that she was built for something greater. This chapter is proof of that.
+                    Nineteen years of watching you grow into someone truly remarkable. This isn't just about growing older—it's about witnessing the quiet resilience and grace you carry every day. It is a rare privilege to walk alongside someone who is so entirely themselves. You were always built for something greater, and this chapter is proof of that.
                 </p>
             </div>
         </div>
@@ -689,7 +769,7 @@
                 <div class="art-index">02</div>
                 <h2 class="art-title">The Masterpiece</h2>
                 <p class="art-desc">
-                    While some spend entire lifetimes searching for aesthetics, she inherently defines it without even trying. From late-night philosophical conversations that unfold into something unexpectedly profound, to the kind of effortless charisma that could light up the dullest of rooms — her presence is never background noise. She is the centrepiece. A living, breathing canvas painted with equal strokes of chaos, warmth, spontaneity, and an almost terrifying level of beauty. The kind of person who turns every ordinary moment into a story worth telling.
+                    You have an effortless way of lighting up a room, not through noise, but through genuine warmth. Whether it's late-night conversations that stretch for hours or the simple comfort of just being there, your presence changes the atmosphere. You turn ordinary, quiet moments into memories worth keeping forever.
                 </p>
             </div>
         </div>
@@ -699,13 +779,14 @@
     <section class="exhibit-section">
         <div class="art-card">
             <div class="art-image-wrap observer-target hover-target">
-                <video src="VIDEO 4.mp4" autoplay loop muted playsinline class="art-image" style="object-position: center;"></video>
+                <video src="VIDEO 4.mp4" autoplay loop muted playsinline class="art-image"
+                    style="object-position: center;"></video>
             </div>
             <div class="art-details observer-target">
                 <div class="art-index">03</div>
                 <h2 class="art-title">Poetry in Motion</h2>
                 <p class="art-desc">
-                    Still frames can only hold so much of the truth — they freeze a single breath in a story that never actually stops moving. When you watch her in motion, you understand what all those words about "presence" really mean. There's a rhythm to the way she carries herself, an unhurried confidence that doesn't need to perform loudly because it already commands everything in the room. This is what effortless looks like when it isn't pretending. This is the kind of energy that stays with you long after the moment has passed, replaying itself in your mind like a favourite verse.
+                    There is a steady, reassuring rhythm to how you move through the world. You don't need to perform—you simply stand in your own truth, and that is more than enough. Having you in my life means having a constant source of light, a grounding force that makes everything feel a little safer and a lot more beautiful.
                 </p>
             </div>
         </div>
@@ -721,7 +802,7 @@
                 <div class="art-index">04</div>
                 <h2 class="art-title">The Radiance</h2>
                 <p class="art-desc">
-                    It is one thing to stand in the light. It is an entirely different, rarer thing to be the source of it — to generate warmth that other people instinctively gravitate toward without quite knowing why. Her radiance isn't manufactured by the right outfit or the right angle; it's structural, baked into who she fundamentally is. The way she laughs, the way she looks at people like they genuinely matter, the way her eyes hold entire conversations before her mouth even opens — it all adds up to something that the world doesn't have a singular word for. Art comes close. So does home.
+                    It is one thing to stand in the light, and entirely another to be the source of it. You generate a kind of warmth that makes people want to stay close. The way you care, the way you look out for the people you love, and the effortless empathy you carry—it all adds up to a soul that is incredibly rare to find.
                 </p>
             </div>
         </div>
@@ -731,13 +812,14 @@
     <section class="exhibit-section">
         <div class="art-card">
             <div class="art-image-wrap observer-target hover-target">
-                <video src="VIDEO 1.mp4" autoplay loop muted playsinline class="art-image" style="object-position: center;"></video>
+                <video src="VIDEO 1.mp4" autoplay loop muted playsinline class="art-image"
+                    style="object-position: center;"></video>
             </div>
             <div class="art-details observer-target">
                 <div class="art-index">05</div>
                 <h2 class="art-title">The Director's Vision</h2>
                 <p class="art-desc">
-                    Every glance is a decision. Every laugh, a director's cut. Every small, seemingly throwaway moment of brilliance — none of it is accidental. It is the natural output of a life being lived with genuine intention and uncompromising soul. She doesn't move through the world carelessly; she curates it, shapes it, leaves her fingerprints all over the scenes she walks through. This is what it looks like when someone refuses to be a supporting character in their own story. This is main character energy in its most honest, most powerful form.
+                    You live your life with such beautiful intention. You aren't just moving through the world; you are actively shaping it, leaving your warmth and kindness on everything you touch. Watching you step into your own power is one of the greatest joys of knowing you.
                 </p>
             </div>
         </div>
@@ -753,7 +835,7 @@
                 <div class="art-index">06</div>
                 <h2 class="art-title">The Archives</h2>
                 <p class="art-desc">
-                    Every defining era leaves behind its own archive — photographs, feelings, inside jokes that will never fully translate to an outsider, songs that belonged entirely to a specific afternoon, conversations that changed the shape of things afterward. These are hers. Collected proof that the years leading to nineteen were not just passing time, but building material. The foundation being quietly poured, floor by floor, for something extraordinary. You don't glance back at the archives to dwell — you glance back to remember exactly how far you've already walked.
+                    Our shared history is filled with quiet, meaningful moments, laughter that we couldn't stop, and conversations that shifted the way I see the world. These archives aren't just memories; they are the foundation of a bond that only gets stronger. Every year added is another beautiful layer to our story.
                 </p>
             </div>
         </div>
@@ -769,7 +851,7 @@
                 <div class="art-index">07</div>
                 <h2 class="art-title">Timeless</h2>
                 <p class="art-desc">
-                    Most things are designed for an era. They arrive, peak, and quietly fade into whatever comes next. And then there are the rare exceptions — the ones that exist outside of trends and timelines, the ones that somehow manage to grow more compelling with every passing year. She belongs to the second category. Her style isn't borrowed from a moment; it invents one. Her spirit isn't shaped by the room she's in; it shapes the room around her. Nineteen is not a ceiling. It is the beginning of the most iconic phase yet.
+                    Trends fade, but the kind of character you have is entirely timeless. You are the kind of person someone is incredibly lucky to know in this lifetime. Your kindness, your humor, your absolute loyalty—it never goes out of style. Nineteen is just the continuation of everything wonderful you already are.
                 </p>
             </div>
         </div>
@@ -779,13 +861,14 @@
     <section class="exhibit-section">
         <div class="art-card reverse">
             <div class="art-image-wrap observer-target hover-target">
-                <video src="VIDEO 2.mp4" autoplay loop muted playsinline class="art-image" style="object-position: center;"></video>
+                <video src="VIDEO 2.mp4" autoplay loop muted playsinline class="art-image"
+                    style="object-position: center;"></video>
             </div>
             <div class="art-details observer-target">
                 <div class="art-index">08</div>
                 <h2 class="art-title">Unscripted</h2>
                 <p class="art-desc">
-                    The best moments are always the ones nobody planned. The ones that arrive sideways, quietly, without any announcement — and somehow manage to be exactly what was needed. She has always had an extraordinary ability to find magic in the unscripted; to laugh the hardest at the things that weren't supposed to be funny, to turn the detours into the most memorable parts of any story. There is a freedom to watching someone who genuinely isn't performing — who simply exists fully, loudly, and without apology. That is what this chapter captures. The real, unedited version. The best one.
+                    The best parts of life are the ones we never planned—the unexpected detours, the spontaneous laughter, the moments where we can just be unapologetically ourselves. There is a deep, comforting freedom in knowing someone who accepts every version of you. That is what this friendship is: genuine, unscripted, and entirely pure.
                 </p>
             </div>
         </div>
@@ -795,13 +878,14 @@
     <section class="exhibit-section">
         <div class="art-card">
             <div class="art-image-wrap observer-target hover-target">
-                <video src="VIDEO 3.mp4" autoplay loop muted playsinline class="art-image" style="object-position: center;"></video>
+                <video src="VIDEO 3.mp4" autoplay loop muted playsinline class="art-image"
+                    style="object-position: center;"></video>
             </div>
             <div class="art-details observer-target">
                 <div class="art-index">09</div>
                 <h2 class="art-title">The Energy</h2>
                 <p class="art-desc">
-                    You either have it or you don't — and she has always, unmistakably, had it. There is a particular kind of electricity that certain people carry with them, an invisible current that changes the temperature of a room the moment they enter it. It's not loud. It doesn't announce itself with a fanfare. It simply settles in and makes everything around it a little more alive. Watching this is not watching a performance. It is watching something completely natural — the kind of energy that other people spend years trying to manufacture, handed out here like it costs nothing at all.
+                    You bring a certain peace and vitality everywhere you go. It's an invisible current that makes everything around you feel a little more alive. To know you is to feel seen and understood without having to explain yourself. Your energy is a gift to everyone lucky enough to be in your orbit.
                 </p>
             </div>
         </div>
@@ -817,7 +901,7 @@
                 <div class="art-index">10</div>
                 <h2 class="art-title">Chapter Nineteen</h2>
                 <p class="art-desc">
-                    Every great story has a chapter that changes everything — the turning point, the hinge, the moment you look back on and say: that was where it all shifted. This is that chapter. Not the ending of something, but the most electric beginning yet. Nineteen carries with it the weight of everything already built and the freedom of everything still unrealised. It is the year where the girl who survived every hard thing steps fully into the woman who was always waiting on the other side of it. Here's to her. Here's to this. Here's to everything that comes next.
+                    Nineteen carries with it the strength of everything you've overcome and the beauty of everything still waiting for you. It is the beginning of your next great era. I am so incredibly proud of the person you are, and even more proud to stand by your side to celebrate it. Here's to you, and everything that comes next.
                 </p>
             </div>
         </div>
@@ -833,8 +917,8 @@
 
             <!-- Message on top of image, below canvas -->
             <div class="secret-message" id="secret-message">
-                <h2>Happy 19th Birthday! 🧿</h2>
-                <p>Behind the aesthetics, the fashion, and the perfection,<br>lies the best soul I have ever known.<br>Thank you for existing, and thank you for being you.<br>Here's to a lifetime of iconic moments together.</p>
+                <h2>To Chota Don,</h2>
+                <p>Happy 19th Birthday! 🧿<br>Behind the elegance and the perfection,<br>lies one of the purest souls I have ever known.<br>Thank you for your warmth, your kindness, and your unwavering friendship.<br>Here's to a lifetime of beautiful memories together.</p>
             </div>
 
             <!-- Canvas that will be scratched away (sits on top) -->
@@ -871,10 +955,10 @@
         // GATE CHECK — session token + time lock
         // ═══════════════════════════════════════
         const UNLOCK_DATE = new Date('2026-04-30T00:00:00').getTime();
-        const urlParams   = new URLSearchParams(window.location.search);
-        const isBypass    = urlParams.get('admin') === 'true';
-        let hasToken      = sessionStorage.getItem('gayatri_main_gate') === '1' || isBypass;
-        let isUnlocked    = Date.now() >= UNLOCK_DATE || isBypass;
+        const urlParams = new URLSearchParams(window.location.search);
+        const isBypass = urlParams.get('admin') === 'true';
+        let hasToken = sessionStorage.getItem('gayatri_main_gate') === '1' || isBypass;
+        let isUnlocked = Date.now() >= UNLOCK_DATE || isBypass;
         const gateOverlay = document.getElementById('gate-overlay');
 
         // Hidden entry: Double click the G monogram to enter password
@@ -899,13 +983,13 @@
             function updateGateCountdown() {
                 const diff = UNLOCK_DATE - Date.now();
                 if (diff <= 0 && hasToken) { gateOverlay.classList.remove('show'); return; }
-                
+
                 // Avoid negative numbers just in case
                 const safeDiff = diff > 0 ? diff : 0;
-                document.getElementById('g-d').innerText = String(Math.floor(safeDiff / 86400000)).padStart(2,'0');
-                document.getElementById('g-h').innerText = String(Math.floor(safeDiff % 86400000 / 3600000)).padStart(2,'0');
-                document.getElementById('g-m').innerText = String(Math.floor(safeDiff % 3600000 / 60000)).padStart(2,'0');
-                document.getElementById('g-s').innerText = String(Math.floor(safeDiff % 60000 / 1000)).padStart(2,'0');
+                document.getElementById('g-d').innerText = String(Math.floor(safeDiff / 86400000)).padStart(2, '0');
+                document.getElementById('g-h').innerText = String(Math.floor(safeDiff % 86400000 / 3600000)).padStart(2, '0');
+                document.getElementById('g-m').innerText = String(Math.floor(safeDiff % 3600000 / 60000)).padStart(2, '0');
+                document.getElementById('g-s').innerText = String(Math.floor(safeDiff % 60000 / 1000)).padStart(2, '0');
             }
             setInterval(updateGateCountdown, 1000);
             updateGateCountdown();
@@ -915,14 +999,14 @@
         // ═══ CUSTOM CURSOR LOGIC ═══
         const dot = document.getElementById('cursor-dot');
         const circle = document.getElementById('cursor-circle');
-        
+
         let mouseX = 0, mouseY = 0;
         let circleX = 0, circleY = 0;
 
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
-            
+
             // Dot follows instantly
             dot.style.left = mouseX + 'px';
             dot.style.top = mouseY + 'px';
@@ -942,6 +1026,11 @@
         document.querySelectorAll('.hover-target, #scratch-canvas').forEach(el => {
             el.addEventListener('mouseenter', () => document.body.classList.add('hover-img'));
             el.addEventListener('mouseleave', () => document.body.classList.remove('hover-img'));
+        });
+
+        // Color reveal states for images (keep color after hover)
+        document.querySelectorAll('.art-image-wrap').forEach(el => {
+            el.addEventListener('mouseenter', () => el.classList.add('color-revealed'));
         });
 
         // ═══ SCROLL REVEAL (INTERSECTION OBSERVER) ═══
@@ -967,7 +1056,7 @@
         const ctx = canvas.getContext('2d');
         const instruction = document.getElementById('scratch-instruction');
         const secretMsg = document.getElementById('secret-message');
-        
+
         let isDrawing = false;
         let scratchedPercent = 0;
         let revealTriggered = false;
@@ -985,7 +1074,7 @@
             ctx.globalCompositeOperation = 'source-over';
             ctx.fillStyle = '#1c1c1c';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
+
             // Add subtle CLASSIFIED text texture
             ctx.font = "18px Inter";
             ctx.fillStyle = "rgba(255,255,255,0.04)";
@@ -1073,16 +1162,16 @@
             for (let i = 0; i < 18; i++) {
                 const dot = document.createElement('div');
                 dot.className = 'hero-love-particle';
-                const dur  = (6 + Math.random() * 6).toFixed(1) + 's';
-                const del  = (Math.random() * 8).toFixed(1) + 's';
-                const dx   = ((Math.random() - 0.5) * 60).toFixed(0) + 'px';
+                const dur = (6 + Math.random() * 6).toFixed(1) + 's';
+                const del = (Math.random() * 8).toFixed(1) + 's';
+                const dx = ((Math.random() - 0.5) * 60).toFixed(0) + 'px';
                 const size = (2 + Math.random() * 3).toFixed(1) + 'px';
                 dot.style.cssText = `
                     --dur:${dur}; --delay:${del}; --dx:${dx};
                     left:${(10 + Math.random() * 80).toFixed(1)}%;
                     bottom:${(20 + Math.random() * 30).toFixed(1)}%;
                     width:${size}; height:${size};
-                    background:${COLORS[Math.floor(Math.random()*COLORS.length)]};
+                    background:${COLORS[Math.floor(Math.random() * COLORS.length)]};
                 `;
                 hero.appendChild(dot);
             }
