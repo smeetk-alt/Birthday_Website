@@ -50,6 +50,23 @@
         }
 
         /* ═══ CUSTOM CURSOR ═══ */
+        @media (pointer: coarse) {
+            * {
+                cursor: auto !important;
+            }
+
+            .cursor-dot,
+            .cursor-circle {
+                display: none !important;
+            }
+
+            .art-image-wrap::before {
+                display: none !important;
+            }
+
+            /* Hide glare on touch */
+        }
+
         .cursor-dot,
         .cursor-circle {
             position: fixed;
@@ -313,6 +330,23 @@
             border-radius: 2px;
         }
 
+        /* Dynamic Interactive Glare Overlay */
+        .art-image-wrap::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle 350px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.15), transparent 50%);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 4;
+            mix-blend-mode: overlay;
+            transition: opacity 0.4s ease;
+        }
+
+        .art-image-wrap:hover::before {
+            opacity: 1;
+        }
+
         /* Loved theme: warm rose aura on image hover */
         .art-image-wrap::after {
             content: '';
@@ -570,6 +604,89 @@
             }
         }
 
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                gap: 8px;
+                padding: 15px;
+            }
+
+            .hero h1 {
+                font-size: clamp(3.5rem, 15vw, 6rem);
+            }
+
+            .hero .subtitle {
+                font-size: 0.75rem;
+                letter-spacing: 4px;
+            }
+
+            .exhibit-section {
+                padding: 80px 20px;
+            }
+
+            .art-details {
+                padding: 20px 0;
+            }
+
+            .art-index {
+                font-size: 2.2rem;
+            }
+
+            .art-title {
+                font-size: 2rem;
+            }
+
+            .scratch-title {
+                font-size: 2rem;
+                margin-bottom: 25px;
+            }
+
+            .secret-message {
+                padding: 20px;
+                bottom: 8%;
+            }
+
+            .secret-message h2 {
+                font-size: 1.5rem;
+            }
+
+            .secret-message p {
+                font-size: 0.85rem;
+            }
+
+            .scratch-instruction {
+                font-size: 0.7rem;
+                letter-spacing: 3px;
+                text-align: center;
+                padding: 0 10px;
+            }
+
+            .gate-title {
+                font-size: 1.5rem;
+            }
+
+            .gate-subtitle {
+                font-size: 0.85rem;
+            }
+
+            .gate-countdown {
+                gap: 8px;
+            }
+
+            .gate-cd-box {
+                min-width: 56px;
+                padding: 10px 8px;
+            }
+
+            .gate-cd-num {
+                font-size: 1.3rem;
+            }
+
+            .gate-cd-lbl {
+                font-size: 0.45rem;
+            }
+        }
+
         /* ═══ TIME LOCK OVERLAY ═══ */
         #gate-overlay {
             position: fixed;
@@ -753,7 +870,10 @@
                 <div class="art-index">01</div>
                 <h2 class="art-title">The Foundation</h2>
                 <p class="art-desc">
-                    Nineteen years of watching you grow into someone truly remarkable. This isn't just about growing older—it's about witnessing the quiet resilience and grace you carry every day. It is a rare privilege to walk alongside someone who is so entirely themselves. You were always built for something greater, and this chapter is proof of that.
+                    Nineteen years of watching you grow into someone truly remarkable. This isn't just about growing
+                    older—it's about witnessing the quiet resilience and grace you carry every day. It is a rare
+                    privilege to walk alongside someone who is so entirely themselves. You were always built for
+                    something greater, and this chapter is proof of that.
                 </p>
             </div>
         </div>
@@ -769,7 +889,10 @@
                 <div class="art-index">02</div>
                 <h2 class="art-title">The Masterpiece</h2>
                 <p class="art-desc">
-                    You have an effortless way of lighting up a room, not through noise, but through genuine warmth. Whether it's late-night conversations that stretch for hours or the simple comfort of just being there, your presence changes the atmosphere. You turn ordinary, quiet moments into memories worth keeping forever.
+                    You have an effortless way of lighting up a room, not through noise, but through genuine warmth.
+                    Whether it's late-night conversations that stretch for hours or the simple comfort of just being
+                    there, your presence changes the atmosphere. You turn ordinary, quiet moments into memories worth
+                    keeping forever.
                 </p>
             </div>
         </div>
@@ -786,7 +909,10 @@
                 <div class="art-index">03</div>
                 <h2 class="art-title">Poetry in Motion</h2>
                 <p class="art-desc">
-                    There is a steady, reassuring rhythm to how you move through the world. You don't need to perform—you simply stand in your own truth, and that is more than enough. Having you in my life means having a constant source of light, a grounding force that makes everything feel a little safer and a lot more beautiful.
+                    There is a steady, reassuring rhythm to how you move through the world. You don't need to
+                    perform—you simply stand in your own truth, and that is more than enough. Having you in my life
+                    means having a constant source of light, a grounding force that makes everything feel a little safer
+                    and a lot more beautiful.
                 </p>
             </div>
         </div>
@@ -802,7 +928,10 @@
                 <div class="art-index">04</div>
                 <h2 class="art-title">The Radiance</h2>
                 <p class="art-desc">
-                    It is one thing to stand in the light, and entirely another to be the source of it. You generate a kind of warmth that makes people want to stay close. The way you care, the way you look out for the people you love, and the effortless empathy you carry—it all adds up to a soul that is incredibly rare to find.
+                    It is one thing to stand in the light, and entirely another to be the source of it. You generate a
+                    kind of warmth that makes people want to stay close. The way you care, the way you look out for the
+                    people you love, and the effortless empathy you carry—it all adds up to a soul that is incredibly
+                    rare to find.
                 </p>
             </div>
         </div>
@@ -819,7 +948,9 @@
                 <div class="art-index">05</div>
                 <h2 class="art-title">The Director's Vision</h2>
                 <p class="art-desc">
-                    You live your life with such beautiful intention. You aren't just moving through the world; you are actively shaping it, leaving your warmth and kindness on everything you touch. Watching you step into your own power is one of the greatest joys of knowing you.
+                    You live your life with such beautiful intention. You aren't just moving through the world; you are
+                    actively shaping it, leaving your warmth and kindness on everything you touch. Watching you step
+                    into your own power is one of the greatest joys of knowing you.
                 </p>
             </div>
         </div>
@@ -835,7 +966,10 @@
                 <div class="art-index">06</div>
                 <h2 class="art-title">The Archives</h2>
                 <p class="art-desc">
-                    Our shared history is filled with quiet, meaningful moments, laughter that we couldn't stop, and conversations that shifted the way I see the world. These archives aren't just memories; they are the foundation of a bond that only gets stronger. Every year added is another beautiful layer to our story.
+                    Our shared history is filled with quiet, meaningful moments, laughter that we couldn't stop, and
+                    conversations that shifted the way I see the world. These archives aren't just memories; they are
+                    the foundation of a bond that only gets stronger. Every year added is another beautiful layer to our
+                    story.
                 </p>
             </div>
         </div>
@@ -851,7 +985,10 @@
                 <div class="art-index">07</div>
                 <h2 class="art-title">Timeless</h2>
                 <p class="art-desc">
-                    Trends fade, but the kind of character you have is entirely timeless. You are the kind of person someone is incredibly lucky to know in this lifetime. Your kindness, your humor, your absolute loyalty—it never goes out of style. Nineteen is just the continuation of everything wonderful you already are.
+                    Trends fade, but the kind of character you have is entirely timeless. You are the kind of person
+                    someone is incredibly lucky to know in this lifetime. Your kindness, your humor, your absolute
+                    loyalty—it never goes out of style. Nineteen is just the continuation of everything wonderful you
+                    already are.
                 </p>
             </div>
         </div>
@@ -868,7 +1005,10 @@
                 <div class="art-index">08</div>
                 <h2 class="art-title">Unscripted</h2>
                 <p class="art-desc">
-                    The best parts of life are the ones we never planned—the unexpected detours, the spontaneous laughter, the moments where we can just be unapologetically ourselves. There is a deep, comforting freedom in knowing someone who accepts every version of you. That is what this friendship is: genuine, unscripted, and entirely pure.
+                    The best parts of life are the ones we never planned—the unexpected detours, the spontaneous
+                    laughter, the moments where we can just be unapologetically ourselves. There is a deep, comforting
+                    freedom in knowing someone who accepts every version of you. That is what this friendship is:
+                    genuine, unscripted, and entirely pure.
                 </p>
             </div>
         </div>
@@ -885,7 +1025,9 @@
                 <div class="art-index">09</div>
                 <h2 class="art-title">The Energy</h2>
                 <p class="art-desc">
-                    You bring a certain peace and vitality everywhere you go. It's an invisible current that makes everything around you feel a little more alive. To know you is to feel seen and understood without having to explain yourself. Your energy is a gift to everyone lucky enough to be in your orbit.
+                    You bring a certain peace and vitality everywhere you go. It's an invisible current that makes
+                    everything around you feel a little more alive. To know you is to feel seen and understood without
+                    having to explain yourself. Your energy is a gift to everyone lucky enough to be in your orbit.
                 </p>
             </div>
         </div>
@@ -901,7 +1043,10 @@
                 <div class="art-index">10</div>
                 <h2 class="art-title">Chapter Nineteen</h2>
                 <p class="art-desc">
-                    Nineteen carries with it the strength of everything you've overcome and the beauty of everything still waiting for you. It is the beginning of your next great era. I am so incredibly proud of the person you are, and even more proud to stand by your side to celebrate it. Here's to you, and everything that comes next.
+                    Nineteen carries with it the strength of everything you've overcome and the beauty of everything
+                    still waiting for you. It is the beginning of your next great era. I am so incredibly proud of the
+                    person you are, and even more proud to stand by your side to celebrate it. Here's to you, and
+                    everything that comes next.
                 </p>
             </div>
         </div>
@@ -918,7 +1063,9 @@
             <!-- Message on top of image, below canvas -->
             <div class="secret-message" id="secret-message">
                 <h2>To Chota Don,</h2>
-                <p>Happy 19th Birthday! 🧿<br>Behind the elegance and the perfection,<br>lies one of the purest souls I have ever known.<br>Thank you for your warmth, your kindness, and your unwavering friendship.<br>Here's to a lifetime of beautiful memories together.</p>
+                <p>Happy 19th Birthday! 🧿<br>Behind the elegance and the perfection,<br>lies one of the purest souls I
+                    have ever known.<br>Thank you for your warmth, your kindness, and your unwavering
+                    friendship.<br>Here's to a lifetime of beautiful memories together.</p>
             </div>
 
             <!-- Canvas that will be scratched away (sits on top) -->
@@ -954,7 +1101,7 @@
         // ═══════════════════════════════════════
         // GATE CHECK — session token + time lock
         // ═══════════════════════════════════════
-        const UNLOCK_DATE = new Date('2026-04-30T00:00:00').getTime();
+        const UNLOCK_DATE = new Date('2026-04-30T09:15:00').getTime();
         const urlParams = new URLSearchParams(window.location.search);
         const isBypass = urlParams.get('admin') === 'true';
         let hasToken = sessionStorage.getItem('gayatri_main_gate') === '1' || isBypass;
@@ -1028,9 +1175,50 @@
             el.addEventListener('mouseleave', () => document.body.classList.remove('hover-img'));
         });
 
-        // Color reveal states for images (keep color after hover)
+        // Color reveal & 3D Interactive Hover states for images
         document.querySelectorAll('.art-image-wrap').forEach(el => {
             el.addEventListener('mouseenter', () => el.classList.add('color-revealed'));
+
+            const mediaEl = el.querySelector('.art-image');
+
+            // 3D Tilt + Parallax + Glare Effect
+            el.addEventListener('mousemove', (e) => {
+                const rect = el.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const percentX = x / rect.width;
+                const percentY = y / rect.height;
+
+                // Update Spotlight Glare coordinates
+                el.style.setProperty('--mouse-x', `${percentX * 100}%`);
+                el.style.setProperty('--mouse-y', `${percentY * 100}%`);
+
+                // 3D Tilt Wrapper
+                const rotateX = (0.5 - percentY) * 12; // Max 6deg
+                const rotateY = (percentX - 0.5) * 12; // Max 6deg
+                el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                el.style.transition = 'transform 0.1s ease-out';
+
+                // Parallax shift media inside
+                const moveX = (0.5 - percentX) * 15; // Max 7.5px shift
+                const moveY = (0.5 - percentY) * 15;
+                if (mediaEl) {
+                    mediaEl.style.objectPosition = `calc(50% + ${moveX}px) calc(50% + ${moveY}px)`;
+                    mediaEl.style.transition = 'object-position 0.1s ease-out';
+                }
+            });
+
+            el.addEventListener('mouseleave', () => {
+                // Reset Wrapper Tilt
+                el.style.transform = '';
+                el.style.transition = 'transform 0.8s cubic-bezier(0.25, 1, 0.5, 1)';
+
+                // Reset Parallax Shift
+                if (mediaEl) {
+                    mediaEl.style.objectPosition = 'center';
+                    mediaEl.style.transition = 'object-position 0.8s ease-out';
+                }
+            });
         });
 
         // ═══ SCROLL REVEAL (INTERSECTION OBSERVER) ═══
