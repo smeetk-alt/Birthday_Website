@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YASHVI | Exhibit 14</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Cinzel:wght@400;600;900&family=DM+Serif+Display:ital@0;1&family=Raleway:wght@100;200;300;400&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0d0608;
+            --bg2: #130a0c;
+            --rose: #e8a0b0;
+            --rose-deep: #c46070;
+            --rose-pale: rgba(232, 160, 176, 0.15);
+            --gold: #d4af7a;
+            --text: #f5eeef;
+            --muted: #9a8085;
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease2: cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none !important
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Raleway', sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── CURSOR ── */
+        .cur-dot,
+        .cur-ring {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 999999;
+            border-radius: 50%;
+            transform: translate(-50%, -50%)
+        }
+
+        .cur-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--rose);
+            transition: width .3s, height .3s, opacity .3s
+        }
+
+        .cur-ring {
+            width: 36px;
+            height: 36px;
+            border: 1px solid rgba(232, 160, 176, 0.5);
+            transition: width .5s var(--ease), height .5s var(--ease), border-color .4s, background .4s;
+        }
+
+        body.img-hover .cur-ring {
+            width: 72px;
+            height: 72px;
+            background: rgba(232, 160, 176, 0.08);
+            border-color: transparent
+        }
+
+        body.img-hover .cur-dot {
+            opacity: 0
+        }
+
+        @media(pointer:coarse) {
+
+            .cur-dot,
+            .cur-ring {
+                display: none
+            }
+
+            * {
+                cursor: auto !important
+            }
+        }
+
+        /* ── NOISE ── */
+        .noise {
+            position: fixed;
+            inset: 0;
+            z-index: 9998;
+            pointer-events: none;
+            opacity: .12;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        /* ── AMBIENT ORBS ── */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            mix-blend-mode: screen;
+            z-index: 0
+        }
+
+        .orb-a {
+            width: 900px;
+            height: 900px;
+            background: radial-gradient(circle, rgba(180, 50, 80, 0.12) 0%, transparent 70%);
+            top: -200px;
+            left: -200px;
+            animation: orbA 18s ease-in-out infinite
+        }
+
+        .orb-b {
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(100, 20, 50, 0.10) 0%, transparent 70%);
+            bottom: -100px;
+            right: -100px;
+            animation: orbB 22s ease-in-out infinite
+        }
+
+        .orb-c {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(212, 175, 122, 0.06) 0%, transparent 70%);
+            top: 40%;
+            left: 40%;
+            animation: orbC 28s ease-in-out infinite
+        }
+
+        @keyframes orbA {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1)
+            }
+
+            33% {
+                transform: translate(80px, 40px) scale(1.1)
+            }
+
+            66% {
+                transform: translate(-40px, 80px) scale(0.95)
+            }
+        }
+
+        @keyframes orbB {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1)
+            }
+
+            40% {
+                transform: translate(-60px, -50px) scale(1.15)
+            }
+
+            70% {
+                transform: translate(50px, -30px) scale(0.9)
+            }
+        }
+
+        @keyframes orbC {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1)
+            }
+
+            50% {
+                transform: translate(-80px, 60px) scale(1.2)
+            }
+        }
+
+        /* ── INTRO CURTAIN ── */
+        #curtain {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: var(--bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 32px;
+            transition: opacity 1.2s var(--ease), transform 1.4s var(--ease);
+        }
+
+        #curtain.out {
+            opacity: 0;
+            transform: translateY(-20px);
+            pointer-events: none
+        }
+
+        .curtain-letter {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(5rem, 20vw, 18rem);
+            font-weight: 900;
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(232, 160, 176, 0.4);
+            letter-spacing: 12px;
+            animation: curtainPulse 3s ease-in-out infinite;
+            text-shadow: 0 0 80px rgba(180, 50, 80, 0.3), 0 0 200px rgba(180, 50, 80, 0.1);
+        }
+
+        @keyframes curtainPulse {
+
+            0%,
+            100% {
+                -webkit-text-stroke: 1px rgba(232, 160, 176, 0.3);
+                text-shadow: 0 0 80px rgba(180, 50, 80, 0.2), 0 0 200px rgba(180, 50, 80, 0.05)
+            }
+
+            50% {
+                -webkit-text-stroke: 1px rgba(232, 160, 176, 0.7);
+                text-shadow: 0 0 120px rgba(180, 50, 80, 0.5), 0 0 280px rgba(180, 50, 80, 0.15)
+            }
+        }
+
+        .curtain-subtitle {
+            font-family: 'Raleway', sans-serif;
+            font-size: .7rem;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            color: var(--muted);
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: .4
+            }
+
+            50% {
+                opacity: 1
+            }
+        }
+
+        .curtain-bar {
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(to bottom, transparent, var(--rose), transparent);
+            animation: barGrow 2s ease-in-out infinite;
+        }
+
+        @keyframes barGrow {
+
+            0%,
+            100% {
+                transform: scaleY(0.3);
+                opacity: .3
+            }
+
+            50% {
+                transform: scaleY(1);
+                opacity: 1
+            }
+        }
+
+        /* ── GATE OVERLAY ── */
+        #gate {
+            position: fixed;
+            inset: 0;
+            z-index: 98000;
+            background: var(--bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #gate.show {
+            opacity: 1;
+            pointer-events: all
+        }
+
+        .gate-y {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(7rem, 22vw, 15rem);
+            font-weight: 900;
+            color: transparent;
+            -webkit-text-stroke: 1px var(--rose);
+            text-shadow: 0 0 100px rgba(232, 160, 176, 0.2);
+            animation: gateY 4s ease-in-out infinite;
+            cursor: pointer;
+            pointer-events: all;
+        }
+
+        @keyframes gateY {
+
+            0%,
+            100% {
+                text-shadow: 0 0 100px rgba(232, 160, 176, 0.2)
+            }
+
+            50% {
+                text-shadow: 0 0 160px rgba(232, 160, 176, 0.5), 0 0 300px rgba(180, 50, 80, 0.2)
+            }
+        }
+
+        .gate-rule {
+            width: 80px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--rose), transparent);
+            margin: 16px auto 28px
+        }
+
+        .gate-tag {
+            font-size: .6rem;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 40px
+        }
+
+        .gate-h {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(1.8rem, 5vw, 3.5rem);
+            font-weight: 400;
+            color: #fff;
+            margin-bottom: 16px
+        }
+
+        .gate-p {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: var(--muted);
+            line-height: 1.8;
+            max-width: 420px;
+            margin-bottom: 44px
+        }
+
+        .gate-cd {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-bottom: 28px
+        }
+
+        .gate-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(232, 160, 176, 0.04);
+            border: 1px solid rgba(232, 160, 176, 0.2);
+            padding: 14px 12px;
+            border-radius: 4px;
+            min-width: 72px;
+        }
+
+        .gate-n {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--rose);
+            line-height: 1
+        }
+
+        .gate-l {
+            font-size: .5rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-top: 5px
+        }
+
+        .gate-hint {
+            font-size: .55rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(136, 136, 136, 0.4)
+        }
+
+        /* ── HEADER ── */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 28px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 500;
+            mix-blend-mode: difference;
+        }
+
+        .brand {
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            transition: letter-spacing .6s var(--ease), text-shadow .4s;
+        }
+
+        .brand:hover {
+            letter-spacing: 10px;
+            text-shadow: 0 0 30px rgba(232, 160, 176, 0.6)
+        }
+
+        .exhibit-tag {
+            font-family: 'Raleway', sans-serif;
+            font-size: .7rem;
+            font-weight: 300;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.6)
+        }
+
+        /* ── HERO ── */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            text-align: center;
+            overflow: hidden;
+            background: radial-gradient(ellipse 100% 70% at 50% 65%, rgba(160, 40, 70, 0.18) 0%, rgba(80, 10, 30, 0.1) 40%, transparent 70%);
+        }
+
+        /* Petal canvas */
+        #petal-canvas {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1
+        }
+
+        .hero-inner {
+            position: relative;
+            z-index: 2
+        }
+
+        .hero-eyebrow {
+            font-family: 'Raleway', sans-serif;
+            font-size: .65rem;
+            letter-spacing: 12px;
+            text-transform: uppercase;
+            color: var(--rose);
+            margin-bottom: 32px;
+            opacity: 0;
+            animation: fadeUp 1s var(--ease) forwards 1.8s;
+        }
+
+        .hero-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(4.5rem, 13vw, 13rem);
+            font-weight: 900;
+            line-height: .85;
+            color: #fff;
+            margin-bottom: 28px;
+            opacity: 0;
+            animation: heroReveal 1.4s var(--ease) forwards 2s;
+        }
+
+        .hero-title span {
+            display: block
+        }
+
+        .hero-title .t1 {
+            color: transparent;
+            -webkit-text-stroke: 2px rgba(255, 255, 255, 0.9);
+            letter-spacing: 8px;
+        }
+
+        .hero-title .t2 {
+            color: var(--rose);
+            text-shadow: 0 0 80px rgba(232, 160, 176, 0.5), 0 0 200px rgba(180, 50, 80, 0.3);
+            font-style: italic;
+            font-family: 'DM Serif Display', serif;
+            font-size: .6em;
+            letter-spacing: 6px;
+        }
+
+        @keyframes heroReveal {
+            0% {
+                opacity: 0;
+                transform: translateY(60px) scale(.96)
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1)
+            }
+        }
+
+        .hero-sub {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 1.4rem;
+            letter-spacing: 2px;
+            color: rgba(232, 160, 176, 0.7);
+            opacity: 0;
+            animation: fadeUp 1s var(--ease) forwards 2.5s;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 44px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            opacity: 0;
+            animation: fadeUp .8s var(--ease) forwards 3.2s;
+        }
+
+        .scroll-hint span {
+            font-size: .6rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--muted)
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 48px;
+            background: rgba(232, 160, 176, 0.2);
+            overflow: hidden;
+            position: relative
+        }
+
+        .scroll-line::after {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, var(--rose));
+            animation: linefall 2.2s ease-in-out infinite;
+        }
+
+        @keyframes linefall {
+            0% {
+                top: -100%
+            }
+
+            100% {
+                top: 200%
+            }
+        }
+
+        @keyframes fadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px)
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        /* ── MARQUEE ── */
+        .marquee-wrap {
+            overflow: hidden;
+            padding: 28px 0;
+            border-top: 1px solid rgba(232, 160, 176, 0.08);
+            border-bottom: 1px solid rgba(232, 160, 176, 0.08);
+            background: linear-gradient(135deg, rgba(180, 50, 80, 0.06) 0%, transparent 50%, rgba(212, 175, 122, 0.04) 100%);
+            position: relative;
+            z-index: 2;
+        }
+
+        .marquee-track {
+            display: flex;
+            gap: 60px;
+            white-space: nowrap;
+            animation: marquee 30s linear infinite;
+            width: max-content;
+        }
+
+        .marquee-item {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            color: var(--rose);
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .marquee-item::before {
+            content: '✦';
+            font-size: .8rem;
+            opacity: .6
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(0)
+            }
+
+            100% {
+                transform: translateX(-50%)
+            }
+        }
+
+        /* ── EXHIBITS ── */
+        .exhibit {
+            padding: 120px 6vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .exhibit:nth-child(even) {
+            background: linear-gradient(135deg, rgba(120, 25, 50, 0.07) 0%, transparent 50%, rgba(80, 15, 35, 0.05) 100%);
+        }
+
+        .art-card {
+            display: flex;
+            align-items: center;
+            gap: 6vw;
+            max-width: 1200px;
+            width: 100%
+        }
+
+        .art-card.rev {
+            flex-direction: row-reverse
+        }
+
+        /* Image wrap */
+        .img-wrap {
+            flex: 1.3;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(50px) scale(.97);
+            transition: opacity 1.3s var(--ease), transform 1.3s var(--ease);
+            border-radius: 1px;
+        }
+
+        .img-wrap.in {
+            opacity: 1;
+            transform: translateY(0) scale(1)
+        }
+
+        /* Glare */
+        .img-wrap::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 4;
+            pointer-events: none;
+            background: radial-gradient(circle 400px at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.14), transparent 55%);
+            opacity: 0;
+            mix-blend-mode: overlay;
+            transition: opacity .5s;
+        }
+
+        .img-wrap:hover::before {
+            opacity: 1
+        }
+
+        /* Rose halo */
+        .img-wrap::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            z-index: 5;
+            pointer-events: none;
+            box-shadow: 0 0 0 0 rgba(232, 160, 176, 0);
+            transition: box-shadow 1s ease;
+        }
+
+        .img-wrap:hover::after {
+            box-shadow: 0 0 60px 12px rgba(232, 160, 176, 0.2), inset 0 0 40px rgba(232, 160, 176, 0.05)
+        }
+
+        /* Number badge */
+        .img-wrap .num-badge {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 6;
+            font-family: 'Cinzel', serif;
+            font-size: .7rem;
+            font-weight: 600;
+            letter-spacing: 4px;
+            color: var(--rose);
+            background: rgba(13, 6, 8, 0.7);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(232, 160, 176, 0.2);
+            padding: 8px 16px;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: opacity .8s var(--ease) .4s, transform .8s var(--ease) .4s;
+        }
+
+        .img-wrap.in .num-badge {
+            opacity: 1;
+            transform: translateX(0)
+        }
+
+        .art-img {
+            width: 100%;
+            height: 82vh;
+            object-fit: cover;
+            object-position: center;
+            transform: scale(1.08);
+            filter: grayscale(100%) brightness(.85);
+            transition: transform 1.3s var(--ease), filter .9s;
+        }
+
+        .img-wrap.in .art-img {
+            transform: scale(1)
+        }
+
+        .img-wrap:hover .art-img {
+            filter: grayscale(0%) brightness(1);
+            transform: scale(1.04)
+        }
+
+        /* Details */
+        .art-details {
+            flex: 1;
+            padding: 40px;
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: opacity 1s var(--ease) .5s, transform 1s var(--ease) .5s;
+        }
+
+        .art-card.rev .art-details {
+            transform: translateX(40px)
+        }
+
+        .art-details.in {
+            opacity: 1;
+            transform: translateX(0)
+        }
+
+        .art-num {
+            font-family: 'Cinzel', serif;
+            font-size: 4rem;
+            font-weight: 900;
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(232, 160, 176, 0.4);
+            line-height: 1;
+            margin-bottom: 8px;
+            transition: color .5s, -webkit-text-stroke .5s, text-shadow .5s;
+        }
+
+        .art-details:hover .art-num {
+            color: var(--rose);
+            -webkit-text-stroke: 1px transparent;
+            text-shadow: 0 0 40px rgba(232, 160, 176, 0.4);
+        }
+
+        .art-rule {
+            width: 32px;
+            height: 1px;
+            background: linear-gradient(90deg, var(--rose), transparent);
+            margin: 16px 0
+        }
+
+        .art-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2.8rem;
+            font-weight: 400;
+            line-height: 1.1;
+            color: #fff8f9;
+            margin-bottom: 20px;
+            transition: color .5s;
+        }
+
+        .art-details:hover .art-title {
+            color: var(--rose)
+        }
+
+        .art-desc {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 1.15rem;
+            color: var(--muted);
+            line-height: 1.9;
+            font-weight: 300;
+        }
+
+        /* Divider */
+        .exhibit+.exhibit {
+            border-top: 1px solid rgba(232, 160, 176, 0.06)
+        }
+
+        /* ── SCRATCH SECTION ── */
+        .scratch-section {
+            padding: 160px 6vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(180deg, var(--bg) 0%, rgba(100, 20, 40, 0.2) 40%, rgba(60, 8, 20, 0.15) 70%, var(--bg) 100%);
+            position: relative;
+        }
+
+        .scratch-heading {
+            font-family: 'DM Serif Display', serif;
+            font-style: italic;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            color: var(--rose);
+            text-align: center;
+            margin-bottom: 12px;
+            text-shadow: 0 0 60px rgba(232, 160, 176, 0.4);
+        }
+
+        .scratch-sub {
+            font-family: 'Raleway', sans-serif;
+            font-size: .7rem;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 60px;
+        }
+
+        .scratch-wrap {
+            position: relative;
+            width: 100%;
+            max-width: 780px;
+            aspect-ratio: 4/5;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(232, 160, 176, 0.08);
+            overflow: hidden;
+            border-radius: 2px;
+        }
+
+        .scratch-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 30%;
+            transform: scale(1.3);
+            transform-origin: center 30%;
+            z-index: 0;
+        }
+
+        .secret {
+            position: absolute;
+            bottom: 12%;
+            z-index: 1;
+            text-align: center;
+            pointer-events: none;
+            padding: 44px 40px;
+            background: rgba(0, 0, 0, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(4px);
+            opacity: 0;
+            transition: opacity 1.4s ease;
+            margin: 0 5%;
+            width: 90%;
+        }
+
+        .secret.show {
+            opacity: 1
+        }
+
+        .secret h2 {
+            font-family: 'DM Serif Display', serif;
+            font-style: italic;
+            font-size: 2.2rem;
+            color: var(--rose);
+            margin-bottom: 16px;
+            text-shadow: 0 0 40px rgba(232, 160, 176, 0.6);
+        }
+
+        .secret p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.85)
+        }
+
+        #scratch-canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            cursor: crosshair;
+            z-index: 2
+        }
+
+        .scratch-hint {
+            position: absolute;
+            z-index: 10;
+            pointer-events: none;
+            font-family: 'Raleway', sans-serif;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            font-size: .75rem;
+            color: #fff;
+            mix-blend-mode: difference;
+            animation: hintPulse 2.5s ease-in-out infinite;
+        }
+
+        .scratch-hint.gone {
+            animation: none !important;
+            opacity: 0 !important
+        }
+
+        @keyframes hintPulse {
+
+            0%,
+            100% {
+                opacity: .4
+            }
+
+            50% {
+                opacity: 1
+            }
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            position: relative;
+            text-align: center;
+            padding: 80px 40px 60px;
+            border-top: 1px solid rgba(232, 160, 176, 0.1);
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(180, 50, 80, 0.12) 0%, transparent 70%);
+        }
+
+        .footer-inner {
+            position: relative;
+            z-index: 1
+        }
+
+        .footer-monogram {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(4rem, 12vw, 9rem);
+            font-weight: 900;
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(232, 160, 176, 0.25);
+            display: block;
+            margin-bottom: 24px;
+            animation: footerPulse 6s ease-in-out infinite;
+        }
+
+        @keyframes footerPulse {
+
+            0%,
+            100% {
+                -webkit-text-stroke: 1px rgba(232, 160, 176, 0.2)
+            }
+
+            50% {
+                -webkit-text-stroke: 1px rgba(232, 160, 176, 0.5)
+            }
+        }
+
+        .footer-love {
+            font-family: 'DM Serif Display', serif;
+            font-style: italic;
+            font-size: 1.5rem;
+            color: var(--rose);
+            text-shadow: 0 0 30px rgba(232, 160, 176, 0.4);
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .footer-copy {
+            font-family: 'Raleway', sans-serif;
+            font-size: .65rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        /* ── RESPONSIVE ── */
+        @media(max-width:900px) {
+
+            .art-card,
+            .art-card.rev {
+                flex-direction: column
+            }
+
+            .art-img {
+                height: 55vh
+            }
+
+            header {
+                padding: 20px
+            }
+        }
+
+        @media(max-width:600px) {
+            header {
+                flex-direction: column;
+                gap: 8px;
+                padding: 16px
+            }
+
+            .exhibit {
+                padding: 80px 20px
+            }
+
+            .art-details {
+                padding: 20px 0
+            }
+
+            .art-num {
+                font-size: 2.8rem
+            }
+
+            .art-title {
+                font-size: 2rem
+            }
+
+            .scratch-heading {
+                font-size: 2rem
+            }
+
+            .secret {
+                padding: 24px 20px;
+                bottom: 6%
+            }
+
+            .secret h2 {
+                font-size: 1.6rem
+            }
+
+            .gate-h {
+                font-size: 1.6rem
+            }
+
+            .gate-box {
+                min-width: 60px;
+                padding: 10px 8px
+            }
+
+            .gate-n {
+                font-size: 1.4rem
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- GATE OVERLAY -->
+    <div id="gate">
+        <div class="gate-y" id="gate-y">Y</div>
+        <div class="gate-rule"></div>
+        <div class="gate-tag">Exhibit No. 14 &nbsp;·&nbsp; Access Restricted</div>
+        <h2 class="gate-h">The Archive is not yet open.</h2>
+        <p class="gate-p">This exhibit opens on a very specific day.<br>Every great story has a right moment to
+            begin.<br>That moment is almost here.</p>
+        <div class="gate-cd">
+            <div class="gate-box"><span class="gate-n" id="g-d">00</span><span class="gate-l">Days</span></div>
+            <div class="gate-box"><span class="gate-n" id="g-h">00</span><span class="gate-l">Hours</span></div>
+            <div class="gate-box"><span class="gate-n" id="g-m">00</span><span class="gate-l">Mins</span></div>
+            <div class="gate-box"><span class="gate-n" id="g-s">00</span><span class="gate-l">Secs</span></div>
+        </div>
+        <div class="gate-hint">Return when the time is right &nbsp;·&nbsp; Double-click the Y to enter passcode</div>
+    </div>
+
+    <!-- INTRO CURTAIN -->
+    <div id="curtain">
+        <div class="curtain-letter">Y</div>
+        <div class="curtain-subtitle">Loading Exhibit No. 14</div>
+        <div class="curtain-bar"></div>
+    </div>
+
+    <!-- AMBIENT ORBS -->
+    <div class="orb orb-a"></div>
+    <div class="orb orb-b"></div>
+    <div class="orb orb-c"></div>
+
+    <!-- NOISE -->
+    <div class="noise"></div>
+
+    <!-- CURSOR -->
+    <div class="cur-dot" id="cur-dot"></div>
+    <div class="cur-ring" id="cur-ring"></div>
+
+    <!-- PETAL CANVAS -->
+    <canvas id="petal-canvas"></canvas>
+
+    <header>
+        <div class="brand">YASHVI</div>
+        <div class="exhibit-tag">Exhibit No. 14</div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero" id="hero">
+        <div class="hero-inner">
+            <div class="hero-eyebrow">An Immersive Birthday Retrospective</div>
+            <h1 class="hero-title">
+                <span class="t1">YASHVI'S</span>
+                <span class="t2">Fourteen</span>
+            </h1>
+            <div class="hero-sub">A curated archive of everything beautiful</div>
+        </div>
+        <div class="scroll-hint">
+            <span>Scroll to explore</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- MARQUEE -->
+    <div class="marquee-wrap">
+        <div class="marquee-track" id="marquee">
+            <div class="marquee-item">The Foundation</div>
+            <div class="marquee-item">The Masterpiece</div>
+            <div class="marquee-item">Poetry in Motion</div>
+            <div class="marquee-item">The Radiance</div>
+            <div class="marquee-item">The Director's Vision</div>
+            <div class="marquee-item">The Archives</div>
+            <div class="marquee-item">Timeless</div>
+            <div class="marquee-item">Unscripted</div>
+            <div class="marquee-item">The Energy</div>
+            <div class="marquee-item">Chapter Fourteen</div>
+            <div class="marquee-item">The Foundation</div>
+            <div class="marquee-item">The Masterpiece</div>
+            <div class="marquee-item">Poetry in Motion</div>
+            <div class="marquee-item">The Radiance</div>
+            <div class="marquee-item">The Director's Vision</div>
+            <div class="marquee-item">The Archives</div>
+            <div class="marquee-item">Timeless</div>
+            <div class="marquee-item">Unscripted</div>
+            <div class="marquee-item">The Energy</div>
+            <div class="marquee-item">Chapter Fourteen</div>
+        </div>
+    </div>
+
+    <!-- EXHIBITS -->
+    <section class="exhibit">
+        <div class="art-card">
+            <div class="img-wrap obs hover-img">
+                <div class="num-badge">01 / 10</div>
+                <img src="1.jpeg" alt="Exhibit 1" class="art-img">
+            </div>
+            <div class="art-details obs">
+                <div class="art-num">01</div>
+                <div class="art-rule"></div>
+                <h2 class="art-title">The Foundation</h2>
+                <p class="art-desc">Fourteen years of watching you grow into someone truly remarkable. This isn't just
+                    about growing older—it's about witnessing the quiet resilience and grace you carry every day. It is
+                    a rare privilege to walk alongside someone who is so entirely themselves. You were always built for
+                    something greater, and this chapter is proof of that.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="exhibit">
+        <div class="art-card rev">
+            <div class="img-wrap obs hover-img">
+                <div class="num-badge">02 / 10</div>
+                <img src="2.jpeg" alt="Exhibit 2" class="art-img">
+            </div>
+            <div class="art-details obs">
+                <div class="art-num">02</div>
+                <div class="art-rule"></div>
+                <h2 class="art-title">The Masterpiece</h2>
+                <p class="art-desc">You have an effortless way of lighting up a room, not through noise, but through
+                    genuine warmth. Whether it's late-night conversations that stretch for hours or the simple comfort
+                    of just being there, your presence changes the atmosphere. You turn ordinary, quiet moments into
+                    memories worth keeping forever.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="exhibit">
+        <div class="art-card">
+            <div class="img-wrap obs hover-img">
+                <div class="num-badge">03 / 10</div>
+                <img src="3.jpeg" alt="Exhibit 3" class="art-img">
+            </div>
+            <div class="art-details obs">
+                <div class="art-num">03</div>
+                <div class="art-rule"></div>
+                <h2 class="art-title">Poetry in Motion</h2>
+                <p class="art-desc">There is a steady, reassuring rhythm to how you move through the world. You don't
+                    need to perform—you simply stand in your own truth, and that is more than enough. Having you in my
+                    life means having a constant source of light, a grounding force that makes everything feel a little
+                    safer and a lot more beautiful.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="exhibit">
+        <div class="art-card rev">
+            <div class="img-wrap obs hover-img">
+                <div class="num-badge">04 / 10</div>
+                <img src="4.jpeg" alt="Exhibit 4" class="art-img">
+            </div>
+            <div class="art-details obs">
+                <div class="art-num">04</div>
+                <div class="art-rule"></div>
+                <h2 class="art-title">The Radiance</h2>
+                <p class="art-desc">It is one thing to stand in the light, and entirely another to be the source of it.
+                    You generate a kind of warmth that makes people want to stay close. The way you care, the way you
+                    look out for the people you love, and the effortless empathy you carry—it all adds up to a soul that
+                    is incredibly rare to find.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="exhibit">
+        <div class="art-card">
+            <div class="img-wrap obs hover-img">
+                <div class="num-badge">05 / 10</div>
+                <img src="5.jpeg" alt="Exhibit 5" class="art-img">
+            </div>
+            <div class="art-details obs">
+                <div class="art-num">05</div>
+                <div class="art-rule"></div>
+                <h2 class="art-title">The Director's Vision</h2>
+                <p class="art-desc">You live your life with such beautiful intention. You aren't just moving through the
+                    world; you are actively shaping it, leaving your warmth and kindness on everything you touch.
+                    Watching you step into your own power is one of the greatest joys of knowing you.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="exhibit">
+        <div class="art-card rev">
+            <div class="img-wrap obs hover-img">
+                <div class="num-badge">06 / 10</div>
+                <img src="6.jpeg" alt="Exhibit 6" class="art-img">
+            </div>
+            <div class="art-details obs">
+                <div class="art-num">06</div>
+                <div class="art-rule"></div>
+                <h2 class="art-title">The Archives</h2>
+                <p class="art-desc">Our shared history is filled with quiet, meaningful moments, laughter that we
+                    couldn't stop, and conversations that shifted the way I see the world. These archives aren't just
+                    memories; they are the foundation of a bond that only gets stronger. Every year added is another
+                    beautiful layer to our story.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="exhibit">
+        <div class="art-card">
+            <div class="img-wrap obs hover-img">
+                <div class="num-badge">07 / 10</div>
+                <img src="7.jpeg" alt="Exhibit 7" class="art-img">
+            </div>
+            <div class="art-details obs">
+                <div class="art-num">07</div>
+                <div class="art-rule"></div>
+                <h2 class="art-title">Timeless</h2>
+                <p class="art-desc">Trends fade, but the kind of character you have is entirely timeless. You are the
+                    kind of person someone is incredibly lucky to know in this lifetime. Your kindness, your humor, your
+                    absolute loyalty—it never goes out of style. Fourteen is just the continuation of everything
+                    wonderful you already are.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="exhibit">
+        <div class="art-card rev">
+            <div class="img-wrap obs hover-img">
+                <div class="num-badge">08 / 10</div>
+                <img src="8.jpeg" alt="Exhibit 8" class="art-img">
+            </div>
+            <div class="art-details obs">
+                <div class="art-num">08</div>
+                <div class="art-rule"></div>
+                <h2 class="art-title">Unscripted</h2>
+                <p class="art-desc">The best parts of life are the ones we never planned—the unexpected detours, the
+                    spontaneous laughter, the moments where we can just be unapologetically ourselves. There is a deep,
+                    comforting freedom in knowing someone who accepts every version of you. That is what this friendship
+                    is: genuine, unscripted, and entirely pure.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="exhibit">
+        <div class="art-card">
+            <div class="img-wrap obs hover-img">
+                <div class="num-badge">09 / 10</div>
+                <img src="9.jpeg" alt="Exhibit 9" class="art-img">
+            </div>
+            <div class="art-details obs">
+                <div class="art-num">09</div>
+                <div class="art-rule"></div>
+                <h2 class="art-title">The Energy</h2>
+                <p class="art-desc">You bring a certain peace and vitality everywhere you go. It's an invisible current
+                    that makes everything around you feel a little more alive. To know you is to feel seen and
+                    understood without having to explain yourself. Your energy is a gift to everyone lucky enough to be
+                    in your orbit.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="exhibit">
+        <div class="art-card rev">
+            <div class="img-wrap obs hover-img">
+                <div class="num-badge">10 / 10</div>
+                <img src="10.jpeg" alt="Exhibit 10" class="art-img">
+            </div>
+            <div class="art-details obs">
+                <div class="art-num">10</div>
+                <div class="art-rule"></div>
+                <h2 class="art-title">Chapter Fourteen</h2>
+                <p class="art-desc">Fourteen carries with it the strength of everything you've overcome and the beauty
+                    of everything still waiting for you. It is the beginning of your next great era. I am so incredibly
+                    proud of the person you are, and even more proud to stand by your side to celebrate it. Here's to
+                    you, and everything that comes next.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SCRATCH -->
+    <section class="scratch-section">
+        <h2 class="scratch-heading">The Director's Note</h2>
+        <p class="scratch-sub">Scratch to unveil</p>
+        <div class="scratch-wrap">
+            <img src="1.jpeg" alt="Secret" class="scratch-img">
+            <div class="secret" id="secret">
+                <h2>To Yashvi,</h2>
+                <p>Happy 14th Birthday! 🧿<br>She is a Society Friend, Sister, Family, Support, Bestie,<br>and every
+                    role a female can be.<br>Behind the elegance and the perfection,<br>lies one of the purest souls I
+                    have ever known.<br>Thank you for your warmth, your kindness,<br>and your unwavering
+                    friendship.<br>Here's to a lifetime of beautiful memories together.</p>
+            </div>
+            <canvas id="scratch-canvas"></canvas>
+            <div class="scratch-hint" id="scratch-hint">Scratch &amp; Reveal</div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-inner">
+            <span class="footer-monogram">Y</span>
+            <span class="footer-love">Curated with love ✦</span>
+            <div class="footer-copy">All Rights Reserved &nbsp;·&nbsp; Exhibit No. 14 &nbsp;·&nbsp; © 2026</div>
+        </div>
+    </footer>
+
+    <script>
+        /* ── GATE ── */
+        const UNLOCK = new Date('2026-07-29T00:00:00').getTime();
+        const params = new URLSearchParams(location.search);
+        const bypass = params.get('admin') === 'true';
+        let token = sessionStorage.getItem('yashvi14') === '1' || bypass;
+        let unlocked = Date.now() >= UNLOCK || bypass;
+        const gate = document.getElementById('gate');
+        const gateY = document.getElementById('gate-y');
+
+        gateY.addEventListener('dblclick', () => {
+            const p = prompt('Enter Archive Passcode:');
+            if (p === '14' || p === 'admin' || p === 'yashvi') {
+                sessionStorage.setItem('yashvi14', '1');
+                token = true; unlocked = true;
+                gate.style.opacity = '0'; gate.style.transition = 'opacity .8s ease';
+                setTimeout(() => { gate.style.display = 'none' }, 900);
+            } else if (p !== null) alert('Access Denied.');
+        });
+
+        if (!token || !unlocked) {
+            gate.classList.add('show');
+            function tickGate() {
+                const diff = Math.max(0, UNLOCK - Date.now());
+                document.getElementById('g-d').textContent = String(Math.floor(diff / 86400000)).padStart(2, '0');
+                document.getElementById('g-h').textContent = String(Math.floor(diff % 86400000 / 3600000)).padStart(2, '0');
+                document.getElementById('g-m').textContent = String(Math.floor(diff % 3600000 / 60000)).padStart(2, '0');
+                document.getElementById('g-s').textContent = String(Math.floor(diff % 60000 / 1000)).padStart(2, '0');
+            }
+            setInterval(tickGate, 1000); tickGate();
+        }
+
+        /* ── CURTAIN ── */
+        setTimeout(() => { document.getElementById('curtain').classList.add('out') }, 2600);
+
+        /* ── CURSOR ── */
+        const dot = document.getElementById('cur-dot');
+        const ring = document.getElementById('cur-ring');
+        let mx = 0, my = 0, rx = 0, ry = 0;
+        document.addEventListener('mousemove', e => {
+            mx = e.clientX; my = e.clientY;
+            dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+        });
+        (function animCursor() {
+            rx += (mx - rx) * .13; ry += (my - ry) * .13;
+            ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+            requestAnimationFrame(animCursor);
+        })();
+        document.querySelectorAll('.hover-img,#scratch-canvas').forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('img-hover'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('img-hover'));
+        });
+
+        /* ── IMAGE 3D TILT + GLARE ── */
+        document.querySelectorAll('.img-wrap').forEach(el => {
+            const img = el.querySelector('.art-img');
+            el.addEventListener('mousemove', e => {
+                const r = el.getBoundingClientRect();
+                const px = (e.clientX - r.left) / r.width;
+                const py = (e.clientY - r.top) / r.height;
+                el.style.setProperty('--mx', `${px * 100}%`);
+                el.style.setProperty('--my', `${py * 100}%`);
+                const rx = (0.5 - py) * 14, ry = (px - 0.5) * 14;
+                el.style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) scale3d(1.02,1.02,1.02)`;
+                el.style.transition = 'transform .08s ease-out';
+                if (img) {
+                    img.style.objectPosition = `calc(50% + ${(0.5 - px) * 18}px) calc(50% + ${(0.5 - py) * 18}px)`;
+                    img.style.transition = 'object-position .08s ease-out';
+                }
+            });
+            el.addEventListener('mouseleave', () => {
+                el.style.transform = '';
+                el.style.transition = 'transform .9s cubic-bezier(0.25,1,0.5,1)';
+                if (img) { img.style.objectPosition = 'center'; img.style.transition = 'object-position .9s ease-out'; }
+            });
+        });
+
+        /* ── SCROLL REVEAL ── */
+        const obs = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in') });
+        }, { threshold: .18 });
+        document.querySelectorAll('.obs').forEach(el => obs.observe(el));
+
+        /* ── PETAL PARTICLES ── */
+        const petalCanvas = document.getElementById('petal-canvas');
+        const pctx = petalCanvas.getContext('2d');
+        const petals = [];
+        function resizePetal() { petalCanvas.width = window.innerWidth; petalCanvas.height = window.innerHeight; }
+        resizePetal(); window.addEventListener('resize', resizePetal);
+
+        const PETAL_COLORS = ['rgba(232,160,176', 'rgba(196,96,112', 'rgba(240,200,210', 'rgba(212,175,122'];
+        for (let i = 0; i < 28; i++) {
+            petals.push({
+                x: Math.random() * window.innerWidth,
+                y: Math.random() * window.innerHeight * 1.2,
+                r: 1.5 + Math.random() * 3,
+                ox: Math.random() * window.innerWidth,
+                amp: 20 + Math.random() * 40,
+                freq: .003 + Math.random() * .004,
+                speed: .4 + Math.random() * .6,
+                opacity: 0.15 + Math.random() * .35,
+                phase: Math.random() * Math.PI * 2,
+                color: PETAL_COLORS[Math.floor(Math.random() * PETAL_COLORS.length)]
+            });
+        }
+
+        let tick = 0;
+        (function animPetals() {
+            pctx.clearRect(0, 0, petalCanvas.width, petalCanvas.height);
+            tick += .5;
+            petals.forEach(p => {
+                p.y -= p.speed;
+                if (p.y < -20) { p.y = petalCanvas.height + 20; p.x = Math.random() * petalCanvas.width; }
+                const wx = p.ox + Math.sin(tick * p.freq + p.phase) * p.amp;
+                pctx.beginPath();
+                pctx.arc(wx, p.y, p.r, 0, Math.PI * 2);
+                pctx.fillStyle = `${p.color},${p.opacity})`;
+                pctx.fill();
+            });
+            requestAnimationFrame(animPetals);
+        })();
+
+        /* ── SCRATCH-OFF ── */
+        const canvas = document.getElementById('scratch-canvas');
+        const ctx = canvas.getContext('2d');
+        const hint = document.getElementById('scratch-hint');
+        const secret = document.getElementById('secret');
+        let drawing = false, revealed = false;
+
+        function resizeScratch() {
+            const wrap = canvas.parentElement;
+            canvas.width = wrap.clientWidth; canvas.height = wrap.clientHeight;
+            fillScratch();
+        }
+        function fillScratch() {
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.fillStyle = '#180c10';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.font = '16px Raleway'; ctx.fillStyle = 'rgba(255,255,255,0.035)';
+            for (let i = 0; i < canvas.width; i += 100) {
+                for (let j = 0; j < canvas.height; j += 44) {
+                    ctx.save(); ctx.translate(i, j); ctx.rotate(-.1);
+                    ctx.fillText('CLASSIFIED', 0, 0); ctx.restore();
+                }
+            }
+            /* Gold shimmer lines */
+            ctx.strokeStyle = 'rgba(212,175,122,0.04)'; ctx.lineWidth = 1;
+            for (let i = 0; i < canvas.height; i += 28) {
+                ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(canvas.width, i); ctx.stroke();
+            }
+        }
+        resizeScratch(); window.addEventListener('resize', resizeScratch);
+
+        function getPos(e) {
+            const r = canvas.getBoundingClientRect();
+            const sx = canvas.width / r.width, sy = canvas.height / r.height;
+            if (e.touches) return { x: (e.touches[0].clientX - r.left) * sx, y: (e.touches[0].clientY - r.top) * sy };
+            return { x: (e.clientX - r.left) * sx, y: (e.clientY - r.top) * sy };
+        }
+        function scratch(e) {
+            if (!drawing) return;
+            const p = getPos(e);
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath(); ctx.arc(p.x, p.y, 140, 0, Math.PI * 2); ctx.fill();
+            checkReveal();
+        }
+        function checkReveal() {
+            if (revealed) return;
+            const d = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+            let t = 0;
+            for (let i = 3; i < d.length; i += 4)if (d[i] < 128) t++;
+            if (t / d.length * 4 > 0.38) {
+                revealed = true;
+                canvas.style.transition = 'opacity 1.4s ease'; canvas.style.opacity = '0';
+                secret.classList.add('show'); hint.classList.add('gone');
+            }
+        }
+        canvas.addEventListener('mousedown', e => { drawing = true; hint.classList.add('gone'); scratch(e) });
+        canvas.addEventListener('mouseup', () => drawing = false);
+        canvas.addEventListener('mousemove', scratch);
+        canvas.addEventListener('mouseleave', () => drawing = false);
+        canvas.addEventListener('touchstart', e => { e.preventDefault(); drawing = true; hint.classList.add('gone'); scratch(e) }, { passive: false });
+        canvas.addEventListener('touchend', () => drawing = false);
+        canvas.addEventListener('touchmove', e => { e.preventDefault(); scratch(e) }, { passive: false });
+    </script>
+</body>
+
+</html>
